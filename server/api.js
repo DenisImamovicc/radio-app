@@ -54,10 +54,26 @@ function getDataById(req, res, id, params) {
     });
 }
 
-function checkEmailDb(data) {
+function MatchEmailFromDb(data) {
   return new Promise(async(resolve, reject) => {
     try {
-      db.get('SELECT Email FROM Useracounts WHERE Email=?', [data.Email], (err, row) => {
+      db.get(`SELECT Email FROM Useracounts WHERE Email=?`, [data], (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(!!row);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
+
+function MatchPasswordFromDb(data) {
+  return new Promise(async(resolve, reject) => {
+    try {
+      db.get(`SELECT Password FROM Useracounts WHERE Password=?`, [data], (err, row) => {
         if (err) {
           reject(err);
         } else {
@@ -87,22 +103,17 @@ api.post("/newacount", (req, res) => {
 
   res.sendStatus(200);
 });
-//Till nästa gång.
-//skapa route som tar json objekt fylld med användarnamn och lös.
-//Börja med att jämnföra förfrågans användarnamn med db lista av användarnamn för att se om den existerar som skapat konto.
-//Om ingen matchning ge en 400ish respons om det matchas så matchar du lös från förfrågan och db och se om det matchar.
 
 api.post("/loginacount",async(req, res) => {
   const data = req.body
-  const emailExists = await checkEmailDb(data);
+  const emailMatch = await MatchEmailFromDb(data.Email);
+  const passwordMatch = await MatchPasswordFromDb(data.Password);
 
-if (emailExists) {
+if (emailMatch && passwordMatch) {
   res.sendStatus(200)
 } else {
   res.sendStatus(400)
 }
-
-  console.log(emailExists); // true or false
 });
 
 api.get("/programscategorie/:id", (req, res) => {
