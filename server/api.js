@@ -1,8 +1,8 @@
 import express from "express";
 import fetch from "node-fetch";
-import bodyParser from "body-parser"
-import sqlite3 from 'sqlite3'
-import { open } from 'sqlite'
+import bodyParser from "body-parser";
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
 
 const port = 9000;
 const api = express();
@@ -12,16 +12,19 @@ const JSON_FORMAT = `format=json`;
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({ extended: true }));
 
-const db = new sqlite3.Database('C:/Users/Work/Desktop/sqldbs/Radiouseracount.db', (err) => {
-  if (err) {
-    console.error(err.message);
-  } else {
-    console.log('Connected to the SQLite database.');
+const db = new sqlite3.Database(
+  "C:/Users/Work/Desktop/sqldbs/Radiouseracount.db",
+  (err) => {
+    if (err) {
+      console.error(err.message);
+    } else {
+      console.log("Connected to the SQLite database.");
+    }
   }
-});
+);
 
 //Reveal data from current table from db
-db.all('SELECT * FROM Useracounts', (err, rows) => {
+db.all("SELECT * FROM Useracounts", (err, rows) => {
   if (err) {
     console.error(err.message);
   } else {
@@ -29,7 +32,6 @@ db.all('SELECT * FROM Useracounts', (err, rows) => {
   }
 });
 
-console.log(db);
 
 function getAllList(req, res) {
   const TYPE = req.originalUrl;
@@ -52,37 +54,56 @@ function getDataById(req, res, id, params) {
     });
 }
 
-api.post("/newacount", (req, res) => {
-  const data = req.body
-  console.log(data);
-  db.run('INSERT INTO Useracounts (Email, Password) VALUES (?, ?)', [data.Email, data.Password], function(err) {
-    if (err) {
-      console.error(err.message);
-    } else {
-      console.log(`A row has been inserted with rowid ${this.lastID}`);
+function checkEmailDb(data) {
+  return new Promise(async(resolve, reject) => {
+    try {
+      db.get('SELECT Email FROM Useracounts WHERE Email=?', [data.Email], (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(!!row);
+        }
+      });
+    } catch (error) {
+      console.error(error);
     }
   });
-  
-  res.sendStatus(200)
+}
 
+api.post("/newacount", (req, res) => {
+  const data = req.body;
+  console.log(data);
+  db.run(
+    "INSERT INTO Useracounts (Email, Password) VALUES (?, ?)",
+    [data.Email, data.Password],
+    function (err) {
+      if (err) {
+        console.error(err.message);
+      } else {
+        console.log(`A row has been inserted with rowid ${this.lastID}`);
+      }
+    }
+  );
+
+  res.sendStatus(200);
 });
 //Till nästa gång.
 //skapa route som tar json objekt fylld med användarnamn och lös.
 //Börja med att jämnföra förfrågans användarnamn med db lista av användarnamn för att se om den existerar som skapat konto.
 //Om ingen matchning ge en 400ish respons om det matchas så matchar du lös från förfrågan och db och se om det matchar.
 
-api.post("/loginacount",(req, res) => {
+api.post("/loginacount",async(req, res) => {
   const data = req.body
-  db.get('SELECT Email FROM Useracounts WHERE Email=?', [data.Email],(err,matchedEmail)=>{
-    if(matchedEmail){
-      //add functionality for loggin in user
-      res.status(200).send("Login succesful")
-    }else{      
-      res.status(400).send("No User found")
-    }
-  })
-});
+  const emailExists = await checkEmailDb(data);
 
+if (emailExists) {
+  res.sendStatus(200)
+} else {
+  res.sendStatus(400)
+}
+
+  console.log(emailExists); // true or false
+});
 
 api.get("/programscategorie/:id", (req, res) => {
   let id = req.params.id;
