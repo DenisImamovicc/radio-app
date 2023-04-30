@@ -12,11 +12,6 @@ const JSON_FORMAT = `format=json`;
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({ extended: true }));
 
-
-// const DB = open({  filename: 'C:/Users/Work/Desktop/sqldbs/Radiouseracount.db', driver: sqlite3.Database}).then((db)=>{
-//   return db
-// })
-
 const db = new sqlite3.Database('C:/Users/Work/Desktop/sqldbs/Radiouseracount.db', (err) => {
   if (err) {
     console.error(err.message);
@@ -25,6 +20,7 @@ const db = new sqlite3.Database('C:/Users/Work/Desktop/sqldbs/Radiouseracount.db
   }
 });
 
+//Reveal data from current table from db
 db.all('SELECT * FROM Useracounts', (err, rows) => {
   if (err) {
     console.error(err.message);
@@ -34,7 +30,6 @@ db.all('SELECT * FROM Useracounts', (err, rows) => {
 });
 
 console.log(db);
-
 
 function getAllList(req, res) {
   const TYPE = req.originalUrl;
@@ -71,6 +66,23 @@ api.post("/newacount", (req, res) => {
   res.sendStatus(200)
 
 });
+//Till nästa gång.
+//skapa route som tar json objekt fylld med användarnamn och lös.
+//Börja med att jämnföra förfrågans användarnamn med db lista av användarnamn för att se om den existerar som skapat konto.
+//Om ingen matchning ge en 400ish respons om det matchas så matchar du lös från förfrågan och db och se om det matchar.
+
+api.post("/loginacount",(req, res) => {
+  const data = req.body
+  db.get('SELECT Email FROM Useracounts WHERE Email=?', [data.Email],(err,matchedEmail)=>{
+    if(matchedEmail){
+      //add functionality for loggin in user
+      res.status(200).send("Login succesful")
+    }else{      
+      res.status(400).send("No User found")
+    }
+  })
+});
+
 
 api.get("/programscategorie/:id", (req, res) => {
   let id = req.params.id;
