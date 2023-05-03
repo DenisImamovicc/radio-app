@@ -227,6 +227,24 @@ api.put("/favoritechannel/", async (req, res) => {
   res.sendStatus(200);
 });
 
+//Route purpose is to give client its favoiritechannelrow from sqldb.
+//Find a way for client to send indentification of some sorts
+//,email in params for beginning and token in the end,to be able to get clients data and give it as res.
+
+api.get("/favoritechannels/:Email", async (req, res) => {
+  const Email = req.params.Email;
+  const data = await getFavoriteChannel(Email);
+  const modified = arrStrToArrObj(data.Favoritechannels, data);
+  res.send(modified);
+});
+
+api.get("/favoriteprograms/:Email", async (req, res) => {
+  const Email = req.params.Email;
+  const data = await getFavoritePrograms(Email);
+  const modified = arrStrToArrObj(data.Favoriteprograms, data);
+  res.send(modified);
+});
+
 api.delete("/unfavoritechannel/:id", (req, res) => {});
 
 api.put("/favoriteprogram", async (req, res) => {
