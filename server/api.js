@@ -31,6 +31,16 @@ const db = new sqlite3.Database(
 //   }
 // });
 
+function checkDuplicate(currentdata,reqdataID) {
+   console.log(currentdata,reqdataID);
+  if (currentdata.some((obj)=>obj.id === reqdataID)) {
+    console.log("INDENTIFIED DUPES");
+    return false
+  }
+  console.log("NO DUPES :)");
+  return true
+}
+
 function getAllList(req, res) {
   const TYPE = req.originalUrl;
   fetch(SVERIGES_RADIO_API + TYPE + "?" + JSON_FORMAT)
@@ -137,8 +147,11 @@ api.put("/favoritechannel/", async (req, res) => {
   // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
   const emptyRow = await checkFavoriteChannel(data);
   const oldData = await getFavoriteChannel(data.Email);
-
-  // console.log(emptyRow);
+  const currentFavs = JSON.parse(
+    oldData.Favoritechannels.slice(0, oldData.length)
+  );
+  
+  // if (checkDuplicate(currentdata,data.channel))  return res.status(400)
 
   if (!emptyRow) {
     console.log("went to if");
@@ -153,27 +166,20 @@ api.put("/favoritechannel/", async (req, res) => {
         }
       }
     );
-  } else {
-    //row has data and need to get olddata to update together with new data to send back to db.
-    // const arr = [JSON.parse(oldData.Favoritechannels),data.channel]
-    // console.log(arr);
-    const currentFavs = JSON.parse(
-      oldData.Favoritechannels.slice(0, oldData.length)
-    );
+  } else if (checkDuplicate(currentFavs,data.channel.id)){
     currentFavs.unshift(data.channel);
-    console.log(currentFavs);
-
-    db.run(
-      "UPDATE Useracounts SET Favoritechannels = ? WHERE Email = ?",
-      [JSON.stringify(currentFavs), data.Email],
-      function (err) {
-        if (err) {
-          console.error(err.message);
-        } else {
-          console.log(`A row has been inserted with rowid ${this.lastID}`);
-        }
-      }
-    );
+    //Add duplication reject logic
+     db.run(
+       "UPDATE Useracounts SET Favoritechannels = ? WHERE Email = ?",
+       [JSON.stringify(currentFavs), data.Email],
+       function (err) {
+         if (err) {
+           console.error(err.message);
+         } else {
+           console.log(`A row has been inserted with rowid ${this.lastID}`);
+         }
+       }
+     );
   }
 
   res.sendStatus(200);
