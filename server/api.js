@@ -2,7 +2,6 @@ import express from "express";
 import fetch from "node-fetch";
 import bodyParser from "body-parser";
 import sqlite3 from "sqlite3";
-import { open } from "sqlite";
 
 const port = 9000;
 const api = express();
@@ -24,14 +23,13 @@ const db = new sqlite3.Database(
 );
 
 //Reveal data from current table from db
-db.all("SELECT * FROM Useracounts", (err, rows) => {
-  if (err) {
-    console.error(err.message);
-  } else {
-    console.log(rows);
-  }
-});
-
+// db.all("SELECT * FROM Useracounts", (err, rows) => {
+//   if (err) {
+//     console.error(err.message);
+//   } else {
+//     console.log(rows);
+//   }
+// });
 
 function getAllList(req, res) {
   const TYPE = req.originalUrl;
@@ -55,15 +53,59 @@ function getDataById(req, res, id, params) {
 }
 
 function MatchEmailFromDb(data) {
-  return new Promise(async(resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
-      db.get(`SELECT Email FROM Useracounts WHERE Email=?`, [data], (err, row) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(!!row);
+      db.get(
+        `SELECT Email FROM Useracounts WHERE Email=?`,
+        [data],
+        (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(!!row);
+          }
         }
-      });
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
+
+function checkFavoriteChannel(data) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      db.get(
+        `SELECT Favoritechannels FROM Useracounts WHERE Email=?`,
+        [data.Email],
+        (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row.Favoritechannels);
+          }
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
+
+function getFavoriteChannel(userid) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      db.get(
+        `SELECT Favoritechannels FROM Useracounts WHERE Email = ?`,
+        [userid],
+        (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row);
+          }
+        }
+      );
     } catch (error) {
       console.error(error);
     }
@@ -71,20 +113,73 @@ function MatchEmailFromDb(data) {
 }
 
 function MatchPasswordFromDb(data) {
-  return new Promise(async(resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
-      db.get(`SELECT Password FROM Useracounts WHERE Password=?`, [data], (err, row) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(!!row);
+      db.get(
+        `SELECT Password FROM Useracounts WHERE Password=?`,
+        [data],
+        (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(!!row);
+          }
         }
-      });
+      );
     } catch (error) {
       console.error(error);
     }
   });
 }
+
+api.put("/favoritechannel/", async (req, res) => {
+  const data = req.body;
+  // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
+  const emptyRow = await checkFavoriteChannel(data);
+  const oldData = await getFavoriteChannel(data.Email);
+
+  // console.log(emptyRow);
+
+  if (!emptyRow) {
+    console.log("went to if");
+    db.run(
+      "UPDATE Useracounts SET Favoritechannels = ? WHERE Email = ?",
+      [JSON.stringify([data.channel]), data.Email],
+      function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log(`A row has been inserted with rowid ${this.lastID}`);
+        }
+      }
+    );
+  } else {
+    //row has data and need to get olddata to update together with new data to send back to db.
+    // const arr = [JSON.parse(oldData.Favoritechannels),data.channel]
+    // console.log(arr);
+    const currentFavs = JSON.parse(
+      oldData.Favoritechannels.slice(0, oldData.length)
+    );
+    currentFavs.unshift(data.channel);
+    console.log(currentFavs);
+
+    db.run(
+      "UPDATE Useracounts SET Favoritechannels = ? WHERE Email = ?",
+      [JSON.stringify(currentFavs), data.Email],
+      function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log(`A row has been inserted with rowid ${this.lastID}`);
+        }
+      }
+    );
+  }
+
+  res.sendStatus(200);
+});
+
+api.delete("/unfavoritechannel/:id", (req, res) => {});
 
 api.post("/newacount", (req, res) => {
   const data = req.body;
@@ -104,16 +199,16 @@ api.post("/newacount", (req, res) => {
   res.sendStatus(200);
 });
 
-api.post("/loginacount",async(req, res) => {
-  const data = req.body
+api.post("/loginacount", async (req, res) => {
+  const data = req.body;
   const emailMatch = await MatchEmailFromDb(data.Email);
   const passwordMatch = await MatchPasswordFromDb(data.Password);
 
-if (emailMatch && passwordMatch) {
-  res.sendStatus(200)
-} else {
-  res.sendStatus(400)
-}
+  if (emailMatch && passwordMatch) {
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(400);
+  }
 });
 
 api.get("/programscategorie/:id", (req, res) => {
@@ -135,6 +230,10 @@ api.get("/programschannel/:id", (req, res) => {
 });
 
 api.get("/channels", (req, res) => {
+  getAllList(req, res);
+});
+
+api.get("/channels/:id", (req, res) => {
   getAllList(req, res);
 });
 
