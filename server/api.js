@@ -31,14 +31,14 @@ const db = new sqlite3.Database(
 //   }
 // });
 
-function checkDuplicate(currentdata,reqdataID) {
-   console.log(currentdata,reqdataID);
-  if (currentdata.some((obj)=>obj.id === reqdataID)) {
+function checkDuplicate(currentdata, reqdataID) {
+  console.log(currentdata, reqdataID);
+  if (currentdata.some((obj) => obj.id === reqdataID)) {
     console.log("INDENTIFIED DUPES");
-    return false
+    return false;
   }
   console.log("NO DUPES :)");
-  return true
+  return true;
 }
 
 function getAllList(req, res) {
@@ -62,6 +62,13 @@ function getDataById(req, res, id, params) {
     });
 }
 
+function arrStrToArrObj(row, data) {
+  if (row) {
+    const currentFavs = JSON.parse(row.slice(0, data.length));
+    return currentFavs;
+  }
+}
+
 function MatchEmailFromDb(data) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -82,7 +89,67 @@ function MatchEmailFromDb(data) {
   });
 }
 
-function checkFavoriteChannel(data) {
+function MatchPasswordFromDb(data) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      db.get(
+        `SELECT Password FROM Useracounts WHERE Password=?`,
+        [data],
+        (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(!!row);
+          }
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
+
+function CheckEmptyPrograms(data) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      db.get(
+        `SELECT Favoriteprograms FROM Useracounts WHERE Email=?`,
+        [data.userEmail],
+        (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row.Favoriteprograms);
+          }
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
+
+function getFavoritePrograms(userid) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      db.get(
+        `SELECT Favoriteprograms FROM Useracounts WHERE Email = ?`,
+        [userid],
+        (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row);
+          }
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
+
+function checkEmptyChannel(data) {
   return new Promise(async (resolve, reject) => {
     try {
       db.get(
@@ -122,36 +189,12 @@ function getFavoriteChannel(userid) {
   });
 }
 
-function MatchPasswordFromDb(data) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      db.get(
-        `SELECT Password FROM Useracounts WHERE Password=?`,
-        [data],
-        (err, row) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(!!row);
-          }
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  });
-}
-
 api.put("/favoritechannel/", async (req, res) => {
   const data = req.body;
   // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
-  const emptyRow = await checkFavoriteChannel(data);
+  const emptyRow = await checkEmptyChannel(data);
   const oldData = await getFavoriteChannel(data.Email);
-  const currentFavs = JSON.parse(
-    oldData.Favoritechannels.slice(0, oldData.length)
-  );
-  
-  // if (checkDuplicate(currentdata,data.channel))  return res.status(400)
+  const currentFavs = arrStrToArrObj(emptyRow, oldData);
 
   if (!emptyRow) {
     console.log("went to if");
@@ -166,26 +209,62 @@ api.put("/favoritechannel/", async (req, res) => {
         }
       }
     );
-  } else if (checkDuplicate(currentFavs,data.channel.id)){
+  } else if (checkDuplicate(currentFavs, data.channel.id)) {
     currentFavs.unshift(data.channel);
-    //Add duplication reject logic
-     db.run(
-       "UPDATE Useracounts SET Favoritechannels = ? WHERE Email = ?",
-       [JSON.stringify(currentFavs), data.Email],
-       function (err) {
-         if (err) {
-           console.error(err.message);
-         } else {
-           console.log(`A row has been inserted with rowid ${this.lastID}`);
-         }
-       }
-     );
+    db.run(
+      "UPDATE Useracounts SET Favoritechannels = ? WHERE Email = ?",
+      [JSON.stringify(currentFavs), data.Email],
+      function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log(`A row has been inserted with rowid ${this.lastID}`);
+        }
+      }
+    );
   }
 
   res.sendStatus(200);
 });
 
 api.delete("/unfavoritechannel/:id", (req, res) => {});
+
+api.put("/favoriteprogram", async (req, res) => {
+  const data = req.body;
+  const emptyRow = await CheckEmptyPrograms(data);
+  const oldData = await getFavoritePrograms(data.userEmail);
+  const currentFavs = arrStrToArrObj(emptyRow, oldData);
+
+  if (!emptyRow) {
+    console.log("went to if");
+    db.run(
+      "UPDATE Useracounts SET Favoriteprograms = ? WHERE Email = ?",
+      [JSON.stringify([data]), data.userEmail],
+      function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log(`A row has been inserted with rowid ${this.lastID}`);
+        }
+      }
+    );
+  } else if (checkDuplicate(currentFavs, data.id)) {
+    currentFavs.unshift(data);
+    db.run(
+      "UPDATE Useracounts SET Favoriteprograms = ? WHERE Email = ?",
+      [JSON.stringify(currentFavs), data.userEmail],
+      function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log(`A row has been inserted with rowid ${this.lastID}`);
+        }
+      }
+    );
+  }
+
+  res.sendStatus(200);
+});
 
 api.post("/newacount", (req, res) => {
   const data = req.body;
