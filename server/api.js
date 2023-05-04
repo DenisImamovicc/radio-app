@@ -259,7 +259,56 @@ api.get("/favoriteprograms/:Email", async (req, res) => {
   }
 });
 
-api.delete("/unfavoritechannel/:id", (req, res) => {});
+api.delete("/unfavoritechannel/:id/:Email", async(req, res) => {
+  const id = Number(req.params.id);
+  const Email = req.params.Email;
+  const data = await getFavoriteChannel(Email);
+  const modifiedData = arrStrToArrObj(data.Favoritechannels, data)
+  const newData = modifiedData.filter((obj)=> obj.id !== id)
+  const deletedData = modifiedData.filter((obj)=> obj.id === id)
+  console.log(newData);
+
+   db.run(
+     "UPDATE Useracounts SET Favoritechannels = ? WHERE Email = ?",
+     [JSON.stringify(newData), Email],
+     function (err) {
+       if (err) {
+         console.error(err.message);
+       } else {
+         console.log(`${deletedData[0].name} with id ${deletedData[0].id} has been deleted from Favoritechannels row`);
+       }
+     }
+   );
+  res.status(200).send({ success: `Delete ${deletedData[0].name} with id ${deletedData[0].id} successfully` });
+
+  // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
+});
+
+api.delete("/unfavoriteprogram/:id/:Email", async(req, res) => {
+  const id = Number(req.params.id);
+  const Email = req.params.Email;
+  const data = await getFavoritePrograms(Email);
+  const modifiedData = arrStrToArrObj(data.Favoriteprograms, data)
+  const newData = modifiedData.filter((obj)=> obj.id !== id)
+  const deletedData = modifiedData.filter((obj)=> obj.id === id)
+  console.log(newData);
+
+   db.run(
+     "UPDATE Useracounts SET Favoriteprograms = ? WHERE Email = ?",
+     [JSON.stringify(newData), Email],
+     function (err) {
+       if (err) {
+         console.error(err.message);
+       } else {
+         console.log(`${deletedData[0].name} with id ${deletedData[0].id} has been deleted from Favoriteprograms row`);
+       }
+     }
+   );
+  res.status(200).send({ success: `Delete ${deletedData[0].name} with id ${deletedData[0].id} successfully` });
+
+  // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
+  // const currentFavs = arrStrToArrObj(emptyRow, oldData);
+});
 
 api.put("/favoriteprogram", async (req, res) => {
   const data = req.body;
