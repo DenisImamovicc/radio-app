@@ -227,22 +227,36 @@ api.put("/favoritechannel/", async (req, res) => {
   res.sendStatus(200);
 });
 
-//Route purpose is to give client its favoiritechannelrow from sqldb.
 //Find a way for client to send indentification of some sorts
 //,email in params for beginning and token in the end,to be able to get clients data and give it as res.
+//implement handling when faves are empty
 
 api.get("/favoritechannels/:Email", async (req, res) => {
   const Email = req.params.Email;
   const data = await getFavoriteChannel(Email);
-  const modified = arrStrToArrObj(data.Favoritechannels, data);
-  res.send(modified);
+
+  if (data.Favoritechannels) {
+    const modified = arrStrToArrObj(data.Favoritechannels, data);
+    res.status(200).send(modified);
+  } else {
+    res
+      .status(404)
+      .send({ error: `There is no data on Favoritechannels for ${Email}` });
+  }
 });
 
 api.get("/favoriteprograms/:Email", async (req, res) => {
   const Email = req.params.Email;
   const data = await getFavoritePrograms(Email);
-  const modified = arrStrToArrObj(data.Favoriteprograms, data);
-  res.send(modified);
+
+  if (data.Favoriteprograms) {
+    const modified = arrStrToArrObj(data.Favoriteprograms, data);
+    res.status(200).send(modified);
+  } else {
+    res
+      .status(404)
+      .send({ error: `There is no data on Favoriteprograms for ${Email}` });
+  }
 });
 
 api.delete("/unfavoritechannel/:id", (req, res) => {});
