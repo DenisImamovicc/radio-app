@@ -2,6 +2,7 @@ import express from "express";
 import fetch from "node-fetch";
 import bodyParser from "body-parser";
 import sqlite3 from "sqlite3";
+import bcrypt from "bcrypt"
 
 const port = 9000;
 const api = express();
@@ -89,25 +90,31 @@ function MatchEmailFromDb(data) {
   });
 }
 
-function MatchPasswordFromDb(data) {
+ function MatchPasswordFromDb (user) {
   return new Promise(async (resolve, reject) => {
     try {
       db.get(
-        `SELECT Password FROM Useracounts WHERE Password=?`,
-        [data],
+        `SELECT Password FROM Useracounts WHERE Email=?`,
+        [user.Email],
         (err, row) => {
+          console.log(row);
           if (err) {
             reject(err);
           } else {
-            resolve(!!row);
+            resolve(row);
           }
         }
       );
     } catch (error) {
       console.error(error);
     }
+    const match = await bcrypt.compare(row,user.Password)
+    return match
   });
 }
+
+
+
 
 function CheckEmptyPrograms(data) {
   return new Promise(async (resolve, reject) => {
@@ -347,28 +354,30 @@ api.put("/favoriteprogram", async (req, res) => {
   res.sendStatus(200);
 });
 
-api.post("/newacount", (req, res) => {
+api.post("/newacount", async(req, res) => {
   const data = req.body;
-  console.log(data);
-  db.run(
-    "INSERT INTO Useracounts (Email, Password) VALUES (?, ?)",
-    [data.Email, data.Password],
-    function (err) {
-      if (err) {
-        console.error(err.message);
-      } else {
-        console.log(`A row has been inserted with rowid ${this.lastID}`);
-      }
-    }
-  );
 
-  res.sendStatus(200);
+  const hashedPwd = await bcrypt.hash(data.Password,10)
+  console.log(data.Email,hashedPwd);
+   db.run(
+     "INSERT INTO Useracounts (Email, Password) VALUES (?, ?)",
+     [data.Email, hashedPwd],
+     function (err) {
+       if (err) {
+         console.error(err.message);
+       } else {
+         console.log(`A row has been inserted with rowid ${this.lastID}`);
+       }
+     }
+   );
+
+  res.status(200).json({mssg:"New User Added in Database"});
 });
 
 api.post("/loginacount", async (req, res) => {
-  const data = req.body;
+  const user = req.body;
   const emailMatch = await MatchEmailFromDb(data.Email);
-  const passwordMatch = await MatchPasswordFromDb(data.Password);
+  const passwordMatch = await MatchPasswordFromDb(user);
 
   if (emailMatch && passwordMatch) {
     res.sendStatus(200);
