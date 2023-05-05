@@ -2,7 +2,7 @@ import express from "express";
 import fetch from "node-fetch";
 import bodyParser from "body-parser";
 import sqlite3 from "sqlite3";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 
 const port = 9000;
 const api = express();
@@ -90,31 +90,28 @@ function MatchEmailFromDb(data) {
   });
 }
 
- function MatchPasswordFromDb (user) {
+function MatchPasswordFromDb(user) {
   return new Promise(async (resolve, reject) => {
     try {
       db.get(
         `SELECT Password FROM Useracounts WHERE Email=?`,
         [user.Email],
-        (err, row) => {
-          console.log(row);
+        (err, pwd) => {
           if (err) {
             reject(err);
           } else {
-            resolve(row);
+            resolve(comparePassword(user, pwd));
           }
         }
       );
     } catch (error) {
       console.error(error);
     }
-    const match = await bcrypt.compare(row,user.Password)
-    return match
   });
 }
 
-
-
+const comparePassword = async (user, dbPwd) =>
+  await bcrypt.compare(user.Password, dbPwd.Password);
 
 function CheckEmptyPrograms(data) {
   return new Promise(async (resolve, reject) => {
@@ -266,52 +263,60 @@ api.get("/favoriteprograms/:Email", async (req, res) => {
   }
 });
 
-api.delete("/unfavoritechannel/:id/:Email", async(req, res) => {
+api.delete("/unfavoritechannel/:id/:Email", async (req, res) => {
   const id = Number(req.params.id);
   const Email = req.params.Email;
   const data = await getFavoriteChannel(Email);
-  const modifiedData = arrStrToArrObj(data.Favoritechannels, data)
-  const newData = modifiedData.filter((obj)=> obj.id !== id)
-  const deletedData = modifiedData.filter((obj)=> obj.id === id)
+  const modifiedData = arrStrToArrObj(data.Favoritechannels, data);
+  const newData = modifiedData.filter((obj) => obj.id !== id);
+  const deletedData = modifiedData.filter((obj) => obj.id === id);
   console.log(newData);
 
-   db.run(
-     "UPDATE Useracounts SET Favoritechannels = ? WHERE Email = ?",
-     [JSON.stringify(newData), Email],
-     function (err) {
-       if (err) {
-         console.error(err.message);
-       } else {
-         console.log(`${deletedData[0].name} with id ${deletedData[0].id} has been deleted from Favoritechannels row`);
-       }
-     }
-   );
-  res.status(200).send({ success: `Delete ${deletedData[0].name} with id ${deletedData[0].id} successfully` });
+  db.run(
+    "UPDATE Useracounts SET Favoritechannels = ? WHERE Email = ?",
+    [JSON.stringify(newData), Email],
+    function (err) {
+      if (err) {
+        console.error(err.message);
+      } else {
+        console.log(
+          `${deletedData[0].name} with id ${deletedData[0].id} has been deleted from Favoritechannels row`
+        );
+      }
+    }
+  );
+  res.status(200).send({
+    success: `Delete ${deletedData[0].name} with id ${deletedData[0].id} successfully`,
+  });
 
   // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
 });
 
-api.delete("/unfavoriteprogram/:id/:Email", async(req, res) => {
+api.delete("/unfavoriteprogram/:id/:Email", async (req, res) => {
   const id = Number(req.params.id);
   const Email = req.params.Email;
   const data = await getFavoritePrograms(Email);
-  const modifiedData = arrStrToArrObj(data.Favoriteprograms, data)
-  const newData = modifiedData.filter((obj)=> obj.id !== id)
-  const deletedData = modifiedData.filter((obj)=> obj.id === id)
+  const modifiedData = arrStrToArrObj(data.Favoriteprograms, data);
+  const newData = modifiedData.filter((obj) => obj.id !== id);
+  const deletedData = modifiedData.filter((obj) => obj.id === id);
   console.log(newData);
 
-   db.run(
-     "UPDATE Useracounts SET Favoriteprograms = ? WHERE Email = ?",
-     [JSON.stringify(newData), Email],
-     function (err) {
-       if (err) {
-         console.error(err.message);
-       } else {
-         console.log(`${deletedData[0].name} with id ${deletedData[0].id} has been deleted from Favoriteprograms row`);
-       }
-     }
-   );
-  res.status(200).send({ success: `Delete ${deletedData[0].name} with id ${deletedData[0].id} successfully` });
+  db.run(
+    "UPDATE Useracounts SET Favoriteprograms = ? WHERE Email = ?",
+    [JSON.stringify(newData), Email],
+    function (err) {
+      if (err) {
+        console.error(err.message);
+      } else {
+        console.log(
+          `${deletedData[0].name} with id ${deletedData[0].id} has been deleted from Favoriteprograms row`
+        );
+      }
+    }
+  );
+  res.status(200).send({
+    success: `Delete ${deletedData[0].name} with id ${deletedData[0].id} successfully`,
+  });
 
   // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
   // const currentFavs = arrStrToArrObj(emptyRow, oldData);
@@ -354,35 +359,35 @@ api.put("/favoriteprogram", async (req, res) => {
   res.sendStatus(200);
 });
 
-api.post("/newacount", async(req, res) => {
+api.post("/newacount", async (req, res) => {
   const data = req.body;
 
-  const hashedPwd = await bcrypt.hash(data.Password,10)
-  console.log(data.Email,hashedPwd);
-   db.run(
-     "INSERT INTO Useracounts (Email, Password) VALUES (?, ?)",
-     [data.Email, hashedPwd],
-     function (err) {
-       if (err) {
-         console.error(err.message);
-       } else {
-         console.log(`A row has been inserted with rowid ${this.lastID}`);
-       }
-     }
-   );
+  const hashedPwd = await bcrypt.hash(data.Password, 10);
+  console.log(data.Email, hashedPwd);
+  db.run(
+    "INSERT INTO Useracounts (Email, Password) VALUES (?, ?)",
+    [data.Email, hashedPwd],
+    function (err) {
+      if (err) {
+        console.error(err.message);
+      } else {
+        console.log(`A row has been inserted with rowid ${this.lastID}`);
+      }
+    }
+  );
 
-  res.status(200).json({mssg:"New User Added in Database"});
+  res.status(200).json({ mssg: "New User Added in Database" });
 });
 
 api.post("/loginacount", async (req, res) => {
   const user = req.body;
-  const emailMatch = await MatchEmailFromDb(data.Email);
+  // const emailMatch = await MatchEmailFromDb(data.Email);
   const passwordMatch = await MatchPasswordFromDb(user);
 
-  if (emailMatch && passwordMatch) {
-    res.sendStatus(200);
+  if (passwordMatch) {
+    res.status(200).json({ mssg: "User logged in!" });
   } else {
-    res.sendStatus(400);
+    res.sendStatus(401);
   }
 });
 
