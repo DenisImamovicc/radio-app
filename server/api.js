@@ -3,12 +3,15 @@ import fetch from "node-fetch";
 import bodyParser from "body-parser";
 import sqlite3 from "sqlite3";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv"
 
 const port = 9000;
 const api = express();
 const SVERIGES_RADIO_API = `http://api.sr.se/api/v2`;
 const JSON_FORMAT = `format=json`;
 
+dotenv.config()
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({ extended: true }));
 
@@ -70,7 +73,7 @@ function arrStrToArrObj(row, data) {
   }
 }
 
-function MatchEmailFromDb(data) {
+function getUserTokenDb(data) {
   return new Promise(async (resolve, reject) => {
     try {
       db.get(
@@ -193,6 +196,20 @@ function getFavoriteChannel(userid) {
   });
 }
 
+function authenticateToken(req, res, next) {
+  console.log(req.headers);
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+  if (token == null) return res.sendStatus(401)
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    console.log(err)
+    if (err) return res.sendStatus(403)
+    req.user = user
+    next()
+  })
+}
+
 api.put("/favoritechannel/", async (req, res) => {
   const data = req.body;
   // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
@@ -249,18 +266,18 @@ api.get("/favoritechannels/:Email", async (req, res) => {
   }
 });
 
-api.get("/favoriteprograms/:Email", async (req, res) => {
+api.get("/favoriteprograms/:Email", authenticateToken ,async (req, res) => {
   const Email = req.params.Email;
   const data = await getFavoritePrograms(Email);
 
-  if (data.Favoriteprograms) {
-    const modified = arrStrToArrObj(data.Favoriteprograms, data);
-    res.status(200).send(modified);
-  } else {
-    res
-      .status(404)
-      .send({ error: `There is no data on Favoriteprograms for ${Email}` });
-  }
+   if (data.Favoriteprograms) {
+     const modified = arrStrToArrObj(data.Favoriteprograms, data);
+     res.status(200).send(modified);
+   } else {
+     res
+       .status(404)
+       .send({ error: `There is no data on Favoriteprograms for ${Email}` });
+   }
 });
 
 api.delete("/unfavoritechannel/:id/:Email", async (req, res) => {
@@ -385,7 +402,9 @@ api.post("/loginacount", async (req, res) => {
   const passwordMatch = await MatchPasswordFromDb(user);
 
   if (passwordMatch) {
-    res.status(200).json({ mssg: "User logged in!" });
+    const acessToken= jwt.sign(user,process.env.ACCESS_TOKEN_SECRET)
+
+    res.status(200).json({ mssg: "User logged in!",acessToken:acessToken});
   } else {
     res.sendStatus(401);
   }
