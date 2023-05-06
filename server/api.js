@@ -4,14 +4,14 @@ import bodyParser from "body-parser";
 import sqlite3 from "sqlite3";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
 const port = 9000;
 const api = express();
 const SVERIGES_RADIO_API = `http://api.sr.se/api/v2`;
 const JSON_FORMAT = `format=json`;
 
-dotenv.config()
+dotenv.config();
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({ extended: true }));
 
@@ -195,22 +195,21 @@ function getFavoriteChannel(userid) {
     }
   });
 }
-
+//add this func to the rest of routes that need user auth.Then add delete route for logout to delete users auth token.
 function authenticateToken(req, res, next) {
-  console.log(req.headers);
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
-  if (token == null) return res.sendStatus(401)
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) return res.sendStatus(401);
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    console.log(err)
-    if (err) return res.sendStatus(403)
-    req.user = user
-    next()
-  })
+    console.log(err);
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
 }
 
-api.put("/favoritechannel/", async (req, res) => {
+api.put("/favoritechannel/", authenticateToken, async (req, res) => {
   const data = req.body;
   // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
   const emptyRow = await checkEmptyChannel(data);
@@ -252,7 +251,7 @@ api.put("/favoritechannel/", async (req, res) => {
 //,email in params for beginning and token in the end,to be able to get clients data and give it as res.
 //implement handling when faves are empty
 
-api.get("/favoritechannels/:Email", async (req, res) => {
+api.get("/favoritechannels/:Email", authenticateToken, async (req, res) => {
   const Email = req.params.Email;
   const data = await getFavoriteChannel(Email);
 
@@ -266,80 +265,88 @@ api.get("/favoritechannels/:Email", async (req, res) => {
   }
 });
 
-api.get("/favoriteprograms/:Email", authenticateToken ,async (req, res) => {
+api.get("/favoriteprograms/:Email", authenticateToken, async (req, res) => {
   const Email = req.params.Email;
   const data = await getFavoritePrograms(Email);
 
-   if (data.Favoriteprograms) {
-     const modified = arrStrToArrObj(data.Favoriteprograms, data);
-     res.status(200).send(modified);
-   } else {
-     res
-       .status(404)
-       .send({ error: `There is no data on Favoriteprograms for ${Email}` });
-   }
+  if (data.Favoriteprograms) {
+    const modified = arrStrToArrObj(data.Favoriteprograms, data);
+    res.status(200).send(modified);
+  } else {
+    res
+      .status(404)
+      .send({ error: `There is no data on Favoriteprograms for ${Email}` });
+  }
 });
 
-api.delete("/unfavoritechannel/:id/:Email", async (req, res) => {
-  const id = Number(req.params.id);
-  const Email = req.params.Email;
-  const data = await getFavoriteChannel(Email);
-  const modifiedData = arrStrToArrObj(data.Favoritechannels, data);
-  const newData = modifiedData.filter((obj) => obj.id !== id);
-  const deletedData = modifiedData.filter((obj) => obj.id === id);
-  console.log(newData);
+api.delete(
+  "/unfavoritechannel/:id/:Email",
+  authenticateToken,
+  async (req, res) => {
+    const id = Number(req.params.id);
+    const Email = req.params.Email;
+    const data = await getFavoriteChannel(Email);
+    const modifiedData = arrStrToArrObj(data.Favoritechannels, data);
+    const newData = modifiedData.filter((obj) => obj.id !== id);
+    const deletedData = modifiedData.filter((obj) => obj.id === id);
+    console.log(newData);
 
-  db.run(
-    "UPDATE Useracounts SET Favoritechannels = ? WHERE Email = ?",
-    [JSON.stringify(newData), Email],
-    function (err) {
-      if (err) {
-        console.error(err.message);
-      } else {
-        console.log(
-          `${deletedData[0].name} with id ${deletedData[0].id} has been deleted from Favoritechannels row`
-        );
+    db.run(
+      "UPDATE Useracounts SET Favoritechannels = ? WHERE Email = ?",
+      [JSON.stringify(newData), Email],
+      function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log(
+            `${deletedData[0].name} with id ${deletedData[0].id} has been deleted from Favoritechannels row`
+          );
+        }
       }
-    }
-  );
-  res.status(200).send({
-    success: `Delete ${deletedData[0].name} with id ${deletedData[0].id} successfully`,
-  });
+    );
+    res.status(200).send({
+      success: `Delete ${deletedData[0].name} with id ${deletedData[0].id} successfully`,
+    });
 
-  // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
-});
+    // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
+  }
+);
 
-api.delete("/unfavoriteprogram/:id/:Email", async (req, res) => {
-  const id = Number(req.params.id);
-  const Email = req.params.Email;
-  const data = await getFavoritePrograms(Email);
-  const modifiedData = arrStrToArrObj(data.Favoriteprograms, data);
-  const newData = modifiedData.filter((obj) => obj.id !== id);
-  const deletedData = modifiedData.filter((obj) => obj.id === id);
-  console.log(newData);
+api.delete(
+  "/unfavoriteprogram/:id/:Email",
+  authenticateToken,
+  async (req, res) => {
+    const id = Number(req.params.id);
+    const Email = req.params.Email;
+    const data = await getFavoritePrograms(Email);
+    const modifiedData = arrStrToArrObj(data.Favoriteprograms, data);
+    const newData = modifiedData.filter((obj) => obj.id !== id);
+    const deletedData = modifiedData.filter((obj) => obj.id === id);
+    console.log(newData);
 
-  db.run(
-    "UPDATE Useracounts SET Favoriteprograms = ? WHERE Email = ?",
-    [JSON.stringify(newData), Email],
-    function (err) {
-      if (err) {
-        console.error(err.message);
-      } else {
-        console.log(
-          `${deletedData[0].name} with id ${deletedData[0].id} has been deleted from Favoriteprograms row`
-        );
+    db.run(
+      "UPDATE Useracounts SET Favoriteprograms = ? WHERE Email = ?",
+      [JSON.stringify(newData), Email],
+      function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log(
+            `${deletedData[0].name} with id ${deletedData[0].id} has been deleted from Favoriteprograms row`
+          );
+        }
       }
-    }
-  );
-  res.status(200).send({
-    success: `Delete ${deletedData[0].name} with id ${deletedData[0].id} successfully`,
-  });
+    );
+    res.status(200).send({
+      success: `Delete ${deletedData[0].name} with id ${deletedData[0].id} successfully`,
+    });
 
-  // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
-  // const currentFavs = arrStrToArrObj(emptyRow, oldData);
-});
+    // if(userlogin) then continue if not res.sendStatus(401).Implement login requriemtn down the line.
+    // const currentFavs = arrStrToArrObj(emptyRow, oldData);
+  }
+);
 
-api.put("/favoriteprogram", async (req, res) => {
+api.put("/favoriteprogram", authenticateToken, async (req, res) => {
   const data = req.body;
   const emptyRow = await CheckEmptyPrograms(data);
   const oldData = await getFavoritePrograms(data.userEmail);
@@ -398,13 +405,13 @@ api.post("/newacount", async (req, res) => {
 
 api.post("/loginacount", async (req, res) => {
   const user = req.body;
+ 
   // const emailMatch = await MatchEmailFromDb(data.Email);
   const passwordMatch = await MatchPasswordFromDb(user);
-
   if (passwordMatch) {
-    const acessToken= jwt.sign(user,process.env.ACCESS_TOKEN_SECRET)
+    const acessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 
-    res.status(200).json({ mssg: "User logged in!",acessToken:acessToken});
+    res.status(200).json({ mssg: "User logged in!", acessToken: acessToken });
   } else {
     res.sendStatus(401);
   }
