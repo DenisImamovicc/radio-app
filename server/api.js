@@ -409,13 +409,14 @@ api.post("/loginacount", async (req, res) => {
   // const emailMatch = await MatchEmailFromDb(data.Email);
   const passwordMatch = await MatchPasswordFromDb(user);
   if (passwordMatch) {
-    const acessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+    const acessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET,{expiresIn:"30min"});
 
     res.status(200).json({ mssg: "User logged in!", acessToken: acessToken });
   } else {
     res.sendStatus(401);
   }
 });
+
 
 api.get("/programscategorie/:id", (req, res) => {
   let id = req.params.id;
