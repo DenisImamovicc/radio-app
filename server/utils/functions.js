@@ -6,10 +6,11 @@ import {DB} from "../config/SQL_DB.js"
 const SVERIGES_RADIO_API = `http://api.sr.se/api/v2`;
 const JSON_FORMAT = `format=json`;
 
-export function checkDuplicate(currentdata, reqdataID) {
+export function checkDuplicate(currentdata, reqdataID,req, res) {
   console.log(currentdata, reqdataID);
   if (currentdata.some((obj) => obj.id === reqdataID)) {
     console.log("INDENTIFIED DUPES");
+    res.sendStatus(401)
     return false;
   }
   console.log("NO DUPES :)");
@@ -37,12 +38,18 @@ export function getDataById(req, res, id, params) {
     });
 }
 
-export function arrStrToArrObj(row, data) {
-  if (row) {
-    const currentFavs = JSON.parse(row.slice(0, data.length));
-    return currentFavs;
+export function arrayify(data) {
+    return JSON.parse(data.slice(0, data.length)); 
+}
+
+export async function handleLoginUser (req, res) {
+  if (await matchPasswordFromDB(req.body)) {
+    res.status(200).json({ mssg: "User logged in!", acessToken: grantAcessToken(req.body) });
+  } else {
+    res.sendStatus(401);
   }
 }
+
 
 export function getUserTokenDB(data) {
   return new Promise(async (resolve, reject) => {
@@ -83,11 +90,12 @@ export function matchPasswordFromDB(user) {
     }
   });
 }
+export const hashPassword = async (Password) => await bcrypt.hash(Password, 10);
+
+export const comparePassword = async (user, DBPwd) => await bcrypt.compare(user.Password, DBPwd.Password);
 
 export const grantAcessToken = (user) => jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "30min",})
 
-export const comparePassword = async (user, DBPwd) =>
-  await bcrypt.compare(user.Password, DBPwd.Password);
 
 export function checkEmptyPrograms(data) {
   return new Promise(async (resolve, reject) => {
@@ -109,25 +117,7 @@ export function checkEmptyPrograms(data) {
   });
 }
 
-export function getFavoritePrograms(userid) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      DB.get(
-        `SELECT Favoriteprograms FROM Useracounts WHERE Email = ?`,
-        [userid],
-        (err, row) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(row);
-          }
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  });
-}
+
 
 export function checkEmptyChannel(data) {
   return new Promise(async (resolve, reject) => {
@@ -149,6 +139,27 @@ export function checkEmptyChannel(data) {
   });
 }
 
+export function getFavoritePrograms(userid) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      DB.get(
+        `SELECT Favoriteprograms FROM Useracounts WHERE Email = ?`,
+        [userid],
+        (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row.Favoriteprograms);
+            console.log(row.Favoriteprograms);
+          }
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
+
 export function getFavoriteChannel(userid) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -159,7 +170,7 @@ export function getFavoriteChannel(userid) {
           if (err) {
             reject(err);
           } else {
-            resolve(row);
+            resolve(row.Favoritechannels);
           }
         }
       );

@@ -10,12 +10,3 @@ export const DB = new sqlite3.Database(
       }
     }
   );
-
-//Reveal data from current table from db
-// db.all("SELECT * FROM Useracounts", (err, rows) => {
-//   if (err) {
-//     console.error(err.message);
-//   } else {
-//     console.log(rows);
-//   }
-// });
