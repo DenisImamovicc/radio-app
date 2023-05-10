@@ -6,12 +6,12 @@ import {
   addUserAccount,
   addFavoriteData,
   deleteFavoriteData,
+  getFavoriteChannel,
+  getFavoritePrograms,
 } from "./model/sqlfuncs.js";
 
 import {
   authenticateToken,
-  getFavoriteChannel,
-  getFavoritePrograms,
   arrayify,
   getDataById,
   getAllList,
@@ -29,26 +29,56 @@ api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({ extended: true }));
 
 api.get("/favoritechannels/:Email", authenticateToken, async (req, res) => {
-  validateData(req,res,await getFavoriteChannel(req.params.Email),"favoritechannel")
+  validateData(
+    req,
+    res,
+    await getFavoriteChannel(req.params.Email),
+    "favoritechannel"
+  );
 });
 
 api.get("/favoriteprograms/:Email", authenticateToken, async (req, res) => {
-  validateData(req,res,await getFavoritePrograms(req.params.Email),"favoriteprogram")
+  validateData(
+    req,
+    res,
+    await getFavoritePrograms(req.params.Email),
+    "favoriteprogram"
+  );
 });
 
-api.delete("/unfavoritechannel/:id/:Email",authenticateToken,async (req, res) => {
+api.delete(
+  "/unfavoritechannel/:id/:Email",
+  authenticateToken,
+  async (req, res) => {
     const data = arrayify(await getFavoriteChannel(req.params.Email));
     const modifiedData = data.filter((obj) => obj.id !== Number(req.params.id));
-    
-    deleteFavoriteData(req,res,req.params.Email,JSON.stringify([modifiedData]),"favoritechannel");
-  });
 
-api.delete("/unfavoriteprogram/:id/:Email",authenticateToken,async (req, res) => {
+    deleteFavoriteData(
+      req,
+      res,
+      req.params.Email,
+      JSON.stringify([modifiedData]),
+      "favoritechannel"
+    );
+  }
+);
+
+api.delete(
+  "/unfavoriteprogram/:id/:Email",
+  authenticateToken,
+  async (req, res) => {
     const data = arrayify(await getFavoritePrograms(req.params.Email));
     const modifiedData = data.filter((obj) => obj.id !== Number(req.params.id));
-    
-    deleteFavoriteData(req,res,req.params.Email,JSON.stringify([modifiedData]),"favoriteprogram");
-});
+
+    deleteFavoriteData(
+      req,
+      res,
+      req.params.Email,
+      JSON.stringify([modifiedData]),
+      "favoriteprogram"
+    );
+  }
+);
 
 api.put("/favoritechannel", authenticateToken, async (req, res) => {
   const oldData = await getFavoriteChannel(req.body.Email);
