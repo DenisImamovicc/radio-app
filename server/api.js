@@ -1,10 +1,12 @@
 import express from "express";
 import bodyParser from "body-parser";
-import bcrypt from "bcrypt";
 import dotenv from "dotenv";
-import sqlite3 from "sqlite3";
-import { addUserAccount,addFavoriteData} from "./model/sqlfuncs.js";
-import {DB} from "./config/SQL_DB.js"
+
+import {
+  addUserAccount,
+  addFavoriteData,
+  deleteFavoriteData,
+} from "./model/sqlfuncs.js";
 
 import {
   authenticateToken,
@@ -16,19 +18,8 @@ import {
   checkDuplicate,
   handleLoginUser,
   hashPassword,
+  validateData,
 } from "./utils/functions.js";
-
-//import DB from model
-// export const db = new sqlite3.Database(
-//   "C:/Users/Work/Desktop/sqldbs/Radiouseracount.db",
-//   (err) => {
-//     if (err) {
-//       console.error(err.message);
-//     } else {
-//       console.log("Connected to the SQLite database.");
-//     }
-//   }
-// );
 
 const port = 9000;
 const api = express();
@@ -37,102 +28,49 @@ dotenv.config();
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({ extended: true }));
 
-//Till next time,make the if logic own func with flexibilty of taking and valueing favchannel or favprogram.
-
 api.get("/favoritechannels/:Email", authenticateToken, async (req, res) => {
-  const data = await getFavoriteChannel(req.params.Email);
-
-  if (data) {
-    res.status(200).send(arrayify(data));
-  } else {
-    res
-      .status(404)
-      .send({ error: `There is no data on Favoritechannels for ${req.params.Email}` });
-  }
+  validateData(req,res,await getFavoriteChannel(req.params.Email),"favoritechannel")
 });
 
 api.get("/favoriteprograms/:Email", authenticateToken, async (req, res) => {
-  const data = await getFavoritePrograms(req.params.Email);
-  
-  if (data) {
-    res.status(200).send(arrayify(data));
-  } else {
-    res
-      .status(404)
-      .send({ error: `There is no data on Favoriteprograms for ${req.params.Email}` });
-  }
+  validateData(req,res,await getFavoritePrograms(req.params.Email),"favoriteprogram")
 });
 
-api.delete(
-  "/unfavoritechannel/:id/:Email",
-  authenticateToken,
-  async (req, res) => {
-    const id = Number(req.params.id);
-    const Email = req.params.Email;
-    const modifiedData = arrayify(data.Favoritechannels, data);
-    const data = await getFavoriteChannel(Email);
-    const newData = modifiedData.filter((obj) => obj.id !== id);
-    const deletedData = modifiedData.filter((obj) => obj.id === id);
-    console.log(newData);
+api.delete("/unfavoritechannel/:id/:Email",authenticateToken,async (req, res) => {
+    const data = arrayify(await getFavoriteChannel(req.params.Email));
+    const modifiedData = data.filter((obj) => obj.id !== Number(req.params.id));
+    
+    deleteFavoriteData(req,res,req.params.Email,JSON.stringify([modifiedData]),"favoritechannel");
+  });
 
-    db.run(
-      "UPDATE Useracounts SET Favoritechannels = ? WHERE Email = ?",
-      [JSON.stringify(newData), Email],
-      function (err) {
-        if (err) {
-          console.error(err.message);
-        } else {
-          console.log(
-            `${deletedData[0].name} with id ${deletedData[0].id} has been deleted from Favoritechannels row`
-          );
-        }
-      }
-    );
-    res.status(200).send({
-      success: `Delete ${deletedData[0].name} with id ${deletedData[0].id} successfully`,
-    });
-  }
-);
+api.delete("/unfavoriteprogram/:id/:Email",authenticateToken,async (req, res) => {
+    const data = arrayify(await getFavoritePrograms(req.params.Email));
+    const modifiedData = data.filter((obj) => obj.id !== Number(req.params.id));
+    
+    deleteFavoriteData(req,res,req.params.Email,JSON.stringify([modifiedData]),"favoriteprogram");
+});
 
-api.delete("/unfavoriteprogram/:id/:Email",authenticateToken, async (req, res) => {
-
-    const id = Number(req.params.id);
-    const Email = req.params.Email;
-    const modifiedData = arrayify(data.Favoriteprograms, data);
-    const data = await getFavoritePrograms(Email);
-    const newData = modifiedData.filter((obj) => obj.id !== id);
-    const deletedData = modifiedData.filter((obj) => obj.id === id);
-
-    DB.run(
-      "UPDATE Useracounts SET Favoriteprograms = ? WHERE Email = ?",
-      [JSON.stringify(newData), Email],
-      function (err) {
-        if (err) {
-          console.error(err.message);
-        } else {
-          console.log(
-            `${deletedData[0].name} with id ${deletedData[0].id} has been deleted from Favoriteprograms row`
-          );
-        }
-      }
-    );
-    res.status(200).send({
-      success: `Delete ${deletedData[0].name} with id ${deletedData[0].id} successfully`,
-    });
-  }
-);
-
-//Under line has been refactored in code and folder assignmnet.
 api.put("/favoritechannel", authenticateToken, async (req, res) => {
   const oldData = await getFavoriteChannel(req.body.Email);
 
   if (!oldData) {
-    await addFavoriteData(req,res,req.body.Email,JSON.stringify([req.body.channel]),"favoritechannel") 
-
-  } else if (checkDuplicate(arrayify(oldData), req.body.channel.id,req, res)) {
-    const data = arrayify(oldData)
+    await addFavoriteData(
+      req,
+      res,
+      req.body.Email,
+      JSON.stringify([req.body.channel]),
+      "favoritechannel"
+    );
+  } else if (checkDuplicate(arrayify(oldData), req.body.channel.id, req, res)) {
+    const data = arrayify(oldData);
     data.unshift(req.body.channel);
-    await addFavoriteData(req,res,req.body.Email,JSON.stringify(data),"favoritechannel") 
+    await addFavoriteData(
+      req,
+      res,
+      req.body.Email,
+      JSON.stringify(data),
+      "favoritechannel"
+    );
   }
 });
 
@@ -140,12 +78,23 @@ api.put("/favoriteprogram", authenticateToken, async (req, res) => {
   const oldData = await getFavoritePrograms(req.body.Email);
 
   if (!oldData) {
-    await addFavoriteData(req,res,req.body.Email,JSON.stringify([req.body.program]),"favoriteprogram") 
-
-  } else if (checkDuplicate(arrayify(oldData), req.body.program.id,req, res)) {
-    const data = arrayify(oldData)
+    await addFavoriteData(
+      req,
+      res,
+      req.body.Email,
+      JSON.stringify([req.body.program]),
+      "favoriteprogram"
+    );
+  } else if (checkDuplicate(arrayify(oldData), req.body.program.id, req, res)) {
+    const data = arrayify(oldData);
     data.unshift(req.body.program);
-    await addFavoriteData(req,res,req.body.Email,JSON.stringify(data),"favoriteprogram") 
+    await addFavoriteData(
+      req,
+      res,
+      req.body.Email,
+      JSON.stringify(data),
+      "favoriteprogram"
+    );
   }
 });
 

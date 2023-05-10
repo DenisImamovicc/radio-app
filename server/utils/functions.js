@@ -38,6 +38,18 @@ export function getDataById(req, res, id, params) {
     });
 }
 
+export function validateData(req,res,data,dataType) {
+  if (data) {
+    res.status(200).send(arrayify(data));
+  } else {
+    res
+      .status(404)
+      .send({
+        error: `There is no data on ${dataType} for ${req.params.Email}`,
+      });
+  }
+}
+
 export function arrayify(data) {
     return JSON.parse(data.slice(0, data.length)); 
 }
@@ -50,94 +62,11 @@ export async function handleLoginUser (req, res) {
   }
 }
 
-
-export function getUserTokenDB(data) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      DB.get(
-        `SELECT Email FROM Useracounts WHERE Email=?`,
-        [data],
-        (err, row) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(!!row);
-          }
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  });
-}
-
-export function matchPasswordFromDB(user) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      DB.get(
-        `SELECT Password FROM Useracounts WHERE Email=?`,
-        [user.Email],
-        (err, pwd) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(comparePassword(user, pwd));
-          }
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  });
-}
 export const hashPassword = async (Password) => await bcrypt.hash(Password, 10);
 
 export const comparePassword = async (user, DBPwd) => await bcrypt.compare(user.Password, DBPwd.Password);
 
 export const grantAcessToken = (user) => jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "30min",})
-
-
-export function checkEmptyPrograms(data) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      DB.get(
-        `SELECT Favoriteprograms FROM Useracounts WHERE Email=?`,
-        [data.userEmail],
-        (err, row) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(row.Favoriteprograms);
-          }
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  });
-}
-
-
-
-export function checkEmptyChannel(data) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      DB.get(
-        `SELECT Favoritechannels FROM Useracounts WHERE Email=?`,
-        [data.Email],
-        (err, row) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(row.Favoritechannels);
-          }
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  });
-}
 
 export function getFavoritePrograms(userid) {
   return new Promise(async (resolve, reject) => {
@@ -150,7 +79,6 @@ export function getFavoritePrograms(userid) {
             reject(err);
           } else {
             resolve(row.Favoriteprograms);
-            console.log(row.Favoriteprograms);
           }
         }
       );
