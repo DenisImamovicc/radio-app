@@ -11,7 +11,7 @@ dotenv.config();
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({ extended: true }));
 
-api.use("/",userRoute)
-api.use("/",SR_API_route)
+api.use("/users",userRoute)
+api.use("/SR_api",SR_API_route)
 
 api.listen(port, () => console.log(port, `Live at http://localhost:${port}`));

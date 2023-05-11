@@ -1,49 +1,56 @@
 import express from "express";
+import { authenticateToken } from "../middleware/auth.js";
+
 import {
-    addUserAccount,
-    addFavoriteData,
-    deleteFavoriteData,
-    getFavoriteChannel,
-    getFavoritePrograms,
-  } from "../model/sqlfuncs.js";
-  
-  import {
+  addUserAccount,
+  addFavoriteData,
+  deleteFavoriteData,
+  getFavoriteChannel,
+  getFavoritePrograms,
+} from "../model/sqlfuncs.js";
+
+import {
+  arrayify,
+  checkDuplicate,
+  handleLoginUser,
+  hashPassword,
+  validateData,
+} from "../utils/functions.js";
+
+const router = express.Router();
+
+router
+  .get(
+    "/favoritechannels/:Email",
     authenticateToken,
-    arrayify,
-    checkDuplicate,
-    handleLoginUser,
-    hashPassword,
-    validateData,
-  } from "../utils/functions.js";
-  
-  const router = express.Router()
-
-
-router.get("/favoritechannels/:Email", authenticateToken, async (req, res) => {
-    validateData(
-      req,
-      res,
-      await getFavoriteChannel(req.params.Email),
-      "favoritechannel"
-    );
-  });
-  
-  router.get("/favoriteprograms/:Email", authenticateToken, async (req, res) => {
-    validateData(
-      req,
-      res,
-      await getFavoritePrograms(req.params.Email),
-      "favoriteprogram"
-    );
-  });
-  
-  router.delete(
+    async (req, res) => {
+      validateData(
+        req,
+        res,
+        await getFavoriteChannel(req.params.Email),
+        "favoritechannel"
+      );
+    }
+  )
+  .get(
+    "/favoriteprograms/:Email",
+    authenticateToken,
+    async (req, res) => {
+      validateData(
+        req,
+        res,
+        await getFavoritePrograms(req.params.Email),
+        "favoriteprogram"
+      );
+    }
+  )
+  .delete(
     "/unfavoritechannel/:id/:Email",
     authenticateToken,
     async (req, res) => {
       const data = arrayify(await getFavoriteChannel(req.params.Email));
       const modifiedData = data.filter((obj) => obj.id !== Number(req.params.id));
-  
+
       deleteFavoriteData(
         req,
         res,
@@ -52,15 +59,14 @@ router.get("/favoritechannels/:Email", authenticateToken, async (req, res) => {
         "favoritechannel"
       );
     }
-  );
-  
-  router.delete(
+  )
+  .delete(
     "/unfavoriteprogram/:id/:Email",
     authenticateToken,
     async (req, res) => {
       const data = arrayify(await getFavoritePrograms(req.params.Email));
       const modifiedData = data.filter((obj) => obj.id !== Number(req.params.id));
-  
+
       deleteFavoriteData(
         req,
         res,
@@ -69,11 +75,10 @@ router.get("/favoritechannels/:Email", authenticateToken, async (req, res) => {
         "favoriteprogram"
       );
     }
-  );
-  
-  router.put("/favoritechannel", authenticateToken, async (req, res) => {
+  )
+  .put("/favoritechannel", authenticateToken, async (req, res) => {
     const oldData = await getFavoriteChannel(req.body.Email);
-  
+
     if (!oldData) {
       await addFavoriteData(
         req,
@@ -93,11 +98,10 @@ router.get("/favoritechannels/:Email", authenticateToken, async (req, res) => {
         "favoritechannel"
       );
     }
-  });
-  
-  router.put("/favoriteprogram", authenticateToken, async (req, res) => {
+  })
+  .put("/favoriteprogram", authenticateToken, async (req, res) => {
     const oldData = await getFavoritePrograms(req.body.Email);
-  
+
     if (!oldData) {
       await addFavoriteData(
         req,
@@ -117,12 +121,10 @@ router.get("/favoritechannels/:Email", authenticateToken, async (req, res) => {
         "favoriteprogram"
       );
     }
-  });
-  
-  router.post("/loginacount", async (req, res) => handleLoginUser(req, res));
-  
-  router.post("/newacount", async (req, res) =>
+  })
+  .post("/loginacount", async (req, res) => handleLoginUser(req, res))
+  .post("/newacount", async (req, res) =>
     addUserAccount(req, res, req.body.Email, hashPassword(req.body.Password))
   );
 
-export default router
+export default router;

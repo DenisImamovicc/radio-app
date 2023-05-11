@@ -26,7 +26,7 @@ export function checkDuplicate(currentdata, reqdataID, req, res) {
 }
 
 export function getAllList(req, res) {
-  const TYPE = req.originalUrl;
+  const TYPE = req.originalUrl.replace('/SR_api', '')
   fetch(SVERIGES_RADIO_API + TYPE + "?" + JSON_FORMAT)
     .then((res) => res.json())
     .then((Data) => res.status(200).send(Data))
@@ -68,17 +68,4 @@ export async function handleLoginUser(req, res) {
   } else {
     res.sendStatus(401);
   }
-}
-
-export function authenticateToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  if (token == null) return res.sendStatus(401);
-
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    console.log(err);
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
 }
