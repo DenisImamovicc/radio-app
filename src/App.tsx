@@ -6,15 +6,14 @@ import Navbar from './components/Navbar'
 import ProgramSuggestionsCarousel from './components/ProgramSuggestionsCarousel'
 
 function App() {
-  const [audioFile, setaudioFile] = useState<string>("")
+  const [audioFile, setaudioFile] = useState("")
 
   return (
     <>
       <Navbar />
       <ProgramSuggestionsCarousel />
       <ChannelSuggestionsCarousel setaudioFile={setaudioFile} audioFile={audioFile}/>
-      <button onClick={() => setaudioFile("")} className='w-100'>Reset</button>
-      {audioFile ? <AudioPlayer audioFile={audioFile}/>:""}
+      <AudioPlayer setaudioFile={setaudioFile} audioFile={audioFile}/>
     </>
   )
 }

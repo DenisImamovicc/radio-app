@@ -1,17 +1,18 @@
 import Carousel from "react-bootstrap/Carousel";
 import data from "../ChannelData.json";
 
-const ChannelSuggestionsCarousel = ({setaudioFile}) => {
+const ChannelSuggestionsCarousel = (props) => {
   const channels = data.channels;
   function playAudio(event:any) {
     const imageData = event.target.dataset.imageData;
     console.log(imageData);    
-    return setaudioFile(imageData)
+    props.setaudioFile(imageData)
+
   }
   return (
     <>
       <h2 className="fs-5 mt-1">Channel suggestions:</h2>
-      <Carousel>
+      <Carousel >
         {channels.map((channel) => (
           <Carousel.Item>
               <img

@@ -1,12 +1,18 @@
-
-const AudioPlayer = (audioUrl:String) => {
-    console.log(audioUrl);
-
+const AudioPlayer = (props) => {
   return (
-    <audio controls className="audioplayer" autoPlay>
-        <source src={audioUrl.audioFile} type="audio/mpeg" ></source>
-    </audio>
-  )
-}
+    <>
+      <button onClick={() => props.setaudioFile("")} className="w-100">
+        Reset
+      </button>
+      {props.audioFile ? (
+        <audio controls className="audioplayer" autoPlay>
+          <source src={props.audioFile} type="audio/mpeg"></source>
+        </audio>
+      ) : (
+        ""
+      )}
+    </>
+  );
+};
 
-export default AudioPlayer
+export default AudioPlayer;
