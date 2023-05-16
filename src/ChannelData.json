@@ -1,0 +1,182 @@
+{
+    "copyright": "Copyright Sveriges Radio 2023. All rights reserved.",
+    "channels": [
+      {
+        "image": "https://static-cdn.sr.se/images/132/2186745_512_512.jpg?preset=api-default-square",
+        "imagetemplate": "https://static-cdn.sr.se/images/132/2186745_512_512.jpg",
+        "color": "31a1bd",
+        "tagline": "Talat innehåll om samhälle, kultur och vetenskap. Kanalen erbjuder nyheter och aktualiteter, granskning och fördjupning men också livsåskådnings-och livsstilsprogram samt underhållning och upplevelser till exempel i form av teater.",
+        "siteurl": "https://sverigesradio.se/p1",
+        "liveaudio": {
+          "id": 132,
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/132.mp3",
+          "statkey": "/app/direkt/p1[k(132)]"
+        },
+        "scheduleurl": "https://api.sr.se/v2/scheduledepisodes?channelid=132",
+        "channeltype": "Rikskanal",
+        "xmltvid": "p1.sr.se",
+        "id": 132,
+        "name": "P1"
+      },
+      {
+        "image": "https://static-cdn.sr.se/images/163/2186754_512_512.jpg?preset=api-default-square",
+        "imagetemplate": "https://static-cdn.sr.se/images/163/2186754_512_512.jpg",
+        "color": "ff5a00",
+        "tagline": "P2 är den klassiska musikkanalen som även erbjuder jazz samt folk- och världsmusik. Digitalt sänder vi musikprogram dygnet runt, i FM finns även program på andra språk än svenska.",
+        "siteurl": "https://sverigesradio.se/p2",
+        "liveaudio": {
+          "id": 163,
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/163.mp3",
+          "statkey": "/app/direkt/p2[k(163)]"
+        },
+        "scheduleurl": "https://api.sr.se/v2/scheduledepisodes?channelid=163",
+        "channeltype": "Rikskanal",
+        "xmltvid": "p2.sr.se",
+        "id": 163,
+        "name": "P2"
+      },
+      {
+        "image": "https://static-cdn.sr.se/images/164/2186756_512_512.jpg?preset=api-default-square",
+        "imagetemplate": "https://static-cdn.sr.se/images/164/2186756_512_512.jpg",
+        "color": "19a972",
+        "tagline": "Kanalen för dig som gillar ny musik, livesänd radio och högkvalitativa poddar. Lyssna på P3 för populärkultur, samhällsjournalistik, musik och humor.",
+        "siteurl": "https://sverigesradio.se/p3",
+        "liveaudio": {
+          "id": 164,
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/164.mp3",
+          "statkey": "/app/direkt/p3[k(164)]"
+        },
+        "scheduleurl": "https://api.sr.se/v2/scheduledepisodes?channelid=164",
+        "channeltype": "Rikskanal",
+        "xmltvid": "p3.sr.se",
+        "id": 164,
+        "name": "P3"
+      },
+      {
+        "image": "https://static-cdn.sr.se/images/105/7e0c4da5-427c-4d88-9b9d-94a7b104eabb.jpg?preset=api-default-square",
+        "imagetemplate": "https://static-cdn.sr.se/images/105/7e0c4da5-427c-4d88-9b9d-94a7b104eabb.jpg",
+        "color": "c31eaa",
+        "tagline": "I P4 Blekinge hör du lokala nyheter, lokala aktualiteter och lokal kultur. Du bjuds på en heltäckande, angelägen kanal där du bor.",
+        "siteurl": "https://sverigesradio.se/blekinge/",
+        "liveaudio": {
+          "id": 213,
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/213.mp3",
+          "statkey": "/app/direkt/p4 blekinge[k(213)]"
+        },
+        "scheduleurl": "https://api.sr.se/v2/scheduledepisodes?channelid=213",
+        "channeltype": "Lokal kanal",
+        "xmltvid": "p4blek.sr.se",
+        "id": 213,
+        "name": "P4 Blekinge"
+      },
+      {
+        "image": "https://static-cdn.sr.se/images/161/37b7d118-6d38-4a7d-87fd-216caf6cb7c6.jpg?preset=api-default-square",
+        "imagetemplate": "https://static-cdn.sr.se/images/161/37b7d118-6d38-4a7d-87fd-216caf6cb7c6.jpg",
+        "color": "c31eaa",
+        "tagline": "P4 Dalarna gör angelägen lokal radio för dalfolket, på plats när det händer. I våra populära program och prisbelönta nyheter hör du ämnen som berör, alltid dagsaktuella och alltid med Dalarna i centrum.",
+        "siteurl": "https://sverigesradio.se/dalarna/",
+        "liveaudio": {
+          "id": 223,
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/223.mp3",
+          "statkey": "/app/direkt/p4 dalarna[k(223)]"
+        },
+        "scheduleurl": "https://api.sr.se/v2/scheduledepisodes?channelid=223",
+        "channeltype": "Lokal kanal",
+        "xmltvid": "p4dala.sr.se",
+        "id": 223,
+        "name": "P4 Dalarna"
+      },
+      {
+        "image": "https://static-cdn.sr.se/images/94/99c16fdf-e9b7-4232-ba4b-223f0f8e4e79.jpg?preset=api-default-square",
+        "imagetemplate": "https://static-cdn.sr.se/images/94/99c16fdf-e9b7-4232-ba4b-223f0f8e4e79.jpg",
+        "color": "c31eaa",
+        "tagline": "P4 Gotland bevakar det som händer på och omkring Gotland, med nyheter, intervjuer och reportage.",
+        "siteurl": "https://sverigesradio.se/gotland/",
+        "liveaudio": {
+          "id": 205,
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/205.mp3",
+          "statkey": "/app/direkt/p4 gotland[k(205)]"
+        },
+        "scheduleurl": "https://api.sr.se/v2/scheduledepisodes?channelid=205",
+        "channeltype": "Lokal kanal",
+        "xmltvid": "p4gotl.sr.se",
+        "id": 205,
+        "name": "P4 Gotland"
+      },
+      {
+        "image": "https://static-cdn.sr.se/images/99/aae78c01-297f-495b-ab93-ec8eab92c0ea.jpg?preset=api-default-square",
+        "imagetemplate": "https://static-cdn.sr.se/images/99/aae78c01-297f-495b-ab93-ec8eab92c0ea.jpg",
+        "color": "c31eaa",
+        "tagline": "I P4 Gävleborg hör du lokala nyheter, lokala aktualiteter och lokal kultur. Du bjuds på en heltäckande, angelägen kanal där du bor.",
+        "siteurl": "https://sverigesradio.se/gavleborg/",
+        "liveaudio": {
+          "id": 210,
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/210.mp3",
+          "statkey": "/app/direkt/p4 gävleborg[k(210)]"
+        },
+        "scheduleurl": "https://api.sr.se/v2/scheduledepisodes?channelid=210",
+        "channeltype": "Lokal kanal",
+        "xmltvid": "p4gavl.sr.se",
+        "id": 210,
+        "name": "P4 Gävleborg"
+      },
+      {
+        "image": "https://static-cdn.sr.se/images/104/0904f0e7-53d3-4d22-b100-0c417b5db972.jpg?preset=api-default-square",
+        "imagetemplate": "https://static-cdn.sr.se/images/104/0904f0e7-53d3-4d22-b100-0c417b5db972.jpg",
+        "color": "c31eaa",
+        "tagline": "Sveriges Radio P4 Göteborg ger dig lokala nyheter - i radion och på webben.",
+        "siteurl": "https://sverigesradio.se/goteborg/",
+        "liveaudio": {
+          "id": 212,
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/212.mp3",
+          "statkey": "/app/direkt/p4 göteborg[k(212)]"
+        },
+        "scheduleurl": "https://api.sr.se/v2/scheduledepisodes?channelid=212",
+        "channeltype": "Lokal kanal",
+        "xmltvid": "p4gbg.sr.se",
+        "id": 212,
+        "name": "P4 Göteborg"
+      },
+      {
+        "image": "https://static-cdn.sr.se/images/128/df8f9818-c563-431f-930b-be1a49705008.jpg?preset=api-default-square",
+        "imagetemplate": "https://static-cdn.sr.se/images/128/df8f9818-c563-431f-930b-be1a49705008.jpg",
+        "color": "c31eaa",
+        "tagline": "P4 Halland erbjuder lokala nyheter och aktualiteter.",
+        "siteurl": "https://sverigesradio.se/halland/",
+        "liveaudio": {
+          "id": 220,
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/220.mp3",
+          "statkey": "/app/direkt/p4 halland[k(220)]"
+        },
+        "scheduleurl": "https://api.sr.se/v2/scheduledepisodes?channelid=220",
+        "channeltype": "Lokal kanal",
+        "xmltvid": "p4hall.sr.se",
+        "id": 220,
+        "name": "P4 Halland"
+      },
+      {
+        "image": "https://static-cdn.sr.se/images/78/3f969001-3c0d-46c0-a3a6-30b44ef999c0.jpg?preset=api-default-square",
+        "imagetemplate": "https://static-cdn.sr.se/images/78/3f969001-3c0d-46c0-a3a6-30b44ef999c0.jpg",
+        "color": "c31eaa",
+        "tagline": "I P4 Jämtland hör du lokala nyheter, aktualiteter, väderprognoser, sport och kultur. ",
+        "siteurl": "https://sverigesradio.se/jamtland/",
+        "liveaudio": {
+          "id": 200,
+          "url": "https://sverigesradio.se/topsy/direkt/srapi/200.mp3",
+          "statkey": "/app/direkt/p4 jämtland[k(200)]"
+        },
+        "scheduleurl": "https://api.sr.se/v2/scheduledepisodes?channelid=200",
+        "channeltype": "Lokal kanal",
+        "xmltvid": "p4jmtl.sr.se",
+        "id": 200,
+        "name": "P4 Jämtland"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "size": 10,
+      "totalhits": 52,
+      "totalpages": 6,
+      "nextpage": "https://api.sr.se/v2/channels?format=json&indent=true&page=2"
+    }
+  }

@@ -1,0 +1,10 @@
+body{
+    background-color: #EAF4FA !important;
+}
+
+.audioplayer{
+    position: sticky;
+    bottom: 0;
+    width: 100vw;
+    z-index: 1;
+}
