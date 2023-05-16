@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState } from 'react';
 import './App.css'
 import AudioPlayer from './components/AudioPlayer'
 import ChannelSuggestionsCarousel from './components/ChannelSuggestionsCarousel'
@@ -10,10 +10,11 @@ function App() {
 
   return (
     <>
-    <Navbar />
-    <ProgramSuggestionsCarousel />
-    <ChannelSuggestionsCarousel setaudioFile={setaudioFile} audioFile={audioFile}/>
-    {audioFile ? <AudioPlayer audioFile={audioFile}/>:""}
+      <Navbar />
+      <ProgramSuggestionsCarousel />
+      <ChannelSuggestionsCarousel setaudioFile={setaudioFile} audioFile={audioFile}/>
+      <button onClick={() => setaudioFile("")} className='w-100'>Reset</button>
+      {audioFile ? <AudioPlayer audioFile={audioFile}/>:""}
     </>
   )
 }
