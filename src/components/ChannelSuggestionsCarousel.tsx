@@ -1,14 +1,10 @@
 import Carousel from "react-bootstrap/Carousel";
 import data from "../ChannelData.json";
 
-const ChannelSuggestionsCarousel = (props) => {
+const ChannelSuggestionsCarousel = (props:any) => {
   const channels = data.channels;
-  function playAudio(event:any) {
-    const imageData = event.target.dataset.imageData;
-    console.log(imageData);    
-    props.setaudioFile(imageData)
+  const playAudio = (url:string) => props.setaudioFile(url)
 
-  }
   return (
     <>
       <h2 className="fs-5 mt-1">Channel suggestions:</h2>
@@ -19,8 +15,7 @@ const ChannelSuggestionsCarousel = (props) => {
                 className="d-block w-100"
                 src={channel.image}
                 alt={channel.name}
-                data-image-data={channel.liveaudio.url}
-                onClick={playAudio}
+                onClick={()=>playAudio(channel.liveaudio.url)}
               />
             <Carousel.Caption className="bg-dark position-static h-100">
               <h3>{channel.name}</h3>

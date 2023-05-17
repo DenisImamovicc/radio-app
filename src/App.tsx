@@ -14,7 +14,7 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/Channels" element={<Channels />}></Route>
+        <Route path="/Channels" element={<Channels setaudioFile={setaudioFile}/>}></Route>
         <Route path="/Programs" element={<Programs />}></Route>
         <Route
           path="/"
