@@ -1,22 +1,29 @@
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import PaginationComponent from "../components/PaginationComponent.tsx";
 import useFetch from "../hooks/useFetch";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Channels = (props: any) => {
-  const { data } = useFetch("http://localhost:9000/SR_api/channels");
+  const [Url, setUrl] = useState("https://api.sr.se/api/v2/channels/?format=json");
+  const { data } = useFetch(Url);
   const playAudio = (url: string) => props.setaudioFile(url);
 
   if (!data || !data.channels) {
     return <div>Loading...</div>;
   }
+
+  const handleFetchNextPage = (nextpageData: string) => {
+    setUrl(nextpageData);
+  };
   return (
     <>
       {data.channels &&
         data.channels.map((channel: any) => (
           <Card key={channel.id} className="m-3">
             <Link to={"/Channels/Channel"} state={channel}>
-              <Card.Img variant="top" src={channel.image}/>
+              <Card.Img variant="top" src={channel.image} />
             </Link>
             <Card.Body>
               <Card.Title>
@@ -32,6 +39,11 @@ const Channels = (props: any) => {
             </Card.Body>
           </Card>
         ))}
+      <PaginationComponent
+        totalpages={data.pagination.totalpages}
+        active={data.pagination.page}
+        handleFetchNextPage={handleFetchNextPage}
+      />
     </>
   );
 };
