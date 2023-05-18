@@ -14,7 +14,7 @@ const ProgramSuggestionsCarousel = () => {
       <h2 className="fs-5 mt-1">Program suggestions:</h2>
       <Carousel>
         {data.programs &&
-          data.programs.map((program: any) => (
+          data.programs.map((program: any) => (            
             <Carousel.Item key={program.id}>
               <img
                 className="d-block w-100"

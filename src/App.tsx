@@ -7,6 +7,8 @@ import ProgramSuggestionsCarousel from "./components/ProgramSuggestionsCarousel"
 import Channels from "./routes/channels";
 import Programs from "./routes/programs";
 import { Route, Routes } from "react-router-dom";
+import Channel from "./routes/channel";
+import Errorpage from "./routes/Errorpage";
 function App() {
   const [audioFile, setaudioFile] = useState("");
 
@@ -14,15 +16,23 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/Channels" element={<Channels setaudioFile={setaudioFile}/>}></Route>
-        <Route path="/Programs" element={<Programs />}></Route>
+        <Route
+          path="/Channels"
+          element={<Channels setaudioFile={setaudioFile} />}
+        />
+        <Route path="/Channels/Channel" element={<Channel />} />
+        <Route path="/Programs" element={<Programs />} />
         <Route
           path="/"
           element={[
             <ProgramSuggestionsCarousel />,
-            <ChannelSuggestionsCarousel setaudioFile={setaudioFile}audioFile={audioFile}/>,
+            <ChannelSuggestionsCarousel
+              setaudioFile={setaudioFile}
+              audioFile={audioFile}
+            />,
           ]}
-        ></Route>
+        />
+        <Route path="/*" element={<Errorpage />} />
       </Routes>
       <AudioPlayer setaudioFile={setaudioFile} audioFile={audioFile} />
     </>
