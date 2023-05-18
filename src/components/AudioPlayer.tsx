@@ -1,4 +1,4 @@
-const AudioPlayer = (props) => {
+const AudioPlayer = (props:any) => {
   return (
     <>
       <button onClick={() => props.setaudioFile("")} className="w-100">

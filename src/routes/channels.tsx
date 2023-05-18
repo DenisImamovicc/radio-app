@@ -1,14 +1,18 @@
-import data from "../ChannelData.json";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import useFetch from "../hooks/useFetch";
 
 const Channels = (props:any) => {
-const channels = data.channels;
+const { data } = useFetch('http://localhost:9000/SR_api/channels');
+
 const playAudio = (url:string) => props.setaudioFile(url)
 
+if (!data || !data.channels) {
+  return <div>Loading...</div>;
+}
   return (
     <>
-      {channels.map((channel) => (
+      {data.channels && data.channels.map((channel:any) => (
           <Card key={channel.id} className="m-3">
             <Card.Img variant="top" src={channel.image} />
             <Card.Body>
