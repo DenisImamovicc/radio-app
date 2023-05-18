@@ -15,7 +15,11 @@ const Channel = () => {
     const numbersOnly = Number(rawDate.toString().replace(/\D/g, ""));
     const date = new Date(numbersOnly);
     const match = date.toString().match(/\d{2}:\d{2}/);
-    return match[0];
+    if (match !== null) {
+      return match[0];
+    }
+
+    return "";
   }
 
   return (
@@ -26,7 +30,7 @@ const Channel = () => {
       {data.schedule &&
         data.schedule.map((episode: any) => (
           <Card key={episode.episodeid} className="m-3">
-            <Card.Img variant="top" src={episode.imageurl}/>
+            <Card.Img variant="top" src={episode.imageurl} />
             <Card.Body>
               <Card.Title>
                 {episode.title} - {episode.program.name}

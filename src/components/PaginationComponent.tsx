@@ -1,10 +1,16 @@
 import Pagination from "react-bootstrap/Pagination";
 
+interface PaginationComponentProps {
+  totalpages: number;
+  active: number;
+  handleFetchNextPage: (url: string) => void;
+}
+
 const PaginationComponent = ({
   totalpages,
   active,
   handleFetchNextPage,
-}) => {
+}:PaginationComponentProps) => {
 
   console.log(active);
   function changeCurrPaginationItem(nextNum:number) {

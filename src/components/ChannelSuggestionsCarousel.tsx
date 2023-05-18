@@ -1,13 +1,16 @@
 import Carousel from "react-bootstrap/Carousel";
 import useFetch from "../hooks/useFetch";
+import {useState} from "react"
 
 const ChannelSuggestionsCarousel = (props: any) => {
-  const { data } = useFetch("http://localhost:9000/SR_api/channels");
+  const [randomNum, setrandomNum] = useState<number>(Math.floor(Math.random() * 6) + 1)
+  const { data } = useFetch(`https://api.sr.se/api/v2/channels/?format=json&page=${randomNum}`);
   const playAudio = (url: string) => props.setaudioFile(url);
 
   if (!data || !data.channels) {
     return <div>Loading...</div>;
   }
+
   return (
     <>
       <h2 className="fs-5 mt-1">Channel suggestions:</h2>
