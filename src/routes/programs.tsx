@@ -12,8 +12,8 @@ function Programs() {
   return (
     <>
       {data.programs.map((program:any) => (
-          <Card key={program.id} className="m-3">
-            <Card.Img variant="top" src={program.programimage} />
+          <Card key={program.id} className="m-3 " bg="dark" text="white">
+            <Card.Img variant="top" src={program.programimage} height={360} />
             <Card.Body>
               <Card.Title>{program.name}- {program.programcategory?.name}</Card.Title>
               <Card.Text>{program.description}</Card.Text>

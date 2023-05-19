@@ -11,7 +11,7 @@ const ProgramSuggestionsCarousel = () => {
   }
   return (
     <>
-      <h2 className="fs-5 mt-1">Program suggestions:</h2>
+      <h2 className="fs-5 m-2 text-white">Rekommenderade program:</h2>
       <Carousel>
         {data.programs &&
           data.programs.map((program: any) => (            
@@ -20,6 +20,7 @@ const ProgramSuggestionsCarousel = () => {
                 className="d-block w-100"
                 src={program.programimage}
                 alt={program.name}
+                height={360}
               />
               <Carousel.Caption className="bg-dark position-static h-100">
                 <h3>{program.name}</h3>

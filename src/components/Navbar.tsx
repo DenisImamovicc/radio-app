@@ -5,15 +5,15 @@ import {Link} from "react-router-dom"
 
 const navbar = () => {
   return (
-    <Navbar bg="dark" expand="lg">
+    <Navbar collapseOnSelect bg="dark" expand="lg" variant="dark">
       <Container>
-        <Navbar.Brand><Link to="/">SR</Link></Navbar.Brand>
+        <Navbar.Brand><Link to="/" id="linkbrand" className="p-1">SR</Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Link to="/Channels">Channels</Link>
-            <Link to="/Programs">Programs</Link>
-            <Link to="/Favorites">Favorites</Link>
+            <Link to="/Channels"><Nav.Link href="/#" id="link" >Channels</Nav.Link></Link>
+            <Link to="/Programs"><Nav.Link href="/#" id="link">Programs</Nav.Link></Link>
+            {/* <Link to="/Favorites"><Nav.Link href="/#" id="link" >Favorites</Nav.Link></Link> */}
           </Nav>
         </Navbar.Collapse>
       </Container>
