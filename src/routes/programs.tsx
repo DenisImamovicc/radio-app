@@ -1,5 +1,6 @@
 import Card from "react-bootstrap/Card";
 import useFetch from "../hooks/useFetch";
+import ProgramTypeDropdown from "../components/ProgramTypeDropdown";
 
 function Programs() {
   const { data } = useFetch(
@@ -11,6 +12,7 @@ function Programs() {
   }
   return (
     <>
+    <ProgramTypeDropdown />
       {data.programs.map((program:any) => (
           <Card key={program.id} className="m-3 " bg="dark" text="white">
             <Card.Img variant="top" src={program.programimage} height={360} />
