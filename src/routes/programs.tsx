@@ -4,7 +4,7 @@ import ProgramTypeDropdown from "../components/ProgramTypeDropdown";
 import { useState } from "react";
 
 function Programs() {
-  const [programCategory, setprogramCategory] = useState<number>(0);
+  const [programCategory, setprogramCategory] = useState<string>("");
   const [Url, setUrl] = useState<string>(
     `https://api.sr.se/api/v2/programs/index?format=json${programCategory}`
   );

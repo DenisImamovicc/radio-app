@@ -2,7 +2,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import useFetch from "../hooks/useFetch";
 
 interface ProgramTypeDropdown {
-  setprogramCategory: (categoryId: number) => void;
+  setprogramCategory: (categoryId: string) => void;
   setUrl: (url: string) => void;
 }
 
@@ -18,7 +18,7 @@ const ProgramTypeDropdown = ({
     return <div>Loading...</div>;
   }
 
-  const filterProgramsByCategory = (categoryId: number) => {
+  const filterProgramsByCategory = (categoryId: string) => {
     setprogramCategory(categoryId);
     setUrl(
       `https://api.sr.se/api/v2/programs?programcategoryid=${categoryId}&format=json`
