@@ -1,9 +1,11 @@
 import Carousel from "react-bootstrap/Carousel";
 import useFetch from "../hooks/useFetch";
+import { useState } from "react";
 
 const ProgramSuggestionsCarousel = () => {
+  const [randomNum] = useState<number>(Math.floor(Math.random() * 6) + 1);
   const { data } = useFetch(
-    "https://api.sr.se/api/v2/programs/index?format=json"
+    `https://api.sr.se/api/v2/programs/index?format=json&page=${randomNum}&size=4`
   );
 
   if (!data || !data.programs) {

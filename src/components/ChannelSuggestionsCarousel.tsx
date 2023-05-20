@@ -5,7 +5,7 @@ import { useState } from "react";
 const ChannelSuggestionsCarousel = (props: any) => {
   const [randomNum] = useState<number>(Math.floor(Math.random() * 6) + 1);
   const { data } = useFetch(
-    `https://api.sr.se/api/v2/channels/?format=json&page=${randomNum}`
+    `https://api.sr.se/api/v2/channels/?format=json&page=${randomNum}&size=4`
   );
   const playAudio = (url: string) => props.setaudioFile(url);
 
