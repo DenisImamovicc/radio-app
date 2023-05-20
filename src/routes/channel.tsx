@@ -3,6 +3,7 @@ import useFetch from "../hooks/useFetch";
 import Card from "react-bootstrap/Card";
 import { useState } from "react";
 import PaginationComponent from "../components/PaginationComponent.tsx";
+import { v4 as uuidv4 } from 'uuid';
 
 const Channel = () => {
   const channelData = useLocation().state;
@@ -22,8 +23,6 @@ const Channel = () => {
     if (match !== null) {
       return match[0];
     }
-
-
     return "";
   }
 
@@ -50,7 +49,7 @@ const Channel = () => {
       />
       {data.schedule &&
         data.schedule.map((episode: any) => (
-          <Card key={episode.episodeid} className="m-3" bg="dark" text="white">
+          <Card key={uuidv4()} className="m-3" bg="dark" text="white">
             <Card.Img variant="top" src={episode.imageurl} height={360} />
             <Card.Body>
               <Card.Title>
