@@ -3,7 +3,7 @@ import useFetch from "../hooks/useFetch";
 import Card from "react-bootstrap/Card";
 import { useState } from "react";
 import PaginationComponent from "../components/PaginationComponent.tsx";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 const Channel = () => {
   const channelData = useLocation().state;
@@ -13,7 +13,11 @@ const Channel = () => {
   console.log(data, channelData);
 
   if (!data || !data.schedule) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-placeholder">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   function formatDate(rawDate: string) {
@@ -32,9 +36,9 @@ const Channel = () => {
 
   const checkNextPage = (pageKey: string) => {
     if (!pageKey) {
-      return data.pagination.previouspage
+      return data.pagination.previouspage;
     }
-    return data.pagination.nextpage
+    return data.pagination.nextpage;
   };
   return (
     <>

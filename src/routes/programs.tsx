@@ -12,7 +12,11 @@ function Programs() {
   const { data } = useFetch(Url);
 
   if (!data || !data.programs) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-placeholder">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   const handleFetchNextPage = (nextpageData: string) => {
@@ -21,9 +25,9 @@ function Programs() {
 
   const checkNextPage = (pageKey: string) => {
     if (!pageKey) {
-      return data.pagination.previouspage
+      return data.pagination.previouspage;
     }
-    return data.pagination.nextpage
+    return data.pagination.nextpage;
   };
   return (
     <>

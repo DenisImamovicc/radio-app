@@ -6,12 +6,18 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const Channels = (props: any) => {
-  const [Url, setUrl] = useState("https://api.sr.se/api/v2/channels/?format=json");
+  const [Url, setUrl] = useState(
+    "https://api.sr.se/api/v2/channels/?format=json"
+  );
   const { data } = useFetch(Url);
   const playAudio = (url: string) => props.setaudioFile(url);
 
   if (!data || !data.channels) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-placeholder">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   const handleFetchNextPage = (nextpageData: string) => {
@@ -19,9 +25,9 @@ const Channels = (props: any) => {
   };
   const checkNextPage = (pageKey: string) => {
     if (!pageKey) {
-      return data.pagination.previouspage
+      return data.pagination.previouspage;
     }
-    return data.pagination.nextpage
+    return data.pagination.nextpage;
   };
   return (
     <>
@@ -29,7 +35,7 @@ const Channels = (props: any) => {
         data.channels.map((channel: any) => (
           <Card key={channel.id} className="m-3" bg="dark" text="white">
             <Link to={"/Channels/Channel"} state={channel}>
-              <Card.Img variant="top" src={channel.image} height={360}/>
+              <Card.Img variant="top" src={channel.image} height={360} />
             </Link>
             <Card.Body>
               <Card.Title>
