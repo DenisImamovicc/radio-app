@@ -1,10 +1,14 @@
 import { useLocation } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import Card from "react-bootstrap/Card";
+import { useState } from "react";
+import PaginationComponent from "../components/PaginationComponent.tsx";
 
 const Channel = () => {
   const channelData = useLocation().state;
-  const { data } = useFetch(`${channelData.scheduleurl}&format=json`);
+  const [Url, setUrl] = useState(`${channelData.scheduleurl}&format=json`);
+
+  const { data } = useFetch(Url);
   console.log(data, channelData);
 
   if (!data || !data.schedule) {
@@ -19,24 +23,42 @@ const Channel = () => {
       return match[0];
     }
 
+
     return "";
   }
 
+  const handleFetchNextPage = (nextpageData: string) => {
+    setUrl(nextpageData);
+  };
+
+  const checkNextPage = (pageKey: string) => {
+    if (!pageKey) {
+      return data.pagination.previouspage
+    }
+    return data.pagination.nextpage
+  };
   return (
     <>
       <h2 className="text-center m-2 text-white">
         {channelData.name} - {channelData.channeltype} Sändningar:
       </h2>
+      <PaginationComponent
+        totalpages={data.pagination.totalpages}
+        active={data.pagination.page}
+        handleFetchNextPage={handleFetchNextPage}
+        nextPageUrl={checkNextPage(data.pagination.nextpage)}
+      />
       {data.schedule &&
         data.schedule.map((episode: any) => (
           <Card key={episode.episodeid} className="m-3" bg="dark" text="white">
-            <Card.Img variant="top" src={episode.imageurl} height={360}/>
+            <Card.Img variant="top" src={episode.imageurl} height={360} />
             <Card.Body>
               <Card.Title>
                 {episode.title} - {episode.program.name}
               </Card.Title>
               <Card.Subtitle className="mb-2 text-white">
-                {formatDate(episode.starttimeutc)} - {formatDate(episode.endtimeutc)}
+                {formatDate(episode.starttimeutc)} -{" "}
+                {formatDate(episode.endtimeutc)}
               </Card.Subtitle>
               <Card.Text>{episode.description}</Card.Text>
             </Card.Body>
