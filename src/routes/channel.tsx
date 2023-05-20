@@ -54,7 +54,7 @@ const Channel = () => {
       {data.schedule &&
         data.schedule.map((episode: any) => (
           <Card key={uuidv4()} className="m-3" bg="dark" text="white">
-            <Card.Img variant="top" src={episode.imageurl} height={360} />
+            <Card.Img variant="top" src={episode.imageurl} height={360} loading="lazy"/>
             <Card.Body>
               <Card.Title>
                 {episode.title} - {episode.program.name}

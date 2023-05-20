@@ -29,6 +29,7 @@ const ChannelSuggestionsCarousel = (props: any) => {
                 src={channel.image}
                 alt={channel.name}
                 height={360}
+                loading="lazy"
                 onClick={() => playAudio(channel.liveaudio.url)}
               />
               <Carousel.Caption className="bg-dark position-static h-100">
