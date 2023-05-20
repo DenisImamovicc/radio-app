@@ -2,6 +2,7 @@ import Card from "react-bootstrap/Card";
 import useFetch from "../hooks/useFetch";
 import ProgramTypeDropdown from "../components/ProgramTypeDropdown";
 import { useState } from "react";
+import PaginationComponent from "../components/PaginationComponent.tsx";
 
 function Programs() {
   const [programCategory, setprogramCategory] = useState<string>("");
@@ -13,6 +14,17 @@ function Programs() {
   if (!data || !data.programs) {
     return <div>Loading...</div>;
   }
+
+  const handleFetchNextPage = (nextpageData: string) => {
+    setUrl(nextpageData);
+  };
+
+  const checkNextPage = (pageKey: string) => {
+    if (!pageKey) {
+      return data.pagination.previouspage
+    }
+    return data.pagination.nextpage
+  };
   return (
     <>
       <ProgramTypeDropdown
@@ -30,6 +42,12 @@ function Programs() {
           </Card.Body>
         </Card>
       ))}
+      <PaginationComponent
+        totalpages={data.pagination.totalpages}
+        active={data.pagination.page}
+        handleFetchNextPage={handleFetchNextPage}
+        nextPageUrl={checkNextPage(data.pagination.nextpage)}
+      />
     </>
   );
 }

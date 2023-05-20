@@ -4,18 +4,20 @@ interface PaginationComponentProps {
   totalpages: number;
   active: number;
   handleFetchNextPage: (url: string) => void;
+  nextPageUrl: string
 }
 
 const PaginationComponent = ({
   totalpages,
   active,
   handleFetchNextPage,
+  nextPageUrl
 }:PaginationComponentProps) => {
 
-  console.log(active);
   function changeCurrPaginationItem(nextNum:number) {
     active = nextNum
-    handleFetchNextPage(`https://api.sr.se/v2/channels?format=json&indent=true&page=${active}`)
+    const regex = /\d+$/;
+     handleFetchNextPage(nextPageUrl.replace(regex, active.toString()))
   }
   let items = [];
   for (let number = 1; number <= totalpages; number++) {
@@ -33,7 +35,7 @@ const PaginationComponent = ({
   return (
     <>
       <div className="m-3">
-        <Pagination>{items}</Pagination>
+        <Pagination className="flex-wrap">{items}</Pagination>
       </div>
     </>
   );

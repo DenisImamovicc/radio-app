@@ -11,7 +11,7 @@ const ProgramTypeDropdown = ({
   setUrl,
 }: ProgramTypeDropdown) => {
   const { data } = useFetch(
-    "http://api.sr.se/api/v2/programcategories?format=json&size=15"
+    "https://api.sr.se/api/v2/programcategories?format=json&size=15"
   );
 
   if (!data || !data.programcategories) {
