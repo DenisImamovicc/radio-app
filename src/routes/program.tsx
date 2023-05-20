@@ -1,48 +1,38 @@
 import { useLocation } from "react-router-dom";
-import useFetch from "../hooks/useFetch";
 import Card from "react-bootstrap/Card";
-
+import { Button } from "react-bootstrap";
 const Program = () => {
-  const channelData = useLocation().state;
-  const { data } = useFetch(`${channelData.scheduleurl}&format=json`);
-  console.log(data, channelData);
+  const programData = useLocation().state;
+  console.log(programData);
 
-  if (!data || !data.schedule) {
+  if (!programData) {
     return <div>Loading...</div>;
-  }
-
-  function formatDate(rawDate: string) {
-    const numbersOnly = Number(rawDate.toString().replace(/\D/g, ""));
-    const date = new Date(numbersOnly);
-    const match = date.toString().match(/\d{2}:\d{2}/);
-    if (match !== null) {
-      return match[0];
-    }
-
-    return "";
   }
 
   return (
     <>
-      <h2 className="text-center m-2">
-        {channelData.name} - {channelData.channeltype} Sändningar snart:
-      </h2>
-      {data.schedule &&
-        data.schedule.map((episode: any) => (
-          <Card key={episode.episodeid} className="m-3">
-            <Card.Img variant="top" src={episode.imageurl} height={360}/>
-            <Card.Body>
-              <Card.Title>
-                {episode.title} - {episode.program.name}
-              </Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">
-                {formatDate(episode.starttimeutc)} -{" "}
-                {formatDate(episode.endtimeutc)}
-              </Card.Subtitle>
-              <Card.Text>{episode.description}</Card.Text>
-            </Card.Body>
-          </Card>
-        ))}
+      <h2 className="text-center m-2 text-white">{programData.name}</h2>
+      <Card key={programData.id} className="m-3" bg="dark" text="white">
+        <Card.Img variant="top" src={programData.programimage} height={360} />
+        <Card.Body>
+          <Card.Title>
+          Radiopresentatör : {programData.responsibleeditor} 
+            <br/>
+            <div className="d-flex justify-content-between">
+            {programData.socialmediaplatforms.map((platform:any)=>(
+              <Button className=" mt-2" href={platform.platformurl}>{platform.platform}</Button>
+            ))}
+            </div>
+          </Card.Title>
+          <hr/>
+          <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
+          <Card.Text>
+            {programData.description}
+            <br/><hr/>
+            {programData.broadcastinfo}
+          </Card.Text>
+        </Card.Body>
+      </Card>
     </>
   );
 };

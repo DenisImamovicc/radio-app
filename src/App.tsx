@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import ProgramSuggestionsCarousel from "./components/ProgramSuggestionsCarousel";
 import Channels from "./routes/channels";
 import Programs from "./routes/programs";
+import Program from "./routes/program";
 import { Route, Routes } from "react-router-dom";
 import Channel from "./routes/channel";
 import Errorpage from "./routes/Errorpage";
@@ -22,6 +23,8 @@ function App() {
         />
         <Route path="/Channels/Channel" element={<Channel />} />
         <Route path="/Programs" element={<Programs />} />
+        <Route path="/Programs/Program" element={<Program />} />
+
         <Route
           path="/"
           element={[
