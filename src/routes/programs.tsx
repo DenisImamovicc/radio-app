@@ -1,9 +1,8 @@
-import Card from "react-bootstrap/Card";
 import useFetch from "../hooks/useFetch";
 import ProgramTypeDropdown from "../components/ProgramTypeDropdown";
 import { useState } from "react";
 import PaginationComponent from "../components/PaginationComponent.tsx";
-import { Link } from "react-router-dom";
+import ProgramCard from "../components/Programcard.tsx";
 
 function Programs() {
   const [programCategory, setprogramCategory] = useState<string>("");
@@ -37,22 +36,7 @@ function Programs() {
         setUrl={setUrl}
       />
       {data.programs.map((program: any) => (
-        <Card key={program.id} className="m-3 " bg="dark" text="white">
-          <Link to={"/Programs/Program"} state={program}>
-            <Card.Img
-              variant="top"
-              src={program.programimage}
-              height={360}
-              loading="lazy"
-            />
-          </Link>
-          <Card.Body>
-            <Card.Title>
-              {program.name} - {program.programcategory?.name}
-            </Card.Title>
-            <Card.Text>{program.description}</Card.Text>
-          </Card.Body>
-        </Card>
+        <ProgramCard program={program}/>
       ))}
       <PaginationComponent
         totalpages={data.pagination.totalpages}
