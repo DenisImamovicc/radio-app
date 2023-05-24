@@ -2,18 +2,6 @@ body{
     background-color: black!important;
 }
 
-.loading-placeholder{
-    min-height: 100vh;
-    min-width: 100vw;
-    text-align: center;
-    color: white;
-    font-size: larger;
-    font-weight: bolder;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
 img{
     background: url(assets/image-holder-icon-614x460.png) no-repeat scroll 0 0;
 }
@@ -52,8 +40,4 @@ a {
 .page-link{
     background-color: black !important;
     color: white !important;
-}
-
-.card{
-    height: 620px;
 }

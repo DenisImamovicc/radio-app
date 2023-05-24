@@ -2,7 +2,8 @@ import useFetch from "../hooks/useFetch";
 import ProgramTypeDropdown from "../components/ProgramTypeDropdown";
 import { useState } from "react";
 import PaginationComponent from "../components/PaginationComponent.tsx";
-import ProgramCard from "../components/Programcard.tsx";
+import ProgramCards from "../components/Programscard.tsx";
+import Loadingprogramcard from "../components/Loadingprogramcard.tsx";
 
 function Programs() {
   const [programCategory, setprogramCategory] = useState<string>("");
@@ -12,11 +13,7 @@ function Programs() {
   const { data } = useFetch(Url);
 
   if (!data || !data.programs) {
-    return (
-      <div className="loading-placeholder">
-        <p>Loading...</p>
-      </div>
-    );
+    return <Loadingprogramcard />
   }
 
   const handleFetchNextPage = (nextpageData: string) => {
@@ -36,7 +33,7 @@ function Programs() {
         setUrl={setUrl}
       />
       {data.programs.map((program: any) => (
-        <ProgramCard program={program}/>
+        <ProgramCards program={program}/>
       ))}
       <PaginationComponent
         totalpages={data.pagination.totalpages}

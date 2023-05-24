@@ -1,5 +1,6 @@
 import Dropdown from "react-bootstrap/Dropdown";
 import useFetch from "../hooks/useFetch";
+import Loadingprogramcard from "./Loadingprogramcard";
 
 interface ProgramTypeDropdown {
   setprogramCategory: (categoryId: string) => void;
@@ -15,7 +16,7 @@ const ProgramTypeDropdown = ({
   );
 
   if (!data || !data.programcategories) {
-    return <div>Loading...</div>;
+    return <Loadingprogramcard />;
   }
 
   const filterProgramsByCategory = (categoryId: string) => {

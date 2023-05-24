@@ -2,41 +2,46 @@ import Carousel from "react-bootstrap/Carousel";
 import useFetch from "../hooks/useFetch";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import LoadingCarousel from "./LoadingCarousel";
+
+interface program {
+  id: number;
+  programimage: string;
+  name: string;
+  programcategory: {
+    name: string;
+  };
+}
 
 const ProgramSuggestionsCarousel = () => {
   const [randomNum] = useState<number>(Math.floor(Math.random() * 6) + 1);
-  const { data } = useFetch(
+  const { data, isLoading } = useFetch(
     `https://api.sr.se/api/v2/programs/index?format=json&page=${randomNum}&size=4`
   );
 
-  if (!data || !data.programs) {
-    return (
-      <div className="loading-placeholder">
-        <p>Loading...</p>
-      </div>
-    );
+  if (isLoading || !data) {
+    return <LoadingCarousel title="Rekommenderade program:"/>;
   }
   return (
     <>
       <h2 className="fs-5 m-2 text-white">Rekommenderade program:</h2>
       <Carousel>
-        {data.programs &&
-          data.programs.map((program: any) => (
-            <Carousel.Item key={program.id}>
-              <Link to={"/Programs/Program"} state={program}>
-                <img
-                  className="d-block w-100"
-                  src={program.programimage}
-                  alt={program.name}
-                  height={360}
-                />
-              </Link>
-              <Carousel.Caption className="bg-dark position-static h-100">
-                <h3>{program.name}</h3>
-                <p>{program.programcategory?.name}</p>
-              </Carousel.Caption>
-            </Carousel.Item>
-          ))}
+        {data.programs.map((program: program) => (
+          <Carousel.Item key={program.id}>
+            <Link to={"/Programs/Program"} state={program}>
+              <img
+                className="d-block w-100"
+                src={program.programimage}
+                alt={program.name}
+                height={360}
+              />
+            </Link>
+            <Carousel.Caption className="bg-dark position-static h-100">
+              <h3>{program.name}</h3>
+              <p>{program.programcategory?.name}</p>
+            </Carousel.Caption>
+          </Carousel.Item>
+        ))}
       </Carousel>
     </>
   );

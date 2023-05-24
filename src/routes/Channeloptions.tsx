@@ -2,9 +2,10 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import useFetch from "../hooks/useFetch";
 import Broadcastcard from "../components/Broadcastcard.tsx";
-import ProgramCard from "../components/Programcard.tsx";
+import ProgramCard from "../components/Programscard.tsx";
 import PaginationComponent from "../components/PaginationComponent.tsx";
 import { useState } from "react";
+import Loadingprogramcard from "../components/Loadingprogramcard.tsx";
 
 interface Channeloptions {
   channelData: {
@@ -40,11 +41,7 @@ export default function Channeloptions({ channelData }: Channeloptions) {
   };
 
   if (!programsData || !broadCastData) {
-    return (
-      <div className="loading-placeholder">
-        <p>Loading...</p>
-      </div>
-    );
+    return <Loadingprogramcard />
   }
 
   return (

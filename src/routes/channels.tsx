@@ -4,6 +4,7 @@ import PaginationComponent from "../components/PaginationComponent.tsx";
 import useFetch from "../hooks/useFetch";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import Loadingprogramcard from "../components/Loadingprogramcard.tsx";
 
 const Channels = (props: any) => {
   const [Url, setUrl] = useState(
@@ -13,11 +14,7 @@ const Channels = (props: any) => {
   const playAudio = (url: string) => props.setaudioFile(url);
 
   if (!data || !data.channels) {
-    return (
-      <div className="loading-placeholder">
-        <p>Loading...</p>
-      </div>
-    );
+    return <Loadingprogramcard />
   }
 
   const handleFetchNextPage = (nextpageData: string) => {

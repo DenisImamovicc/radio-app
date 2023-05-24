@@ -1,38 +1,50 @@
 import Card from "react-bootstrap/Card";
-import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import Loadingprogramcard from "./Loadingprogramcard";
 
 interface ProgramCard {
-  program: {
+  programData: {
     programimage: string;
-    title: string;
-    programcategory: {
-      name: string;
-    };
+    responsibleeditor: string;
     id: number;
-    name: string;
-    starttimeutc: string;
-    endtimeutc: string;
     description: string;
+    socialmediaplatforms: {
+      plattform: string;
+      plattformul: string;
+    }[];
+    broadcastinfo: string;
   };
 }
 
-export default function ProgramCard({ program }: ProgramCard) {
+export default function ProgramCard({ programData }: ProgramCard) {
+
+  if (!programData) {
+    return <Loadingprogramcard />;
+  }
   return (
     <>
-      <Card key={program.id} className="m-3 " bg="dark" text="white">
-        <Link to={"/Programs/Program"} state={program}>
-          <Card.Img
-            variant="top"
-            src={program.programimage}
-            height={360}
-            loading="lazy"
-          />
-        </Link>
+      <Card key={programData.id} className="m-3" bg="dark" text="white">
+        <Card.Img variant="top" src={programData.programimage} height={360} />
         <Card.Body>
           <Card.Title>
-            {program.name} - {program.programcategory?.name}
+            Radiopresentatör : {programData.responsibleeditor}
+            <br />
+            <div className="d-flex justify-content-between">
+              {programData.socialmediaplatforms.map((platform: any) => (
+                <Button className=" mt-2" href={platform.platformurl}>
+                  {platform.platform}
+                </Button>
+              ))}
+            </div>
           </Card.Title>
-          <Card.Text>{program.description}</Card.Text>
+          <hr />
+          <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
+          <Card.Text>
+            {programData.description}
+            <br />
+            <hr />
+            {programData.broadcastinfo}
+          </Card.Text>
         </Card.Body>
       </Card>
     </>

@@ -1,6 +1,7 @@
 import Carousel from "react-bootstrap/Carousel";
 import useFetch from "../hooks/useFetch";
 import { useState } from "react";
+import LoadingCarousel from "./LoadingCarousel";
 
 const ChannelSuggestionsCarousel = (props: any) => {
   const [randomNum] = useState<number>(Math.floor(Math.random() * 6) + 1);
@@ -9,12 +10,8 @@ const ChannelSuggestionsCarousel = (props: any) => {
   );
   const playAudio = (url: string) => props.setaudioFile(url);
 
-  if (!data || !data.channels) {
-    return (
-      <div className="loading-placeholder">
-        <p>Loading...</p>
-      </div>
-    );
+  if (!data) {
+    return <LoadingCarousel title="Rekommenderade kanaler:"/>
   }
 
   return (
