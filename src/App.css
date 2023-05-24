@@ -1,5 +1,6 @@
 body{
     background-color: black!important;
+    min-height: 100vh;
 }
 
 img{
