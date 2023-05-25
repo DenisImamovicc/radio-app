@@ -19,9 +19,8 @@ const ProgramSuggestionsCarousel = () => {
     `https://api.sr.se/api/v2/programs/index?format=json&page=${randomNum}&size=4`
   );
 
-  if (isLoading || !data) {
-    return <LoadingCarousel title="Rekommenderade program:"/>;
-  }
+  if (isLoading || !data) return <LoadingCarousel title="Rekommenderade program:"/>;
+  
   return (
     <>
       <h2 className="fs-5 m-2 text-white">Rekommenderade program:</h2>

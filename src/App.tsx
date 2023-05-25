@@ -9,7 +9,6 @@ import Programs from "./routes/programs";
 import Program from "./routes/program";
 import { Route, Routes } from "react-router-dom";
 import Channel from "./routes/channel";
-import Errorpage from "./routes/Errorpage";
 function App() {
   const [audioFile, setaudioFile] = useState("");
 
@@ -35,7 +34,6 @@ function App() {
             />,
           ]}
         />
-        <Route path="/*" element={<Errorpage />} />
       </Routes>
       <AudioPlayer setaudioFile={setaudioFile} audioFile={audioFile} />
     </>

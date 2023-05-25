@@ -17,7 +17,6 @@ interface ProgramsCard {
 }
 
 export default function ProgramsCard({ program }: ProgramsCard) {
-  console.log(program);
   
   return (
     <>

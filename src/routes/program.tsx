@@ -3,7 +3,6 @@ import ProgramCard from "../components/Programcard";
 
 const Program = () => {
   const programData = useLocation().state;
-  console.log(programData);
 
   return (
     <>
