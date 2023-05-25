@@ -20,12 +20,7 @@ const Channels = (props: any) => {
   const handleFetchNextPage = (nextpageData: string) => {
     setUrl(nextpageData);
   };
-  const checkNextPage = (pageKey: string) => {
-    if (!pageKey) {
-      return data.pagination.previouspage;
-    }
-    return data.pagination.nextpage;
-  };
+
   return (
     <>
       {data.channels &&
@@ -49,10 +44,8 @@ const Channels = (props: any) => {
           </Card>
         ))}
       <PaginationComponent
-        totalpages={data.pagination.totalpages}
-        active={data.pagination.page}
+        data={data.pagination}
         handleFetchNextPage={handleFetchNextPage}
-        nextPageUrl={checkNextPage(data.pagination.nextpage)}
       />
     </>
   );

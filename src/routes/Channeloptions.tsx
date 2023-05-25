@@ -14,34 +14,34 @@ interface Channeloptions {
   };
 }
 
-export default function Channeloptions({ channelData }: Channeloptions) {
-  const [ChannelUrl, setChannelUrl] = useState(
-    `${channelData.scheduleurl}&format=json`
-  );
-  const [ProgramUrl, setProgramUrl] = useState(
-    `https://api.sr.se/api/v2/programs/index?format=json&channelid=${channelData.id}`
-  );
+export default function Channeloptions({ channelData: { id, scheduleurl }}: Channeloptions) {
+  // const [ChannelUrl, setChannelUrl] = useState(
+  //   `${channelData.scheduleurl}&format=json`
+  // );
+  // const [ProgramUrl, setProgramUrl] = useState(
+  //   `https://api.sr.se/api/v2/programs/index?format=json&channelid=${channelData.id}`
+  // );
 
-  const { data: broadCastData } = useFetch(ChannelUrl);
-  const { data: programsData } = useFetch(ProgramUrl);
+  const [urls, setUrls] = useState({
+    channelUrl: `${scheduleurl}&format=json`,
+    programUrl: `https://api.sr.se/api/v2/programs/index?format=json&channelid=${id}`,
+  });
 
+  const { data: broadCastData } = useFetch(urls.channelUrl);
+  const { data: programsData } = useFetch(urls.programUrl);
+  
   const handleFetchNextPage = (nextpageData: string) => {
-    if (nextpageData.includes("programs")) {
-      setProgramUrl(nextpageData);
-    } else {
-      setChannelUrl(nextpageData);
-    }
-  };
-
-  const checkNextPage = (data: any) => {
-    if (!data.pagination.nextpage) {
-      return data.pagination.previouspage;
-    }
-    return data.pagination.nextpage;
+    setUrls((prevUrls) => {
+      if (nextpageData.includes("programs")) {
+        return { ...prevUrls, programUrl: nextpageData };
+      } else {
+        return { ...prevUrls, channelUrl: nextpageData };
+      }
+    });
   };
 
   if (!programsData || !broadCastData) {
-    return <Loadingprogramcard />
+    return <Loadingprogramcard />;
   }
 
   return (
@@ -53,25 +53,21 @@ export default function Channeloptions({ channelData }: Channeloptions) {
       >
         <Tab eventKey="Sändningar" title="Sändningar">
           {broadCastData.schedule &&
-            broadCastData.schedule.map((episode: any) => (
-              <Broadcastcard episode={episode} />
+            broadCastData.schedule.map((episode: any,index: number) => (
+              <Broadcastcard episode={episode} key={index}/>
             ))}
           <PaginationComponent
-            totalpages={broadCastData.pagination.totalpages}
-            active={broadCastData.pagination.page}
+            data={broadCastData.pagination}
             handleFetchNextPage={handleFetchNextPage}
-            nextPageUrl={checkNextPage(broadCastData)}
           />
         </Tab>
         <Tab eventKey="Program" title="Program">
-          {programsData.programs.map((program: any) => (
-            <ProgramCard program={program} />
+          {programsData.programs.map((program: any,index: number) => (
+            <ProgramCard program={program} key={index}/>
           ))}
           <PaginationComponent
-            totalpages={programsData.pagination.totalpages}
-            active={programsData.pagination.page}
+            data={programsData.pagination}
             handleFetchNextPage={handleFetchNextPage}
-            nextPageUrl={checkNextPage(programsData)}
           />
         </Tab>
       </Tabs>

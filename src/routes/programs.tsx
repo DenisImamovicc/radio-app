@@ -10,36 +10,26 @@ function Programs() {
   const [Url, setUrl] = useState<string>(
     `https://api.sr.se/api/v2/programs/index?format=json${programCategory}`
   );
-  const { data } = useFetch(Url);
+  const { data} = useFetch(Url);
 
-  if (!data || !data.programs) {
-    return <Loadingprogramcard />
-  }
+  if (!data || !data.programs) return <Loadingprogramcard />
+  
+  const handleFetchNextPage = (nextpageData: string) => setUrl(nextpageData);
 
-  const handleFetchNextPage = (nextpageData: string) => {
-    setUrl(nextpageData);
-  };
-
-  const checkNextPage = (pageKey: string) => {
-    if (!pageKey) {
-      return data.pagination.previouspage;
-    }
-    return data.pagination.nextpage;
-  };
   return (
     <>
       <ProgramTypeDropdown
         setprogramCategory={setprogramCategory}
         setUrl={setUrl}
       />
+
       {data.programs.map((program: any) => (
         <ProgramCards program={program}/>
       ))}
+  
       <PaginationComponent
-        totalpages={data.pagination.totalpages}
-        active={data.pagination.page}
+        data={data.pagination}
         handleFetchNextPage={handleFetchNextPage}
-        nextPageUrl={checkNextPage(data.pagination.nextpage)}
       />
     </>
   );
