@@ -21,7 +21,7 @@ export default function ProgramsCard({ program }: ProgramsCard) {
   return (
     <>
       <Card key={program.id} className="m-3 " bg="dark" text="white">
-        <Link to={"/Programs/Program"} state={program}>
+        <Link to={`/Programs/Program/${program.id}`} state={program}>
           <Card.Img
             variant="top"
             src={program.programimage}

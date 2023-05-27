@@ -27,7 +27,7 @@ const ProgramSuggestionsCarousel = () => {
       <Carousel>
         {data.programs.map((program: program) => (
           <Carousel.Item key={program.id}>
-            <Link to={"/Programs/Program"} state={program}>
+            <Link to={`/Programs/Program/${program.id}`} state={program}>
               <img
                 className="d-block w-100"
                 src={program.programimage}
