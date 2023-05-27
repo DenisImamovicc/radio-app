@@ -10,13 +10,19 @@ interface ProgramCard {
     description: string;
     socialmediaplatforms: {
       plattform: string;
-      plattformul: string;
+      plattformurl: string;
     }[];
+    programurl: string;
     broadcastinfo: string;
+    channel:{
+      name:string
+      id:number
+    }
   };
 }
 
 export default function ProgramCard({ programData }: ProgramCard) {
+  console.log(programData);
 
   if (!programData) {
     return <Loadingprogramcard />;
@@ -24,7 +30,9 @@ export default function ProgramCard({ programData }: ProgramCard) {
   return (
     <>
       <Card key={programData.id} className="m-3" bg="dark" text="white">
-        <Card.Img variant="top" src={programData.programimage} height={360} />
+        <a href={programData.programurl} target="_blank">
+          <Card.Img variant="top" src={programData.programimage} height={360} />
+        </a>
         <Card.Body>
           <Card.Title>
             Radiopresentatör : {programData.responsibleeditor}
@@ -47,6 +55,9 @@ export default function ProgramCard({ programData }: ProgramCard) {
           </Card.Text>
         </Card.Body>
       </Card>
+      <h4 className="text-white text-center">Kolla på programmet här!</h4>
+      <hr />
+      <Button className="p-2 m-2">{programData.channel.name}</Button>
     </>
   );
 }
