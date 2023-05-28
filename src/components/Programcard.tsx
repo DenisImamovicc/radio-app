@@ -1,6 +1,7 @@
 import Card from "react-bootstrap/Card";
 import { Button } from "react-bootstrap";
 import Loadingprogramcard from "./Loadingprogramcard";
+import { Link } from "react-router-dom";
 
 interface ProgramCard {
   programData: {
@@ -14,10 +15,10 @@ interface ProgramCard {
     }[];
     programurl: string;
     broadcastinfo: string;
-    channel:{
-      name:string
-      id:number
-    }
+    channel: {
+      name: string;
+      id: number;
+    };
   };
 }
 
@@ -27,6 +28,7 @@ export default function ProgramCard({ programData }: ProgramCard) {
   if (!programData) {
     return <Loadingprogramcard />;
   }
+  
   return (
     <>
       <Card key={programData.id} className="m-3" bg="dark" text="white">
@@ -55,9 +57,11 @@ export default function ProgramCard({ programData }: ProgramCard) {
           </Card.Text>
         </Card.Body>
       </Card>
-      <h4 className="text-white text-center">Kolla på programmet här!</h4>
+      <h4 className="text-white text-center">Programmet hittar du:</h4>
       <hr />
-      <Button className="p-2 m-2">{programData.channel.name}</Button>
+      <Link to={`/Channels/Channel/${programData.channel.id}`}>
+        <Button className="p-2 m-2">{programData.channel.name}</Button>
+      </Link>
     </>
   );
 }
