@@ -6,12 +6,27 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import Loadingprogramcard from "../components/Loadingprogramcard.tsx";
 
-const Channels = (props: any) => {
+interface Channels {
+  setaudioFile: (url: string) => void;
+}
+
+interface channel {
+  id: number;
+  image: string;
+  channeltype:string
+  name: string;
+  tagline:string
+  liveaudio: {
+    url: string;
+  };
+}
+
+const Channels = ({setaudioFile}:Channels) => {
   const [Url, setUrl] = useState(
     "https://api.sr.se/api/v2/channels/?format=json"
   );
   const { data } = useFetch(Url);
-  const playAudio = (url: string) => props.setaudioFile(url);
+  const playAudio = (url: string) => setaudioFile(url);
 
   if (!data || !data.channels) {
     return <Loadingprogramcard />
@@ -24,7 +39,7 @@ const Channels = (props: any) => {
   return (
     <>
       {data.channels &&
-        data.channels.map((channel: any) => (
+        data.channels.map((channel: channel) => (
           <Card key={channel.id} className="m-3" bg="dark" text="white">
             <Link to={`/Channels/Channel/${channel.id}`} state={channel}>
               <Card.Img variant="top" src={channel.image} height={360} loading="lazy"/>

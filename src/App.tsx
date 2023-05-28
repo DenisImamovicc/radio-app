@@ -10,9 +10,8 @@ import Program from "./routes/program";
 import { Route, Routes } from "react-router-dom";
 import Channel from "./routes/channel";
 
-
 function App() {
-  const [audioFile, setaudioFile] = useState(0);
+  const [audioFile, setaudioFile] = useState("");
 
   return (
     <>
@@ -22,7 +21,7 @@ function App() {
           path="/Channels"
           element={<Channels setaudioFile={setaudioFile} />}
         />
-        <Route path="/Channels/Channel/:id" element={<Channel />} />
+        <Route path="/Channels/Channel/:id" element={<Channel setaudioFile={setaudioFile}/>} />
         <Route path="/Programs" element={<Programs />} />
         <Route path="/Programs/Program/:id" element={<Program />} />
 
