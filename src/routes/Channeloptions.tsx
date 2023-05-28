@@ -15,13 +15,6 @@ interface Channeloptions {
 }
 
 export default function Channeloptions({ channelData: { id, scheduleurl }}: Channeloptions) {
-  // const [ChannelUrl, setChannelUrl] = useState(
-  //   `${channelData.scheduleurl}&format=json`
-  // );
-  // const [ProgramUrl, setProgramUrl] = useState(
-  //   `https://api.sr.se/api/v2/programs/index?format=json&channelid=${channelData.id}`
-  // );
-
   const [urls, setUrls] = useState({
     channelUrl: `${scheduleurl}&format=json`,
     programUrl: `https://api.sr.se/api/v2/programs/index?format=json&channelid=${id}`,

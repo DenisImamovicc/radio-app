@@ -22,7 +22,7 @@ function App() {
           path="/Channels"
           element={<Channels setaudioFile={setaudioFile} />}
         />
-        <Route path="/Channels/Channel" element={<Channel />} />
+        <Route path="/Channels/Channel/:id" element={<Channel />} />
         <Route path="/Programs" element={<Programs />} />
         <Route path="/Programs/Program/:id" element={<Program />} />
 

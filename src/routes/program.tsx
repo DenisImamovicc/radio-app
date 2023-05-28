@@ -4,7 +4,6 @@ import useFetch from "../hooks/useFetch";
 import Loadingprogramcard from "../components/Loadingprogramcard";
 import { Placeholder } from "react-bootstrap";
 
-
 const Program = () => {
   let programData = useLocation().state;
   const {id,isLoading} = useParams()

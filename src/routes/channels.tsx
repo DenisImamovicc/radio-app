@@ -26,7 +26,7 @@ const Channels = (props: any) => {
       {data.channels &&
         data.channels.map((channel: any) => (
           <Card key={channel.id} className="m-3" bg="dark" text="white">
-            <Link to={"/Channels/Channel"} state={channel}>
+            <Link to={`/Channels/Channel/${channel.id}`} state={channel}>
               <Card.Img variant="top" src={channel.image} height={360} loading="lazy"/>
             </Link>
             <Card.Body>

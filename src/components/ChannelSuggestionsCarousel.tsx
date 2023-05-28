@@ -30,7 +30,7 @@ const ChannelSuggestionsCarousel = ({setaudioFile}:any) => {
         {data.channels &&
           data.channels.map((channel: channel) => (
             <Carousel.Item key={channel.id}>
-              <Link to={"/Channels/Channel"} state={channel}>
+              <Link to={`/Channels/Channel/${channel.id}`} state={channel}>
                 <img
                   className="d-block w-100"
                   src={channel.image}
