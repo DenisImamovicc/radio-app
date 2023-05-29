@@ -17,10 +17,19 @@ const PaginationComponent = ({
   handleFetchNextPage,
 }: PaginationComponentProps) => {
   const [paginationData, setpaginationData] = useState(data);
+  const [currPag, setcurrPag] = useState(1);
 
   useEffect(() => {
     setpaginationData(data);
-  }, [data]);
+
+    if (paginationData.page > currPag + 3) {
+      console.log(currPag);
+
+      setcurrPag(paginationData.page);
+    } else if (paginationData.page < currPag) {
+      setcurrPag(paginationData.page - 3);
+    }
+  }, [data, currPag]);
 
   if (!paginationData)
     return (
@@ -45,29 +54,63 @@ const PaginationComponent = ({
     );
   }
 
+  let paginationsHolder = [
+    <Pagination.Item
+      key={currPag}
+      active={currPag === paginationData.page}
+      onClick={() => changeCurrPaginationItem(currPag)}
+    >
+      {currPag}
+    </Pagination.Item>,
+    <Pagination.Item
+      key={currPag + 1}
+      active={currPag + 1 === paginationData.page}
+      onClick={() => changeCurrPaginationItem(currPag + 1)}
+    >
+      {currPag + 1}
+    </Pagination.Item>,
+    <Pagination.Item
+      key={currPag + 2}
+      active={currPag + 2 === paginationData.page}
+      onClick={() => changeCurrPaginationItem(currPag + 2)}
+    >
+      {currPag + 2}
+    </Pagination.Item>,
+    <Pagination.Item
+      key={currPag + 3}
+      active={currPag + 3 === paginationData.page}
+      onClick={() => changeCurrPaginationItem(currPag + 3)}
+    >
+      {currPag + 3}
+    </Pagination.Item>,
 
-
-  let paginationsHolder = [];
-  for (let i = 1; i <= paginationData.totalpages; i++) {
-    paginationsHolder.push(
-      <Pagination.Item
-        key={i}
-        active={i === paginationData.page}
-        onClick={() => changeCurrPaginationItem(i)}
-      >
-        {i}
-      </Pagination.Item>
-    );
-  }
- //tills nästa gång fixa paginationen.om det finss 5 rutor total för rutorna och mängden sidor är 20 så ska paginationsnumrena vara [i-2,i-1,i=3,i+1,+2]
+  ];
+  // for (let i = 1; i <= paginationData.totalpages; i++) {
+  //   paginationsHolder.push(
+  //     <Pagination.Item
+  //       key={i}
+  //       active={i === paginationData.page}
+  //       onClick={() => changeCurrPaginationItem(i)}
+  //     >
+  //       {i}
+  //     </Pagination.Item>
+  //   );
+  // }
+  //tills nästa gång fixa paginationen.om det finss 5 rutor total för rutorna och mängden sidor är 20 så ska paginationsnumrena vara [i-2,i-1,i=3,i+1,+2]
   return (
-    <div className="m-3">
+    <div className="m-2 d-flex justify-content-center">
       <Pagination className="flex-wrap">
-        <Pagination.First onClick={() => changeCurrPaginationItem(1)}/>
-        <Pagination.Prev onClick={() => changeCurrPaginationItem(paginationData.page-1)}/>
+        <Pagination.First onClick={() => changeCurrPaginationItem(1)} />
+        <Pagination.Prev
+          onClick={() => changeCurrPaginationItem(paginationData.page - 1)}
+        />
         {paginationsHolder}
-        <Pagination.Next onClick={() => changeCurrPaginationItem(paginationData.page+1)}/>
-        <Pagination.Last onClick={() => changeCurrPaginationItem(paginationData.totalpages)}/>
+        <Pagination.Next
+          onClick={() => changeCurrPaginationItem(paginationData.page + 1)}
+        />
+        <Pagination.Last
+          onClick={() => changeCurrPaginationItem(paginationData.totalpages)}
+        />
       </Pagination>
     </div>
   );
