@@ -70,7 +70,7 @@ const PaginationComponent = ({
     if (currPag === paginationData.totalpages) {
       console.log("has 1 page");
       return 0;
-    }else if (paginationData.totalpages > 3) {
+    }else if (paginationData.totalpages-currPag > 3) {
       console.log("has more than 3 pages");
       return 3;
     }
