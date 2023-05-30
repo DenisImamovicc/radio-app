@@ -20,15 +20,22 @@ const PaginationComponent = ({
   const [currPag, setcurrPag] = useState(1);
 
   useEffect(() => {
+    setcurrPag(data.page)
+  }, [data.totalpages])
+  
+  useEffect(() => {
     setpaginationData(data);
 
     if (paginationData.page > currPag + 3) {
       console.log(currPag);
-
       setcurrPag(paginationData.page);
-    } else if (paginationData.page < currPag) {
+    } 
+    else if (paginationData.page < currPag) {
       setcurrPag(paginationData.page - 3);
     }
+    else if (paginationData.page === 1) {
+      setcurrPag(paginationData.page);
+    } 
   }, [data, currPag]);
 
   if (!paginationData)
@@ -45,7 +52,12 @@ const PaginationComponent = ({
     return paginationData.nextpage;
   };
 
-  function changeCurrPaginationItem(nextNum: number) {
+  function fetchNextPage(nextNum: number | null) {
+    console.log(nextNum);
+
+    if (nextNum === null) {
+      return "not valid input";
+    }
     paginationData.page = nextNum;
     const pagNumRegex = /\d+$/;
     const nextPageURL = checkNextPageKeyName(paginationData.nextpage);
@@ -54,62 +66,60 @@ const PaginationComponent = ({
     );
   }
 
-  let paginationsHolder = [
-    <Pagination.Item
-      key={currPag}
-      active={currPag === paginationData.page}
-      onClick={() => changeCurrPaginationItem(currPag)}
-    >
-      {currPag}
-    </Pagination.Item>,
-    <Pagination.Item
-      key={currPag + 1}
-      active={currPag + 1 === paginationData.page}
-      onClick={() => changeCurrPaginationItem(currPag + 1)}
-    >
-      {currPag + 1}
-    </Pagination.Item>,
-    <Pagination.Item
-      key={currPag + 2}
-      active={currPag + 2 === paginationData.page}
-      onClick={() => changeCurrPaginationItem(currPag + 2)}
-    >
-      {currPag + 2}
-    </Pagination.Item>,
-    <Pagination.Item
-      key={currPag + 3}
-      active={currPag + 3 === paginationData.page}
-      onClick={() => changeCurrPaginationItem(currPag + 3)}
-    >
-      {currPag + 3}
-    </Pagination.Item>,
+  function HandlePaginationAmount() {
+    if (currPag === paginationData.totalpages) {
+      console.log("has 1 page");
+      return 0;
+    }else if (paginationData.totalpages > 3) {
+      console.log("has more than 3 pages");
+      return 3;
+    }
+     return 1     
+  }
 
-  ];
-  // for (let i = 1; i <= paginationData.totalpages; i++) {
-  //   paginationsHolder.push(
-  //     <Pagination.Item
-  //       key={i}
-  //       active={i === paginationData.page}
-  //       onClick={() => changeCurrPaginationItem(i)}
-  //     >
-  //       {i}
-  //     </Pagination.Item>
-  //   );
-  // }
-  //tills nästa gång fixa paginationen.om det finss 5 rutor total för rutorna och mängden sidor är 20 så ska paginationsnumrena vara [i-2,i-1,i=3,i+1,+2]
+  let paginationsHolder = [];
+  for (let i = 0; i <= HandlePaginationAmount(); i++) {
+    paginationsHolder.push(
+      <Pagination.Item
+        key={currPag + i}
+        active={currPag + i === paginationData.page}
+        onClick={() => fetchNextPage(currPag + i)}
+      >
+        {currPag + i}
+      </Pagination.Item>
+    );
+  }
+
+  function handleNonExistingPaginationPage(nextpagination: number) {
+    if (nextpagination > paginationData.totalpages) {
+      return null;
+    } else if (nextpagination < 1) {
+      return null;
+    }
+    return nextpagination;
+  }
+
   return (
     <div className="m-2 d-flex justify-content-center">
       <Pagination className="flex-wrap">
-        <Pagination.First onClick={() => changeCurrPaginationItem(1)} />
+        <Pagination.First onClick={() => fetchNextPage(1)} />
         <Pagination.Prev
-          onClick={() => changeCurrPaginationItem(paginationData.page - 1)}
+          onClick={() =>
+            fetchNextPage(
+              handleNonExistingPaginationPage(paginationData.page - 1)
+            )
+          }
         />
         {paginationsHolder}
         <Pagination.Next
-          onClick={() => changeCurrPaginationItem(paginationData.page + 1)}
+          onClick={() =>
+            fetchNextPage(
+              handleNonExistingPaginationPage(paginationData.page + 1)
+            )
+          }
         />
         <Pagination.Last
-          onClick={() => changeCurrPaginationItem(paginationData.totalpages)}
+          onClick={() => fetchNextPage(paginationData.totalpages)}
         />
       </Pagination>
     </div>
