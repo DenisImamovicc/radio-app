@@ -11,8 +11,8 @@ const navbar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Link to="/Channels"><Nav.Link href="/#" id="link" >Channels</Nav.Link></Link>
-            <Link to="/Programs"><Nav.Link href="/#" id="link">Programs</Nav.Link></Link>
+            <Link to="/Channels"><Nav.Link href="/#" id="link" >Kanal</Nav.Link></Link>
+            <Link to="/Programs"><Nav.Link href="/#" id="link">Program</Nav.Link></Link>
             {/* <Link to="/Favorites"><Nav.Link href="/#" id="link" >Favorites</Nav.Link></Link> */}
           </Nav>
         </Navbar.Collapse>
