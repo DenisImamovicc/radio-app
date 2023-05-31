@@ -20,22 +20,19 @@ const PaginationComponent = ({
   const [currPag, setcurrPag] = useState(1);
 
   useEffect(() => {
-    setcurrPag(data.page)
-  }, [data.totalpages])
-  
+    setcurrPag(data.page);
+  }, [data.totalpages]);
+
   useEffect(() => {
     setpaginationData(data);
 
     if (paginationData.page > currPag + 3) {
-      console.log(currPag);
       setcurrPag(paginationData.page);
-    } 
-    else if (paginationData.page < currPag) {
+    } else if (paginationData.page < currPag) {
       setcurrPag(paginationData.page - 3);
-    }
-    else if (paginationData.page === 1) {
+    } else if (paginationData.page === 1) {
       setcurrPag(paginationData.page);
-    } 
+    }
   }, [data, currPag]);
 
   if (!paginationData)
@@ -53,28 +50,32 @@ const PaginationComponent = ({
   };
 
   function fetchNextPage(nextNum: number | null) {
-    console.log(nextNum);
-
     if (nextNum === null) {
       return "not valid input";
     }
     paginationData.page = nextNum;
     const pagNumRegex = /\d+$/;
     const nextPageURL = checkNextPageKeyName(paginationData.nextpage);
+    scroll({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
     handleFetchNextPage(
       nextPageURL.replace(pagNumRegex, paginationData.page.toString())
     );
   }
 
   function HandlePaginationAmount() {
+    let PAGINATION_ITEM_AMOUNT = 1;
     if (currPag === paginationData.totalpages) {
-      console.log("has 1 page");
-      return 0;
-    }else if (paginationData.totalpages-currPag > 3) {
-      console.log("has more than 3 pages");
-      return 3;
+      PAGINATION_ITEM_AMOUNT = 0;
+      return PAGINATION_ITEM_AMOUNT;
+    } else if (paginationData.totalpages - currPag > 3) {
+      PAGINATION_ITEM_AMOUNT = 3;
+      return PAGINATION_ITEM_AMOUNT;
     }
-     return 1     
+    return PAGINATION_ITEM_AMOUNT;
   }
 
   let paginationsHolder = [];
