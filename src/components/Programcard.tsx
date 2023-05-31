@@ -23,7 +23,6 @@ interface ProgramCard {
 }
 
 export default function ProgramCard({ programData }: ProgramCard) {
-  console.log(programData);
 
   if (!programData) {
     return <Loadingprogramcard />;

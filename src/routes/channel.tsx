@@ -17,9 +17,14 @@ const Channel = ({ setaudioFile }: channel) => {
 
   const playAudio = (url: string) => setaudioFile(url);
 
+  scroll({
+    top: 0,
+    left: 0,
+    behavior: "smooth",
+  });
+
   if (!channelData) {
     channelData = data;
-    console.log(channelData, "inside if");
   }
 
   if (isLoading || !channelData) {
