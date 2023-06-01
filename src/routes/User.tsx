@@ -39,11 +39,12 @@ export default function User({ setaudioFile }: UserProps) {
       <Tabs
         defaultActiveKey="Favorit Kannaler"
         id="uncontrolled-tab-example"
-        className="mb-3"
+        className="mb-3 "
       >
         <Tab
           eventKey="Favorit Kannaler"
           title="Favorit Kannaler"
+          className=""
         >
           {favoriteChannels ? (
             <Card
@@ -78,15 +79,15 @@ export default function User({ setaudioFile }: UserProps) {
               </Card.Body>
             </Card>
           ) : (
-            "Inga Favoritmarkerade kannaler än :)"
+            <div className="user-nocontent">Inga Favoritmarkerade kannaler än :)</div>
           )}
         </Tab>
-         <Tab
+         {/* <Tab
           eventKey="Favorit program"
           title="Favorit program"
         >
           <h2>program</h2>
-        </Tab> 
+        </Tab>  */}
       </Tabs>
     </>
   );
