@@ -5,6 +5,7 @@ import useFetch from "../hooks/useFetch";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Loadingprogramcard from "../components/Loadingprogramcard.tsx";
+import ToggleIcon from "../components/Favoriteicon.tsx";
 
 interface Channels {
   setaudioFile: (url: string) => void;
@@ -13,15 +14,15 @@ interface Channels {
 interface channel {
   id: number;
   image: string;
-  channeltype:string
+  channeltype: string;
   name: string;
-  tagline:string
+  tagline: string;
   liveaudio: {
     url: string;
   };
 }
 
-const Channels = ({setaudioFile}:Channels) => {
+const Channels = ({ setaudioFile }: Channels) => {
   const [Url, setUrl] = useState(
     "https://api.sr.se/api/v2/channels/?format=json"
   );
@@ -29,7 +30,7 @@ const Channels = ({setaudioFile}:Channels) => {
   const playAudio = (url: string) => setaudioFile(url);
 
   if (!data || !data.channels) {
-    return <Loadingprogramcard />
+    return <Loadingprogramcard />;
   }
 
   const handleFetchNextPage = (nextpageData: string) => {
@@ -42,11 +43,16 @@ const Channels = ({setaudioFile}:Channels) => {
         data.channels.map((channel: channel) => (
           <Card key={channel.id} className="m-3" bg="dark" text="white">
             <Link to={`/Channels/Channel/${channel.id}`} state={channel}>
-              <Card.Img variant="top" src={channel.image} height={360} loading="lazy"/>
+              <Card.Img
+                variant="top"
+                src={channel.image}
+                height={360}
+                loading="lazy"
+              />
             </Link>
             <Card.Body>
               <Card.Title>
-                {channel.name} - {channel.channeltype}
+                {channel.name} - {channel.channeltype} <ToggleIcon channel={channel}/>
               </Card.Title>
               <Card.Text>{channel.tagline}</Card.Text>
               <Button
