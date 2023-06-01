@@ -13,7 +13,7 @@ const navbar = () => {
           <Nav className="me-auto">
             <Link to="/Channels"><Nav.Link href="/#" id="link" >Kanal</Nav.Link></Link>
             <Link to="/Programs"><Nav.Link href="/#" id="link">Program</Nav.Link></Link>
-            {/* <Link to="/Favorites"><Nav.Link href="/#" id="link" >Favorites</Nav.Link></Link> */}
+            <Link to="/User"><Nav.Link href="/#" id="link" >Användare</Nav.Link></Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

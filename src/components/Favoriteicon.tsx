@@ -5,18 +5,20 @@ import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import Toast from "react-bootstrap/Toast";
 
 interface channel {
-  id: number;
-  image: string;
-  channeltype: string;
-  name: string;
-  tagline: string;
-  liveaudio: {
-    url: string;
+  channel: {
+    id: number;
+    image: string;
+    channeltype: string;
+    name: string;
+    tagline: string;
+    liveaudio: {
+      url: string;
+    };
   };
 }
 
 const ToggleIcon = ({ channel }: channel) => {
-  const [isClicked, setIsClicked] = useState(
+  const [isClicked, setIsClicked] = useState<boolean|null|string>(
     localStorage.getItem(`${channel.name} isFav?`)
   );
   const [ShowToast, setShowToast] = useState(false);
@@ -25,12 +27,14 @@ const ToggleIcon = ({ channel }: channel) => {
     if (localStorage.getItem(`${channel.name} isFav?`) === "false") {
       console.log("useffect");
       setIsClicked(false);
+      localStorage.removeItem(`data`);
     }
   }, [isClicked]);
 
   const handleClick = () => {
     setIsClicked(!isClicked);
     localStorage.setItem(`${channel.name} isFav?`, `${!isClicked}`);
+    localStorage.setItem(`data`, JSON.stringify(channel));
     setShowToast(true);
   };
   //   console.log(channel);
@@ -45,14 +49,15 @@ const ToggleIcon = ({ channel }: channel) => {
       <Toast
         onClose={() => setShowToast(false)}
         show={ShowToast}
-        delay={3000}
+        delay={2000}
         className="toastFavorite"
         bg="dark"
+        autohide
       >
-        <Toast.Header >
-          {/* <img src={channel.image} className=" me-2 " alt="" /> */}
+        <Toast.Header>
           <strong className="me-auto">
-            {channel.name} har {isClicked ? "favoritmarkerats!":"avfavoritmarkerats!"}
+            {channel.name} har{" "}
+            {isClicked ? "favoritmarkerats!" : "avfavoritmarkerats!"}
           </strong>
         </Toast.Header>
       </Toast>
