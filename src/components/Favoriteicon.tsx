@@ -17,24 +17,51 @@ interface channel {
   };
 }
 
+interface obj {
+    name:string
+  };
+
 const ToggleIcon = ({ channel }: channel) => {
-  const [isClicked, setIsClicked] = useState<boolean|null|string>(
+  const [isClicked, setIsClicked] = useState<boolean | null | string>(
     localStorage.getItem(`${channel.name} isFav?`)
   );
   const [ShowToast, setShowToast] = useState(false);
 
+  function removeLocalStorage(key: string, value: String) {
+    const localData = JSON.parse(localStorage.getItem(key)|| "null");
+    console.log(localData, value);
+
+    const updatedData = localData.filter((obj:obj) => {
+      return obj.name !== value;
+    });
+    console.log(updatedData);
+
+    return localStorage.setItem(key, JSON.stringify(updatedData));
+  }
+
+  function AddLocalStorage(key: string, value: any) {
+    const localData = JSON.parse(localStorage.getItem(key)|| "null");
+    const checkdata = localStorage.getItem(key);
+    // console.log(localData,checkdata);
+
+    if (checkdata) {
+      localData.push(value);
+      return localStorage.setItem(key, JSON.stringify(localData));
+    }
+    return localStorage.setItem(key, JSON.stringify([value]));
+  }
+
   useEffect(() => {
     if (localStorage.getItem(`${channel.name} isFav?`) === "false") {
-      console.log("useffect");
       setIsClicked(false);
-      localStorage.removeItem(`data`);
+      removeLocalStorage(`FavoriteChannelsList`, `${channel.name}`);
     }
   }, [isClicked]);
 
   const handleClick = () => {
     setIsClicked(!isClicked);
     localStorage.setItem(`${channel.name} isFav?`, `${!isClicked}`);
-    localStorage.setItem(`data`, JSON.stringify(channel));
+    AddLocalStorage("FavoriteChannelsList", channel);
     setShowToast(true);
   };
   //   console.log(channel);

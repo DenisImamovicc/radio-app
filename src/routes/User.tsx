@@ -22,11 +22,22 @@ interface UserProps {
   setaudioFile: (url: string) => void;
 }
 
+interface channel {
+    id: number;
+    image: string;
+    channeltype: string;
+    name: string;
+    tagline: string;
+    liveaudio: {
+      url: string;
+    };
+}
+
 export default function User({ setaudioFile }: UserProps) {
-  const [favoriteChannels, setFavoriteChannels] = useState<User|null>(null);
+  const [favoriteChannels, setFavoriteChannels] = useState<User[]|null>(null);
 
   useEffect(() => {
-    let data:User | null = JSON.parse(localStorage.getItem("data")|| "null");
+    let data:User[] | null = JSON.parse(localStorage.getItem("FavoriteChannelsList")|| "null");
     setFavoriteChannels(data);
   }, []);
 
@@ -46,33 +57,33 @@ export default function User({ setaudioFile }: UserProps) {
           title="Favorit Kannaler"
           className=""
         >
-          {favoriteChannels ? (
+          {favoriteChannels ? favoriteChannels.map((channel:channel)=>
             <Card
-              key={favoriteChannels.id}
+              key={channel.id}
               className="m-3"
               bg="dark"
               text="white"
             >
               <Link
-                to={`/Channels/Channel/${favoriteChannels.id}`}
-                state={favoriteChannels}
+                to={`/Channels/Channel/${channel.id}`}
+                state={channel}
               >
                 <Card.Img
                   variant="top"
-                  src={favoriteChannels.image}
+                  src={channel.image}
                   height={360}
                   loading="lazy"
                 />
               </Link>
               <Card.Body>
                 <Card.Title>
-                  {favoriteChannels.name} - {favoriteChannels.channeltype}{" "}
-                  <ToggleIcon channel={favoriteChannels} />
+                  {channel.name} - {channel.channeltype}{" "}
+                  <ToggleIcon channel={channel} />
                 </Card.Title>
-                <Card.Text>{favoriteChannels.tagline}</Card.Text>
+                <Card.Text>{channel.tagline}</Card.Text>
                 <Button
                   variant="primary"
-                  onClick={() => playAudio(favoriteChannels.liveaudio.url)}
+                  onClick={() => playAudio(channel.liveaudio.url)}
                 >
                   Play latest
                 </Button>
