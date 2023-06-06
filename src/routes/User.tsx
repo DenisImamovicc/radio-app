@@ -40,10 +40,10 @@ export default function User({ setaudioFile }: UserProps) {
 
   useEffect(() => {
     let channelData:User[] | null = JSON.parse(localStorage.getItem("FavoriteChannelsList")|| "null");
-    setFavoriteChannels(channelData);
+    channelData?.length ? setFavoriteChannels(channelData) : setFavoriteChannels(null)
 
     let programData:User[] | null = JSON.parse(localStorage.getItem("FavoriteProgramsList")|| "null");
-    setFavoritePrograms(programData);
+    programData?.length ? setFavoritePrograms(programData) : setFavoritePrograms(null)
   }, []);
 
   const playAudio = (url: string) => setaudioFile(url);
