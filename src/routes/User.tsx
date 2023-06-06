@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
-import ToggleIcon from "../components/FavoriteChannelicon";
-import ToggleIconProgram from "../components/FavoriteProgramicon";
+import ProgramCards from "../components/Programscard";
+import ChannelsCard from "../components/ChannelsCard";
 
 interface User {
   id: number;
@@ -16,7 +13,6 @@ interface User {
   liveaudio: {
     url: string;
   };
-  setaudioFile: (url: string) => void;
 }
 
 interface UserProps {
@@ -46,55 +42,23 @@ export default function User({ setaudioFile }: UserProps) {
     programData?.length ? setFavoritePrograms(programData) : setFavoritePrograms(null)
   }, []);
 
-  const playAudio = (url: string) => setaudioFile(url);
-
   return (
     <> 
-      <h1 className="p-1">Hej Användare!</h1>
+      <h1 className="p-1 text-light">Hej Användare!</h1>
       <Tabs
-        defaultActiveKey="Favorit Kannaler"
+        defaultActiveKey="Favorit kanaler"
         id="uncontrolled-tab-example"
         className="mb-3 "
       >
         <Tab
-          eventKey="Favorit Kannaler"
-          title="Favorit Kannaler"
+          eventKey="Favorit kanaler"
+          title="Favorit kanaler"
           className=""
         >
           {favoriteChannels ? favoriteChannels.map((channel:channel)=>
-            <Card
-              key={channel.id}
-              className="m-3"
-              bg="dark"
-              text="white"
-            >
-              <Link
-                to={`/Channels/Channel/${channel.id}`}
-                state={channel}
-              >
-                <Card.Img
-                  variant="top"
-                  src={channel.image}
-                  height={360}
-                  loading="lazy"
-                />
-              </Link>
-              <Card.Body>
-                <Card.Title>
-                  {channel.name} - {channel.channeltype}{" "}
-                  <ToggleIcon channel={channel} />
-                </Card.Title>
-                <Card.Text>{channel.tagline}</Card.Text>
-                <Button
-                  variant="primary"
-                  onClick={() => playAudio(channel.liveaudio.url)}
-                >
-                  Play latest
-                </Button>
-              </Card.Body>
-            </Card>
+            <ChannelsCard channel={channel} setaudioFile={setaudioFile}/>
           ) : (
-            <div className="user-nocontent">Inga Favoritmarkerade kannaler än :)</div>
+            <div className="user-nocontent">Inga Favoritmarkerade kanaler än :)</div>
           )}
         </Tab>
          <Tab
@@ -102,31 +66,7 @@ export default function User({ setaudioFile }: UserProps) {
           title="Favorit program"
         >
           {favoritePrograms ? favoritePrograms.map((program:any)=>
-            <Card
-              key={program.id}
-              className="m-3"
-              bg="dark"
-              text="white"
-            >
-              <Link
-                to={`/Programs/Program/${program.id}`}
-                state={program}
-              >
-                <Card.Img
-                  variant="top"
-                  src={program.programimage}
-                  height={360}
-                  loading="lazy"
-                />
-              </Link>
-              <Card.Body>
-                <Card.Title>
-                  {program.name}
-                  <ToggleIconProgram program={program} />
-                </Card.Title>
-                <Card.Text>{program.description}</Card.Text>
-              </Card.Body>
-            </Card>
+            <ProgramCards program={program}/>
           ) : (
             <div className="user-nocontent">Inga Favoritmarkerade program än :)</div>
           )}

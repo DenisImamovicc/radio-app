@@ -35,17 +35,13 @@ const Program = () => {
   return (
     <>
       {programData.program ? (
-        <div>
-          <h2 className="text-center m-2 text-white">
-            {programData.program.name}
-          </h2>
+        <>
           <ProgramCard programData={programData.program} />
-        </div>
+        </>
       ) : (
-        <div>
-          <h2 className="text-center m-2 text-white">{programData.name}</h2>
+        <>
           <ProgramCard programData={programData} />
-        </div>
+        </>
       )}
     </>
   );
