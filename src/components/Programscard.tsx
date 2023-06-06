@@ -1,5 +1,6 @@
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
+import ToggleIconProgram from "./FavoriteProgramicon.tsx";
 
 interface ProgramsCard {
   program: {
@@ -16,7 +17,7 @@ interface ProgramsCard {
   };
 }
 
-export default function ProgramsCard({ program }: ProgramsCard) {
+export default function ProgramCards({ program }: ProgramsCard) {
   
   return (
     <>
@@ -31,7 +32,7 @@ export default function ProgramsCard({ program }: ProgramsCard) {
         </Link>
         <Card.Body>
           <Card.Title>
-            {program.name}
+            {program.name} <ToggleIconProgram program={program}/>
           </Card.Title>
           <Card.Text>{program.description}</Card.Text>
         </Card.Body>

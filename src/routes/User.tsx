@@ -4,7 +4,8 @@ import Tabs from "react-bootstrap/Tabs";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
-import ToggleIcon from "../components/Favoriteicon";
+import ToggleIcon from "../components/FavoriteChannelicon";
+import ToggleIconProgram from "../components/FavoriteProgramicon";
 
 interface User {
   id: number;
@@ -35,17 +36,20 @@ interface channel {
 
 export default function User({ setaudioFile }: UserProps) {
   const [favoriteChannels, setFavoriteChannels] = useState<User[]|null>(null);
+  const [favoritePrograms, setFavoritePrograms] = useState<User[]|null>(null);
 
   useEffect(() => {
-    let data:User[] | null = JSON.parse(localStorage.getItem("FavoriteChannelsList")|| "null");
-    setFavoriteChannels(data);
+    let channelData:User[] | null = JSON.parse(localStorage.getItem("FavoriteChannelsList")|| "null");
+    setFavoriteChannels(channelData);
+
+    let programData:User[] | null = JSON.parse(localStorage.getItem("FavoriteProgramsList")|| "null");
+    setFavoritePrograms(programData);
   }, []);
 
-  console.log(favoriteChannels);
   const playAudio = (url: string) => setaudioFile(url);
 
   return (
-    <>
+    <> 
       <h1 className="p-1">Hej Användare!</h1>
       <Tabs
         defaultActiveKey="Favorit Kannaler"
@@ -93,12 +97,40 @@ export default function User({ setaudioFile }: UserProps) {
             <div className="user-nocontent">Inga Favoritmarkerade kannaler än :)</div>
           )}
         </Tab>
-         {/* <Tab
+         <Tab
           eventKey="Favorit program"
           title="Favorit program"
         >
-          <h2>program</h2>
-        </Tab>  */}
+          {favoritePrograms ? favoritePrograms.map((program:any)=>
+            <Card
+              key={program.id}
+              className="m-3"
+              bg="dark"
+              text="white"
+            >
+              <Link
+                to={`/Programs/Program/${program.id}`}
+                state={program}
+              >
+                <Card.Img
+                  variant="top"
+                  src={program.programimage}
+                  height={360}
+                  loading="lazy"
+                />
+              </Link>
+              <Card.Body>
+                <Card.Title>
+                  {program.name}
+                  <ToggleIconProgram program={program} />
+                </Card.Title>
+                <Card.Text>{program.description}</Card.Text>
+              </Card.Body>
+            </Card>
+          ) : (
+            <div className="user-nocontent">Inga Favoritmarkerade program än :)</div>
+          )}
+          </Tab>
       </Tabs>
     </>
   );

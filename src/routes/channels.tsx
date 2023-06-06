@@ -5,7 +5,7 @@ import useFetch from "../hooks/useFetch";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Loadingprogramcard from "../components/Loadingprogramcard.tsx";
-import ToggleIcon from "../components/Favoriteicon.tsx";
+import ToggleIcon from "../components/FavoriteChannelicon.tsx";
 
 interface Channels {
   setaudioFile: (url: string) => void;
