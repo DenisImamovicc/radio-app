@@ -10,7 +10,7 @@ import {
 import ToggleIconProgram from "./FavoriteProgramicon";
 
 interface ProgramCard {
-  programData: {
+  data: {
     name: string;
     programimage: string;
     responsibleeditor: string;
@@ -29,35 +29,35 @@ interface ProgramCard {
   };
 }
 
-export default function ProgramCard({ programData }: ProgramCard) {
+export default function ProgramCard({ data }: ProgramCard) {
   const socialMediaIcons: any[] = [faFacebook, faTwitter, faInstagram];
 
-  if (!programData) {
+  if (!data) {
     return <Loadingprogramcard />;
   }
-  console.log(programData);
+  console.log(data);
   
   return (
     <>
 
-      <Card key={programData.id} className="m-3" bg="dark" text="white">
-        <a href={programData.programurl} target="_blank">
-          <Card.Img variant="top" src={programData.programimage} height={360} />
+      <Card key={data.id} className="m-3" bg="dark" text="white">
+        <a href={data.programurl} target="_blank">
+          <Card.Img variant="top" src={data.programimage} height={360} />
         </a>
         <Card.Body>
           <Card.Title className="d-flex align-items-center justify-content-between">
-            Radiopresentatör : <br />{programData.responsibleeditor}<ToggleIconProgram program={programData}/>
+            Radiopresentatör : <br />{data.responsibleeditor}<ToggleIconProgram program={data}/>
           </Card.Title> 
           <hr />
           <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
           <Card.Text>
-            {programData.description}
+            {data.description}
             <br />
             <br />
-            {programData.broadcastinfo}
+            {data.broadcastinfo}
             <hr />
             <div className="d-flex justify-content-evenly">
-              {programData.socialmediaplatforms.map(
+              {data.socialmediaplatforms.map(
                 (platform, index: number) => (
                   <a
                     href={platform.platformurl}

@@ -3,20 +3,27 @@ import ProgramCard from "../components/Programcard";
 import useFetch from "../hooks/useFetch";
 import Loadingprogramcard from "../components/Loadingprogramcard";
 import { Placeholder } from "react-bootstrap";
-import Broadcasts from "../components/Broadcasts";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
+import ContentList from "../components/ContentList";
 
-interface audio {
-  setaudioFile: (url: string) => void;
-}
+ interface data {
+  //  programData: {
+  //    name:string
+  //    channel: {
+  //      id: number;
+  //    };
+  //  };
+   setaudioFile: (url: string) => void;
 
-const Program = ({ setaudioFile }: audio) => {
-  const [programData, setprogramData] = useState(null);
+ }
+
+const Program = ({ setaudioFile }: data) => {
+  const [programData, setprogramData] = useState<any>(null);
   const { id } = useParams();
   const { data } = useFetch(
     `https://api.sr.se/api/v2/programs/${id}?format=json`
@@ -31,7 +38,6 @@ const Program = ({ setaudioFile }: audio) => {
       setprogramData(data.program);
     }
   }, [localData, data]);
-
 
   return (
     <>
@@ -54,13 +60,30 @@ const Program = ({ setaudioFile }: audio) => {
             className="mb-3"
           >
             <Tab eventKey="Program" title="Program">
-              <ProgramCard programData={programData} />
+              <ProgramCard 
+                data={programData} />
             </Tab>
             <Tab eventKey="Sändningar" title="Sändningar">
-              <Broadcasts programData={programData} setaudioFile={setaudioFile} />
+              <ContentList
+                data={programData}
+                setaudioFile={setaudioFile}
+                contentType={"broadcasts"}
+              />
             </Tab>
-            <Tab eventKey="Poddar" title="Podd"></Tab>
-            <Tab eventKey="Avsnitt" title="Avsnitt"></Tab>
+            <Tab eventKey="Poddar" title="Podd">
+              <ContentList
+                data={programData}
+                setaudioFile={setaudioFile}
+                contentType={"podfiles"}
+              />
+            </Tab>
+            <Tab eventKey="Avsnitt" title="Avsnitt">
+              <ContentList
+                data={programData}
+                setaudioFile={setaudioFile}
+                contentType={"episodes"}
+              />
+            </Tab>
           </Tabs>
         </>
       ) : (
