@@ -1,8 +1,6 @@
 import Card from "react-bootstrap/Card";
 import Loadingprogramcard from "./Loadingprogramcard";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 import {
   faTwitter,
@@ -37,17 +35,11 @@ export default function ProgramCard({ programData }: ProgramCard) {
   if (!programData) {
     return <Loadingprogramcard />;
   }
-
+  console.log(programData);
+  
   return (
     <>
-      <Link
-        to={`/Channels/Channel/${programData.channel.id}`}
-        title={programData.channel.name}
-        className="d-flex justify-content-center align-items-center ms-4"
-      >
-        <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-light"/>
-        <h2 className=" m-2 text-white">{programData.name}</h2>
-      </Link>
+
       <Card key={programData.id} className="m-3" bg="dark" text="white">
         <a href={programData.programurl} target="_blank">
           <Card.Img variant="top" src={programData.programimage} height={360} />

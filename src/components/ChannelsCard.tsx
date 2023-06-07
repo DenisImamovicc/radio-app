@@ -20,11 +20,15 @@ interface ChannelCardProps {
 
 function ChannelsCard({ channel, setaudioFile }: ChannelCardProps) {
   const playAudio = (url: string) => setaudioFile(url);
-  
+
   return (
     <>
       <Card key={channel.id} className="m-3" bg="dark" text="white">
-        <Link to={`/Channels/Channel/${channel.id}`} state={channel} className="d-flex justify-content-between">
+        <Link
+          to={`/Channels/Channel/${channel.id}`}
+          state={channel}
+          className="d-flex justify-content-between"
+        >
           <Card.Img
             variant="top"
             src={channel.image}

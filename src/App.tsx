@@ -24,7 +24,7 @@ function App() {
         />
         <Route path="/Channels/Channel/:id" element={<Channel setaudioFile={setaudioFile}/>} />
         <Route path="/Programs" element={<Programs />} />
-        <Route path="/Programs/Program/:id" element={<Program />} />
+        <Route path="/Programs/Program/:id" element={<Program setaudioFile={setaudioFile}/>} />
         <Route path="/User" element={<User setaudioFile={setaudioFile}/>} />
 
         <Route
