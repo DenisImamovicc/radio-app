@@ -44,7 +44,7 @@ export default function User({ setaudioFile }: UserProps) {
 
   return (
     <> 
-      <h1 className="p-1 text-light">Hej Användare!</h1>
+      <h1 className="p-1 text-light">Din sida</h1>
       <Tabs
         defaultActiveKey="Favorit kanaler"
         id="uncontrolled-tab-example"

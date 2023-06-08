@@ -35,8 +35,7 @@ export default function ProgramCard({ data }: ProgramCard) {
   if (!data) {
     return <Loadingprogramcard />;
   }
-  console.log(data);
-  
+    
   return (
     <>
 

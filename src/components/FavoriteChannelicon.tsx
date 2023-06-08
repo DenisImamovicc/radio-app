@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import Toast from "react-bootstrap/Toast";
+import { Link } from "react-router-dom";
 
 interface channel {
   channel: {
@@ -75,14 +76,15 @@ const ToggleIcon = ({ channel }: channel) => {
       <Toast
         onClose={() => setShowToast(false)}
         show={ShowToast}
-        delay={2000}
+        delay={3000}
         className="toastFavorite"
         bg="dark"
         autohide
       >
         <Toast.Header>
           <strong className="me-auto">
-            {channel.name} har {isClicked ? "favoritmarkerats!" : "avfavoritmarkerats!"}
+            {channel.name} har{" "}
+            {isClicked ? "favoritmarkerats till" : "avfavoritmarkerats från"} <Link to={`/User`} className="text-decoration-underline"> Din sida! </Link>
           </strong>
         </Toast.Header>
       </Toast>

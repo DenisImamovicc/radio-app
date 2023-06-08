@@ -9,6 +9,7 @@ const AudioPlayer = ({ setaudioFile, audioFile }: AudioPlayer) => {
   return (
     <>
       <div className="audioplayer ">
+        {audioFile ? 
         <Button
           onClick={() => setaudioFile("")}
           className="w-100 p-2 "
@@ -16,6 +17,9 @@ const AudioPlayer = ({ setaudioFile, audioFile }: AudioPlayer) => {
         >
           Ta bort nuvarande för att kunna spela nästa
         </Button>
+        :
+        ""
+      }
         {audioFile ? (
           <audio controls autoPlay className="w-100">
             <source src={audioFile} type="audio/mpeg"></source>

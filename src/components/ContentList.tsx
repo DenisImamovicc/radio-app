@@ -1,8 +1,7 @@
 import { useState } from "react";
-
 import ListGroup from "react-bootstrap/ListGroup";
 import useFetch from "../hooks/useFetch";
-
+import Spinner from 'react-bootstrap/Spinner';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import PaginationComponent from "./PaginationComponent";
@@ -74,9 +73,13 @@ function ContentList({ data, setaudioFile, contentType }: data) {
   };
 
   if (!contentData) {
-    return <h2>Wait you dumb cunt</h2>;
+    return  <Spinner animation="border" variant="light"/>
   }
-  console.log(contentData);
+
+  if (!contentData[contentType].length) {
+    return  <h2 className="text-light text-center" id="nodatatitel">Hittat ingen tillgänglig data</h2>
+  }
+  // console.log(contentData);
 
   return (
     <>
@@ -105,7 +108,7 @@ function ContentList({ data, setaudioFile, contentType }: data) {
             </ListGroup.Item>
           ))
         ) : (
-          <h1 className="text-light">Inga sändningar tillgängliga</h1>
+          ""
         )}
       </ListGroup>
       <PaginationComponent
