@@ -31,7 +31,6 @@ const Program = ({ setaudioFile }: data) => {
   const localData = useLocation().state;
 
   useEffect(() => {
-    console.log(localData, "localdata");
     if (localData) {
       setprogramData(localData);
     } else if (data && data.program) {

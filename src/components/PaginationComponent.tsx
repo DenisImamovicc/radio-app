@@ -42,12 +42,7 @@ const PaginationComponent = ({
       </Pagination>
     );
 
-  const checkNextPageKeyName = (keyName: string) => {
-    if (!keyName) {
-      return paginationData.previouspage;
-    }
-    return paginationData.nextpage;
-  };
+  const checkNextPageKeyName = (keyName: string) => !keyName ?paginationData.previouspage : paginationData.nextpage
 
   function fetchNextPage(nextNum: number | null) {
     if (nextNum === null) {
@@ -59,7 +54,6 @@ const PaginationComponent = ({
     scroll({
       top: 0,
       left: 0,
-      behavior: "smooth",
     });
     handleFetchNextPage(
       nextPageURL.replace(pagNumRegex, paginationData.page.toString())
