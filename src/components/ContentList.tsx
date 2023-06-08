@@ -42,18 +42,41 @@ function ContentList({ data, setaudioFile, contentType }: data) {
 
   const playAudio = (url: string) => setaudioFile(url);
 
+  //Avsnitt data struktur är fucky emellan olika program.Figure it out
   const handleContentTypePath = (content: any) => {
     if (contentType === "broadcasts") {
       return content.broadcastfiles[0].url;
     } else if (contentType === "podfiles") {
       return content.url;
+    }else if (contentType === "episodes") {
+      if (content.hasOwnProperty("broadcast")) {        
+         return content.broadcast.broadcastfiles[0].url;
+      }else{
+        return content.listenpodfile.url
+      }
     }
-    return content.episodes;
+     return 0 
+  };
+
+  const handleContentDurationPath = (content: any) => {
+    if (contentType === "broadcasts") {
+      return content.totalduration;
+    } else if (contentType === "podfiles") {
+      return content.duration;
+    }else if (contentType === "episodes") {
+      if (content.hasOwnProperty("broadcast")) {        
+        return content.broadcast.broadcastfiles[0].duration;
+     }else{
+       return content.listenpodfile.duration
+     }      
+    }
+    return 0;
   };
 
   if (!contentData) {
     return <h2>Wait you dumb cunt</h2>;
   }
+  console.log(contentData);
 
   return (
     <>
@@ -67,7 +90,8 @@ function ContentList({ data, setaudioFile, contentType }: data) {
             >
               <div className="ms-2 me-auto ">
                 <div className="fw-bold">{content.title}</div>
-                {Math.round((content.totalduration / 60) * 10) / 10}min
+                <p>{content.description}</p>
+                {Math.round((handleContentDurationPath(content) / 60) * 10) / 10}min
                 <FontAwesomeIcon
                   onClick={() => playAudio(handleContentTypePath(content))}
                   className="ms-1"
