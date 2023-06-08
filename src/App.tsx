@@ -10,6 +10,7 @@ import Program from "./routes/program";
 import { Route, Routes } from "react-router-dom";
 import Channel from "./routes/channel";
 import User from "./routes/User";
+import Errorpage from "./routes/NotFound";
 
 function App() {
   const [audioFile, setaudioFile] = useState("");
@@ -22,10 +23,16 @@ function App() {
           path="/Channels"
           element={<Channels setaudioFile={setaudioFile} />}
         />
-        <Route path="/Channels/Channel/:id" element={<Channel setaudioFile={setaudioFile}/>} />
+        <Route
+          path="/Channels/Channel/:id"
+          element={<Channel setaudioFile={setaudioFile} />}
+        />
         <Route path="/Programs" element={<Programs />} />
-        <Route path="/Programs/Program/:id" element={<Program setaudioFile={setaudioFile}/>} />
-        <Route path="/User" element={<User setaudioFile={setaudioFile}/>} />
+        <Route
+          path="/Programs/Program/:id"
+          element={<Program setaudioFile={setaudioFile} />}
+        />
+        <Route path="/User" element={<User setaudioFile={setaudioFile} />} />
 
         <Route
           path="/"
@@ -37,6 +44,7 @@ function App() {
             />,
           ]}
         />
+        <Route path="*" element={<Errorpage />} />
       </Routes>
       <AudioPlayer setaudioFile={setaudioFile} audioFile={audioFile} />
     </>
