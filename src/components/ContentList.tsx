@@ -48,14 +48,14 @@ function ContentList({ data, setaudioFile, contentType }: data) {
       return content.broadcastfiles[0].url;
     } else if (contentType === "podfiles") {
       return content.url;
-    }else if (contentType === "episodes") {
-      if (content.hasOwnProperty("broadcast")) {        
-         return content.broadcast.broadcastfiles[0].url;
-      }else{
-        return content.listenpodfile.url
+    } else if (contentType === "episodes") {
+      if (content.hasOwnProperty("broadcast")) {
+        return content.broadcast.broadcastfiles[0].url;
+      } else {
+        return content.listenpodfile.url;
       }
     }
-     return 0 
+    return 0;
   };
 
   const handleContentDurationPath = (content: any) => {
@@ -63,12 +63,12 @@ function ContentList({ data, setaudioFile, contentType }: data) {
       return content.totalduration;
     } else if (contentType === "podfiles") {
       return content.duration;
-    }else if (contentType === "episodes") {
-      if (content.hasOwnProperty("broadcast")) {        
+    } else if (contentType === "episodes") {
+      if (content.hasOwnProperty("broadcast")) {
         return content.broadcast.broadcastfiles[0].duration;
-     }else{
-       return content.listenpodfile.duration
-     }      
+      } else {
+        return content.listenpodfile.duration;
+      }
     }
     return 0;
   };
@@ -80,23 +80,27 @@ function ContentList({ data, setaudioFile, contentType }: data) {
 
   return (
     <>
-      <ListGroup as="ol" numbered className="mb-2" id="Contentlist">
+      <ListGroup as="ol" numbered className="mb-3" id="Contentlist">
         {contentData && contentData[contentType] ? (
           contentData[contentType].map((content: any) => (
             <ListGroup.Item
               as="li"
-              className="d-flex justify-content-between align-items-start mx-3 "
+              className="d-flex justify-content-between align-items-start mx-3  text-light bg-dark"
               key={content.id}
             >
               <div className="ms-2 me-auto ">
                 <div className="fw-bold">{content.title}</div>
-                <p>{content.description}</p>
-                {Math.round((handleContentDurationPath(content) / 60) * 10) / 10}min
-                <FontAwesomeIcon
-                  onClick={() => playAudio(handleContentTypePath(content))}
-                  className="ms-1"
-                  icon={faPlay}
-                />
+                {content.description ? <p>{content.description}</p> : ""}
+                <p>
+                  <FontAwesomeIcon
+                    onClick={() => playAudio(handleContentTypePath(content))}
+                    className="me-1"
+                    icon={faPlay}
+                  />
+                  {Math.round((handleContentDurationPath(content) / 60) * 10) /
+                    10}
+                  min
+                </p>
               </div>
             </ListGroup.Item>
           ))
