@@ -4,6 +4,9 @@ import { useState } from "react";
 import Loadingprogramcard from "../components/Loadingprogramcard.tsx";
 import ChannelsCard from "../components/ChannelsCard.tsx";
 
+import Container from 'react-bootstrap/Container';
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 interface Channels {
   setaudioFile: (url: string) => void;
@@ -36,10 +39,16 @@ const Channels = ({ setaudioFile }: Channels) => {
 
   return (
     <>
-      {data.channels &&
-        data.channels.map((channel: channel) => (
-          <ChannelsCard channel={channel} setaudioFile={setaudioFile}/>
-        ))}
+    <Container>
+      <Row xs={1} md={2} lg={3}>
+        {data.channels &&
+          data.channels.map((channel: channel) => (
+            <Col>
+              <ChannelsCard channel={channel} setaudioFile={setaudioFile} />
+            </Col>
+          ))}
+      </Row>
+      </Container>
       <PaginationComponent
         data={data.pagination}
         handleFetchNextPage={handleFetchNextPage}

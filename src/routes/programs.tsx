@@ -5,28 +5,37 @@ import PaginationComponent from "../components/PaginationComponent.tsx";
 import ProgramCards from "../components/Programscard.tsx";
 import Loadingprogramcard from "../components/Loadingprogramcard.tsx";
 
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+
 function Programs() {
   const [programCategory, setprogramCategory] = useState<string>("");
   const [Url, setUrl] = useState<string>(
     `https://api.sr.se/api/v2/programs/index?format=json${programCategory}`
   );
-  const { data} = useFetch(Url);
+  const { data } = useFetch(Url);
 
-  if (!data || !data.programs) return <Loadingprogramcard />
-  
+  if (!data || !data.programs) return <Loadingprogramcard />;
+
   const handleFetchNextPage = (nextpageData: string) => setUrl(nextpageData);
 
   return (
     <>
+      <Container>
       <ProgramTypeDropdown
         setprogramCategory={setprogramCategory}
         setUrl={setUrl}
       />
+        <Row xs={1} md={2} lg={3}>
+          {data.programs.map((program: any) => (
+            <Col>
+              <ProgramCards program={program} />
+            </Col>
+          ))}
+        </Row>
+      </Container>
 
-      {data.programs.map((program: any) => (
-        <ProgramCards program={program}/>
-      ))}
-  
       <PaginationComponent
         data={data.pagination}
         handleFetchNextPage={handleFetchNextPage}
