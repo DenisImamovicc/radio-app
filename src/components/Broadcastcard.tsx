@@ -36,7 +36,7 @@ export default function Broadcastcard({episode}:Broadcastcard) {
           height={360}
           loading="lazy"
         />
-        <Card.Body>
+        <Card.Body id="">
           <Card.Title>
             {episode.title} - {episode.program.name}
           </Card.Title>
@@ -44,7 +44,10 @@ export default function Broadcastcard({episode}:Broadcastcard) {
             {formatDate(episode.starttimeutc)} -{" "}
             {formatDate(episode.endtimeutc)}
           </Card.Subtitle>
-          <Card.Text>{episode.description}</Card.Text>
+          <hr />
+          <Card.Text>
+            {episode.description}
+          </Card.Text>
         </Card.Body>
       </Card>
     </>

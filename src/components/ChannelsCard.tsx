@@ -23,7 +23,7 @@ function ChannelsCard({ channel, setaudioFile }: ChannelCardProps) {
 
   return (
     <>
-      <Card key={channel.id} className="m-3" bg="dark" text="white">
+      <Card key={channel.id} className="m-2" bg="dark" text="white">
         <Link
           to={`/Channels/Channel/${channel.id}`}
           state={channel}
@@ -36,18 +36,23 @@ function ChannelsCard({ channel, setaudioFile }: ChannelCardProps) {
             loading="lazy"
           />
         </Link>
-        <Card.Body>
-          <Card.Title className="d-flex align-items-center justify-content-between">
-            {channel.name} - {channel.channeltype}{" "}
-            <ToggleIcon channel={channel} />
-          </Card.Title>
+        <Card.Body className="d-flex justify-content-between flex-column" id="Cardbody">
+          <div>
+            <Card.Title className="d-flex align-items-center justify-content-between">
+              {channel.name} - {channel.channeltype}{" "}
+              <ToggleIcon channel={channel} />
+            </Card.Title>
           <hr />
           <Card.Text>{channel.tagline}</Card.Text>
-          <FontAwesomeIcon
-            icon={faPlay}
-            onClick={() => playAudio(channel.liveaudio.url)}
-          />{" "}
-          LIVE
+          </div>
+          <div>
+          <hr />
+            <FontAwesomeIcon
+              icon={faPlay}
+              onClick={() => playAudio(channel.liveaudio.url)}
+            />
+            <span> LIVE</span> 
+          </div>
         </Card.Body>
       </Card>
     </>

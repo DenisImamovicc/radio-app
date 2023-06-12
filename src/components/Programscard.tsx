@@ -20,7 +20,7 @@ interface ProgramsCard {
 export default function ProgramCards({ program }: ProgramsCard) {
   return (
     <>
-      <Card key={program.id} className="m-3 " bg="dark" text="white">
+      <Card key={program.id} className="m-2 " bg="dark" text="white">
         <Link to={`/Programs/Program/${program.id}`} state={program}>
           <Card.Img
             variant="top"
@@ -29,13 +29,14 @@ export default function ProgramCards({ program }: ProgramsCard) {
             loading="lazy"
           />
         </Link>
-        <Card.Body>
+        <Card.Body id="Cardbody">
           <Card.Title className="d-flex align-items-center justify-content-between">
             {program.name}
             <ToggleIconProgram program={program} />
           </Card.Title>
           <hr/>
           <Card.Text>{program.description}</Card.Text>
+          <hr/>
         </Card.Body>
       </Card>
     </>
