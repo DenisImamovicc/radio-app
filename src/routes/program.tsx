@@ -59,8 +59,10 @@ const Program = ({ setaudioFile }: data) => {
             className="mb-3"
           >
             <Tab eventKey="Program" title="Program">
-              <ProgramCard 
-                data={programData} />
+              <div className="d-flex justify-content-center">
+                <ProgramCard 
+                  data={programData} />
+              </div>
             </Tab>
             <Tab eventKey="Sändningar" title="Sändningar">
               <ContentList

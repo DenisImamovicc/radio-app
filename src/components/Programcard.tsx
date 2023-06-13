@@ -38,8 +38,7 @@ export default function ProgramCard({ data }: ProgramCard) {
     
   return (
     <>
-
-      <Card key={data.id} className="m-3" bg="dark" text="white">
+      <Card key={data.id} className="m-3" bg="dark" text="white" style={{maxWidth:"400px"}}>
         <a href={data.programurl} target="_blank">
           <Card.Img variant="top" src={data.programimage} height={360} />
         </a>
