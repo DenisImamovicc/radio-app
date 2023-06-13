@@ -73,6 +73,10 @@ a {
     flex-wrap: wrap;
 }
 
+#channelStartingpagecard{
+    max-width: 100px;
+}
+
 @media (min-width: 765px) {
     #Cardbody{
         height: 300px;

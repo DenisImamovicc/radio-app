@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "./App.css";
 import AudioPlayer from "./components/AudioPlayer";
-import ChannelSuggestionsCarousel from "./components/ChannelSuggestionsCarousel";
 import Navbar from "./components/Navbar";
 import ProgramSuggestionsCarousel from "./components/ProgramSuggestionsCarousel";
 import Channels from "./routes/channels";
@@ -11,6 +10,7 @@ import { Route, Routes } from "react-router-dom";
 import Channel from "./routes/channel";
 import User from "./routes/User";
 import Errorpage from "./routes/NotFound";
+import RecommendedChannels from "./components/RecommendedChannels";
 
 function App() {
   const [audioFile, setaudioFile] = useState("");
@@ -37,11 +37,11 @@ function App() {
         <Route
           path="/"
           element={[
-            <ProgramSuggestionsCarousel />,
-            <ChannelSuggestionsCarousel
-              setaudioFile={setaudioFile}
-              audioFile={audioFile}
+            <RecommendedChannels              
+            setaudioFile={setaudioFile}
+            audioFile={audioFile}
             />,
+            <ProgramSuggestionsCarousel />,
           ]}
         />
         <Route path="*" element={<Errorpage />} />
