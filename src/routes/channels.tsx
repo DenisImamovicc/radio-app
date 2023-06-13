@@ -39,7 +39,7 @@ const Channels = ({ setaudioFile }: Channels) => {
 
   return (
     <>
-    <Container>
+    <Container className="mt-5">
       <Row xs={1} md={2} lg={3}>
         {data.channels &&
           data.channels.map((channel: channel) => (

@@ -12,11 +12,11 @@ interface channel {
   };
 }
 
-function RecommendedChannels({ setaudioFile, audioFile }: any) {
+function RecommendedChannels({ setaudioFile }: any) {
   const { data } = useFetch(
     `https://api.sr.se/api/v2/channels/?format=json&page=1&size=3`
   );
-  console.log(data);
+//   console.log(data);
 
   const playAudio = (url: string) => setaudioFile(url);
 
@@ -25,7 +25,7 @@ function RecommendedChannels({ setaudioFile, audioFile }: any) {
   return (
     <>
       <div className="d-flex justify-content-start flex-column ms-2">
-        <h1 className="text-light m-1">Lyssna direkt:</h1>
+        <h1 className="text-light m-1">Lyssna direkt</h1>
         <div className="d-flex flex-row">
           {data.channels &&
             data.channels.map((channel: channel) => {

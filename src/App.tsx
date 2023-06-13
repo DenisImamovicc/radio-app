@@ -2,7 +2,6 @@ import { useState } from "react";
 import "./App.css";
 import AudioPlayer from "./components/AudioPlayer";
 import Navbar from "./components/Navbar";
-import ProgramSuggestionsCarousel from "./components/ProgramSuggestionsCarousel";
 import Channels from "./routes/channels";
 import Programs from "./routes/programs";
 import Program from "./routes/program";
@@ -11,12 +10,13 @@ import Channel from "./routes/channel";
 import User from "./routes/User";
 import Errorpage from "./routes/NotFound";
 import RecommendedChannels from "./components/RecommendedChannels";
+import Selectedprograms from "./components/Selectedprograms";
 
 function App() {
   const [audioFile, setaudioFile] = useState("");
 
   return (
-    <>
+    <div className="App">
       <Navbar />
       <Routes>
         <Route
@@ -41,13 +41,13 @@ function App() {
             setaudioFile={setaudioFile}
             audioFile={audioFile}
             />,
-            <ProgramSuggestionsCarousel />,
+            <Selectedprograms />
           ]}
         />
         <Route path="*" element={<Errorpage />} />
       </Routes>
       <AudioPlayer setaudioFile={setaudioFile} audioFile={audioFile} />
-    </>
+    </div>
   );
 }
 

@@ -4,7 +4,7 @@ import imageHolderIcon from "../assets/image-holder-icon-614x460.png";
 const Loadingprogramcard = () => {
   return (
     <>
-      <Card className="m-3" bg="dark" text="white">
+      <Card className="m-3" bg="dark" text="white" id="Loadingcard">
         <Card.Img variant="top" src={imageHolderIcon} height={360} />
         <Card.Body>
           <Placeholder as={Card.Title} animation="glow">
