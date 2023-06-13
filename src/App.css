@@ -73,6 +73,8 @@ a {
     flex-wrap: wrap;
 }
 
-#Cardbody{
-    height: 300px;
-}
+@media (min-width: 765px) {
+    #Cardbody{
+        height: 300px;
+    }
+  }
