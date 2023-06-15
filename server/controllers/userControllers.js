@@ -63,7 +63,7 @@ export async function handleLoginAcount(req, res) {
 }
 
 export async function handleCreateAcount(req, res) {
-  addUserAccount(req, res, req.body.Email, hashPassword(req.body.Password));
+ addUserAccount(req, res, req.body.Email, await hashPassword(req.body.Password),req.body.Name);
 }
 
 export async function updateUserChannels(req, res) {

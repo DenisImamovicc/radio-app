@@ -1,11 +1,11 @@
 import { DB } from "../config/SQL_DB.js";
 import { comparePassword } from "../utils/functions.js";
 
-export async function addUserAccount(req, res, email, hashedPassword) {
+export async function addUserAccount(req, res, email, hashedPassword,Name) {
   return new Promise((resolve, reject) => {
     DB.run(
-      "INSERT INTO Useracounts (Email, Password) VALUES (?, ?)",
-      [email, hashedPassword],
+      "INSERT INTO Useracounts (Email, Password,Name) VALUES (?,?,?)",
+      [email, hashedPassword, Name],
       function (err) {
         if (err) {
           reject(err);
