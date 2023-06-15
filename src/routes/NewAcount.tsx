@@ -1,9 +1,11 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
+import { useState } from "react";
 
 function NewAcount() {
-    
+  const [showPassword, setshowPassword] = useState<boolean>(false);
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const User = {
@@ -13,6 +15,8 @@ function NewAcount() {
     };
     console.log(User);
   };
+
+  const handleShowPassword = () => setshowPassword(!showPassword);
 
   return (
     <div
@@ -25,7 +29,7 @@ function NewAcount() {
           <Form.Group controlId="formBasicName">
             <Form.Label>Namn</Form.Label>
             <Form.Control
-              type="name"
+              type="text"
               placeholder="Lägg in ditt namn"
               required
             />
@@ -37,12 +41,23 @@ function NewAcount() {
               Vi kommer aldrig dela din adress med någon annan
             </Form.Text>
           </Form.Group>
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>Lösenord</Form.Label>
-            <Form.Control type="password" placeholder="Password" required />
-          </Form.Group>
+          {showPassword ? (
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Lösenord</Form.Label>
+              <Form.Control type="text" placeholder="Password" required />
+            </Form.Group>
+          ) : (
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Lösenord</Form.Label>
+              <Form.Control type="password" placeholder="Password" required />
+            </Form.Group>
+          )}
           <Form.Group controlId="formBasicCheckbox" className="mt-1">
-            <Form.Check type="checkbox" label="Check me out" />
+            <Form.Check
+              type="checkbox"
+              label="Visa Lösenord"
+              onClick={handleShowPassword}
+            />
           </Form.Group>
           <div>
             <Button variant="primary" type="submit" className="mt-1">
