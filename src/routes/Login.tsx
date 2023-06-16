@@ -2,21 +2,66 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 function Login() {
   const [showPassword, setshowPassword] = useState<boolean>(false);
+  const [isOk, setisOk] = useState<boolean>(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
+  const [token, settoken] = useState("");
 
-  const handleSubmit = (e: any) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     const User = {
       Email: `${e.target[0].value}`,
       Password: `${e.target[1].value}`,
     };
-    console.log(User);
+    await loginAcount(User);
+    setIsFormSubmitted(true);
   };
 
+  useEffect(() => {
+    if (isFormSubmitted) {
+      if (isOk) {
+        navigate("/User");
+        console.log(token);
+        alert("Login success!");
+      } else {
+        alert("Login failed!");
+      }
+    }
+  }, [isOk, isFormSubmitted]);
+
   const handleShowPassword = () => setshowPassword(!showPassword);
+
+  const loginAcount = async (User: any) => {
+    try {
+      const rawResponse = await fetch(
+        "http://localhost:9000/users/loginacount",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(User),
+        }
+      );
+      if (rawResponse.ok === false) {
+        setisOk(false);
+        throw new Error("Request failed");
+      }
+      const responseData = await rawResponse.json();
+      settoken(responseData);
+      setisOk(true);
+      return responseData;
+    } catch (error) {
+      console.log(error);
+      setisOk(false);
+    }
+  };
 
   return (
     <div
@@ -27,10 +72,14 @@ function Login() {
       <Card className="m-3" bg="dark" text="white">
         <Form className="m-3" onSubmit={handleSubmit}>
           <Form.Group controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" required />
+            <Form.Label>Email addres</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="exempel@exempel.se"
+              required
+            />
             <Form.Text className="text-light">
-              We'll never share your email with anyone else.
+              Vi kommer aldrig dela din adress med någon annan
             </Form.Text>
           </Form.Group>
 
@@ -53,13 +102,15 @@ function Login() {
             />
           </Form.Group>
           <div>
-            <Button variant="primary" type="submit" className="mt-1">
+            <Button variant="primary" type="submit" className="mt-2">
               Submit
             </Button>
           </div>
-          <Form.Text className="text-light text-end mt-1">
-            <Link to="/NewAcount">Dont have an acount?</Link>
-          </Form.Text>
+          <div className="text-end text-light  mt-1">
+            <Form.Text>
+              <Link to="/NewAcount">Skapa konto här!</Link>
+            </Form.Text>
+          </div>
         </Form>
       </Card>
     </div>
