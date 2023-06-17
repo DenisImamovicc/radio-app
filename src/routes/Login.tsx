@@ -4,7 +4,12 @@ import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-function Login() {
+
+interface prop {
+  setisLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
+}
+
+function Login({setisLoggedIn}:prop) {
   const [showPassword, setshowPassword] = useState<boolean>(false);
   const [isOk, setisOk] = useState<boolean>(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
@@ -30,6 +35,7 @@ function Login() {
         navigate("/User");
         createLoginDurationCookie();
         alert("Login success!");
+        setisLoggedIn(true)
         setIsFormSubmitted(false);
       } else {
         alert("Login failed!");

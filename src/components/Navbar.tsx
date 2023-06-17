@@ -3,7 +3,11 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import {Link} from "react-router-dom"
 
-const navbar = () => {
+interface prop {
+  isLoggedIn: boolean,
+}
+
+const navbar = ({isLoggedIn}:prop) => {
 
   return (
     <Navbar collapseOnSelect bg="dark" expand="lg" variant="dark">
@@ -14,7 +18,7 @@ const navbar = () => {
           <Nav className="me-auto">
             <Link to="/Channels"><Nav.Link href="/#" id="link" >Kanal</Nav.Link></Link>
             <Link to="/Programs"><Nav.Link href="/#" id="link">Program</Nav.Link></Link>
-            {document.cookie.endsWith("true") ?
+            {isLoggedIn ?
             (
               <Link to="/User"><Nav.Link href="/#" id="link" >Min sida</Nav.Link></Link>
             )

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./App.css";
 import AudioPlayer from "./components/AudioPlayer";
 import Navbar from "./components/Navbar";
@@ -13,13 +12,21 @@ import RecommendedChannels from "./components/RecommendedChannels";
 import Selectedprograms from "./components/Selectedprograms";
 import Login from "./routes/Login";
 import NewAcount from "./routes/NewAcount";
+import { useEffect,useState } from "react";
 
 function App() {
   const [audioFile, setaudioFile] = useState("");
+  const [isLoggedIn, setisLoggedIn] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (document.cookie.endsWith("true")) {  
+      setisLoggedIn(true)
+    }
+  }, [isLoggedIn])
 
   return (
     <div className="App">
-      <Navbar />
+      <Navbar isLoggedIn={isLoggedIn}/>
       <Routes>
         <Route
           path="/Channels"
@@ -35,7 +42,7 @@ function App() {
           element={<Program setaudioFile={setaudioFile} />}
         />
         <Route path="/User" element={<User setaudioFile={setaudioFile} />} />
-        <Route path="/Login" element={<Login />}/>
+        <Route path="/Login" element={<Login  setisLoggedIn={setisLoggedIn}/>}/>
         <Route path="/NewAcount" element={<NewAcount />}/>
         <Route
           path="/"
