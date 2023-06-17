@@ -14,7 +14,7 @@ function NewAcount() {
     if (isFormSubmitted) {
       console.log(isOk, "Status");
       if (isOk) {
-        navigate("/");
+        navigate("/Login");
         alert("Account creation success! Please login afterwards");
       } else {
         alert("Account creation failed!");

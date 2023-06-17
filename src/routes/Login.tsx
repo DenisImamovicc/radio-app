@@ -26,10 +26,11 @@ function Login() {
     if (isFormSubmitted) {
       if (isOk) {
         navigate("/User");
-        console.log(token);
         alert("Login success!");
+        setIsFormSubmitted(false);
       } else {
         alert("Login failed!");
+        setIsFormSubmitted(false);
       }
     }
   }, [isOk, isFormSubmitted]);
