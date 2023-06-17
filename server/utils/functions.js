@@ -8,8 +8,13 @@ const JSON_FORMAT = `format=json`;
 
 export const hashPassword = async (Password) => await bcrypt.hash(Password, 10);
 
-export const comparePassword = async (user, DBPwd) =>
-  await bcrypt.compare(user.Password, DBPwd.Password);
+export const comparePassword = async (user, DBPwd) => {
+  console.log(DBPwd);
+  if (DBPwd.Password === undefined) {
+    return null;
+  }
+  return await bcrypt.compare(user.Password, DBPwd.Password);
+};
 
 export const grantAcessToken = (user) =>
   jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30min" });
@@ -26,7 +31,7 @@ export function checkDuplicate(currentdata, reqdataID, req, res) {
 }
 
 export function getAllList(req, res) {
-  const TYPE = req.originalUrl.replace('/SR_api', '')
+  const TYPE = req.originalUrl.replace("/SR_api", "");
   fetch(SVERIGES_RADIO_API + TYPE + "?" + JSON_FORMAT)
     .then((res) => res.json())
     .then((Data) => res.status(200).send(Data))
@@ -62,9 +67,14 @@ export function arrayify(data) {
 
 export async function handleLoginUser(req, res) {
   if (await matchPasswordFromDB(req.body)) {
+    const token = grantAcessToken(req.body);
     res
+      .cookie("jwt", token, {
+        httpOnly: true,
+        maxAge: 30 * 60 * 1000,
+      })
       .status(200)
-      .json({ mssg: "User logged in!", acessToken: grantAcessToken(req.body) });
+      .json({ mssg: "User logged in!" });
   } else {
     res.sendStatus(401);
   }
