@@ -8,9 +8,11 @@ function Login() {
   const [showPassword, setshowPassword] = useState<boolean>(false);
   const [isOk, setisOk] = useState<boolean>(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
-  const [token, settoken] = useState("");
 
   const navigate = useNavigate();
+
+  const createLoginDurationCookie = () =>
+    (document.cookie = "isLoggedIn=true; Secure; max-age=3600;");
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -26,6 +28,7 @@ function Login() {
     if (isFormSubmitted) {
       if (isOk) {
         navigate("/User");
+        createLoginDurationCookie();
         alert("Login success!");
         setIsFormSubmitted(false);
       } else {
@@ -55,7 +58,6 @@ function Login() {
         throw new Error("Request failed");
       }
       const responseData = await rawResponse.json();
-      settoken(responseData);
       setisOk(true);
       return responseData;
     } catch (error) {
