@@ -3,6 +3,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import ProgramCards from "../components/Programscard";
 import ChannelsCard from "../components/ChannelsCard";
+import { useLocation } from "react-router-dom";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -37,6 +38,7 @@ interface channel {
 export default function User({ setaudioFile }: UserProps) {
   const [favoriteChannels, setFavoriteChannels] = useState<User[] | null>(null);
   const [favoritePrograms, setFavoritePrograms] = useState<User[] | null>(null);
+  let currentUser = useLocation().state;
 
   useEffect(() => {
     let channelData: User[] | null = JSON.parse(
@@ -52,17 +54,24 @@ export default function User({ setaudioFile }: UserProps) {
     programData?.length
       ? setFavoritePrograms(programData)
       : setFavoritePrograms(null);
+
+      
+      
+
+      console.log(currentUser,"User");
+
+
   }, []);
 
   return (
     <>
       <h1 className="p-2 text-light">Min sida</h1>
       <Tabs
-        defaultActiveKey="Favorit kanaler"
+        defaultActiveKey="Favorit kannaler"
         id="uncontrolled-tab-example"
         className="mb-3 "
       >
-        <Tab eventKey="Favorit kanaler" title="Favorit kanaler" className="">
+        <Tab eventKey="Favorit kannaler" title="Favorit kannaler" className="">
           <Container>
             <Row xs={1} md={2} lg={3}>
               {favoriteChannels ? (
@@ -76,7 +85,7 @@ export default function User({ setaudioFile }: UserProps) {
                 ))
               ) : (
                 <div className="user-nocontent">
-                  Inga Favoritmarkerade kanaler än :)
+                  Inga Favoritmarkerade kannaler än :)
                 </div>
               )}
             </Row>
@@ -93,7 +102,7 @@ export default function User({ setaudioFile }: UserProps) {
                 ))
               ) : (
                 <div className="user-nocontent">
-                  Inga Favoritmarkerade kanaler än :)
+                  Inga Favoritmarkerade kannaler än :)
                 </div>
               )}
             </Row>

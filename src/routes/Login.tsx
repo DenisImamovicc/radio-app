@@ -7,12 +7,16 @@ import { useNavigate } from "react-router-dom";
 
 interface prop {
   setisLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
+  
 }
+
+
 
 function Login({setisLoggedIn}:prop) {
   const [showPassword, setshowPassword] = useState<boolean>(false);
   const [isOk, setisOk] = useState<boolean>(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
+  const [submittedUser, setsubmittedUser] = useState("");
 
   const navigate = useNavigate();
 
@@ -25,14 +29,16 @@ function Login({setisLoggedIn}:prop) {
       Email: `${e.target[0].value}`,
       Password: `${e.target[1].value}`,
     };
+
     await loginAcount(User);
+    setsubmittedUser(User.Email)
     setIsFormSubmitted(true);
   };
 
   useEffect(() => {
     if (isFormSubmitted) {
       if (isOk) {
-        navigate("/User");
+        navigate("/User",{ state: submittedUser });
         createLoginDurationCookie();
         alert("Login success!");
         setisLoggedIn(true)
