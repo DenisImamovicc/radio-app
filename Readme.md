@@ -10,11 +10,11 @@ Radio station containing channels, programs, podcasts and episodes gathered from
 - [Contact](#contact)
 
 ## Tools used
-Frameworks:React.js,Typescript.js,Express.js,Bootstrap
-Front-End:Javascript,Html,Css
-Back-End:Node.js,SQLite
-Mehodologies:CRUD,Full-stack,REST-API,MVC
-Others:GIT
+- Frameworks:React.js,Typescript.js,Express.js,Bootstrap
+- Front-End:Javascript,Html,Css
+- Back-End:Node.js,SQLite
+- Mehodologies:CRUD,Full-stack,REST-API,MVC
+- Others:GIT
 
 Sveriges Radio Publika Api:
 https://sverigesradio.se/api/documentation/v2/index.html
