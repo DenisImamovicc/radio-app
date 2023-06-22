@@ -4,20 +4,20 @@ import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useFetch from "../hooks/useFetch";
 
 interface prop {
   setisLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
   
 }
 
-
-
 function Login({setisLoggedIn}:prop) {
   const [showPassword, setshowPassword] = useState<boolean>(false);
-  const [isOk, setisOk] = useState<boolean>(false);
-  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
-  const [submittedUser, setsubmittedUser] = useState("");
+  const [submitForm, setsubmitForm] = useState<boolean>(false);
+  const [URL, setURL] = useState("");
+  const [User, setUser] = useState({});
 
+  const {error,isLoading } = useFetch(URL,"POST",User);
   const navigate = useNavigate();
 
   const createLoginDurationCookie = () =>
@@ -30,53 +30,29 @@ function Login({setisLoggedIn}:prop) {
       Password: `${e.target[1].value}`,
     };
 
-    await loginAcount(User);
-    setsubmittedUser(User.Email)
-    setIsFormSubmitted(true);
+    setUser(User)
+    setURL("http://localhost:9000/users/loginacount")
+    setsubmitForm(true);
   };
 
   useEffect(() => {
-    if (isFormSubmitted) {
-      if (isOk) {
-        navigate("/User",{ state: submittedUser });
+    if (isLoading === false && submitForm) {
+      if (error) {
+        alert("Login failed!");
+        setsubmitForm(false);
+        setURL("");
+      } else {
+        navigate("/User",{ state: User });
         createLoginDurationCookie();
         alert("Login success!");
         setisLoggedIn(true)
-        setIsFormSubmitted(false);
-      } else {
-        alert("Login failed!");
-        setIsFormSubmitted(false);
+        setsubmitForm(false);
+        setURL("");
       }
     }
-  }, [isOk, isFormSubmitted]);
+  }, [submitForm, isLoading]);
 
   const handleShowPassword = () => setshowPassword(!showPassword);
-
-  const loginAcount = async (User: any) => {
-    try {
-      const rawResponse = await fetch(
-        "http://localhost:9000/users/loginacount",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(User),
-        }
-      );
-      if (rawResponse.ok === false) {
-        setisOk(false);
-        throw new Error("Request failed");
-      }
-      const responseData = await rawResponse.json();
-      setisOk(true);
-      return responseData;
-    } catch (error) {
-      console.log(error);
-      setisOk(false);
-    }
-  };
 
   return (
     <div
