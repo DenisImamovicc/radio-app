@@ -119,23 +119,27 @@ export function matchPasswordFromDB(user) {
   });
 }
 
-// export async function getFavoriteData(req, res, userEmail,favtype) {
-//   const query =
-//     "favoritechannel" === favtype
-//       ? "SELECT Favoritechannels FROM Useracounts WHERE Email = ?"
-//       : "SELECT Favoriteprograms FROM Useracounts WHERE Email = ?";
-
-//   return new Promise((resolve, reject) => {
-//     DB.run(query, [userEmail], function (err, row) {
-//       if (err) {
-//         reject(console.error(err.message));
-//         res.sendStatus(500);
-//       } else {
-//         resolve(row.Favoriteprograms);
-//         res.status(200).send({
-//           success: row.Favoriteprograms,
-//         });
-//       }
-//     });
-//   });
-// }
+export function checkExistingEmail(Email) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      DB.get(
+        `SELECT Email FROM Useracounts WHERE Email=?`,
+        [Email],
+        (err,row) => {
+          if (err) {
+            reject(false);
+          } else {
+            console.log(row);
+            if (row) {
+              resolve(false);
+            } else {
+              resolve(true);
+            }
+          }
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}

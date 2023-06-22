@@ -6,7 +6,7 @@ interface FetchData {
     error: string | null;
   }
 
-const useFetch = (url:string):FetchData => {
+const useFetch = (url:string,reqMethod:string="GET",reqBody:string=""):FetchData => {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -15,7 +15,10 @@ const useFetch = (url:string):FetchData => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(url);
+        const response = await fetch(url,{
+          method:"GET",
+          credentials: "include"
+        });
         if (!response.ok) {
           throw new Error('Request failed');
         }

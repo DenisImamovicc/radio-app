@@ -4,6 +4,7 @@ import {
   deleteFavoriteData,
   getFavoriteChannel,
   getFavoritePrograms,
+  checkExistingEmail,
 } from "../model/sqlfuncs.js";
 
 import {
@@ -63,7 +64,10 @@ export async function handleLoginAcount(req, res) {
 }
 
 export async function handleCreateAcount(req, res) {
- addUserAccount(req, res, req.body.Email, await hashPassword(req.body.Password),req.body.Name);
+
+  await checkExistingEmail(req.body.Email) 
+    ? addUserAccount(req, res, req.body.Email, await hashPassword(req.body.Password),req.body.Name)
+    : res.sendStatus(400)
 }
 
 export async function updateUserChannels(req, res) {
