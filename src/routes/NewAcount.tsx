@@ -3,48 +3,31 @@ import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useFetch from "../hooks/useFetch";
 
 function NewAcount() {
   const [showPassword, setshowPassword] = useState<boolean>(false);
-  const [isOk, setisOk] = useState<boolean>(false);
-  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
+  const [submitForm, setsubmitForm] = useState<boolean>(false);
+  const [URL, setURL] = useState("");
+  const [User, setUser] = useState({});
+
+  const { error, isLoading } = useFetch(URL, "POST", User);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isFormSubmitted) {
-      console.log(isOk, "Status");
-      if (isOk) {
+    if (isLoading === false && submitForm) {
+      if (error) {
+        alert("Account creation failed!");
+        setsubmitForm(false);
+        setURL("");
+      } else {
         navigate("/Login");
         alert("Account creation success! Please login afterwards");
-      } else {
-        alert("Account creation failed!");
+        setsubmitForm(false);
+        setURL("");
       }
     }
-  }, [isOk, isFormSubmitted]);
-
-  async function createNewAcount(data: any) {
-    try {
-      const rawResponse = await fetch("http://localhost:9000/users/newacount", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (rawResponse.ok === false) {
-        setisOk(false);
-        throw new Error("Request failed");
-      }
-      const responseData = await rawResponse.json();
-      console.log(responseData);
-      setisOk(true);
-      return responseData;
-    } catch (error) {
-      console.log(error);
-      setisOk(false);
-    }
-  }
+  }, [submitForm, isLoading]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -53,8 +36,9 @@ function NewAcount() {
       Email: `${e.target[1].value}`,
       Password: `${e.target[2].value}`,
     };
-    await createNewAcount(User);
-    setIsFormSubmitted(true);
+    setUser(User);
+    setURL("http://localhost:9000/users/newacount");
+    setsubmitForm(true);
   };
 
   const handleShowPassword = () => setshowPassword(!showPassword);
