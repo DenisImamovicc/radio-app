@@ -1,5 +1,5 @@
 import useFetch from "../hooks/useFetch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProgramCards from "./Programscard";
 import { Link } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
@@ -9,11 +9,19 @@ import Row from "react-bootstrap/Row";
 import { Button } from "react-bootstrap";
 
 function Selectedprograms() {
-  const [randomNum] = useState<number>(Math.floor(Math.random() * 200) + 1);
+  const [randomNum, setrandomNum] = useState<number>(
+    Math.floor(Math.random() * 200) + 1
+  );
 
   const { data, isLoading } = useFetch(
     `https://api.sr.se/api/v2/programs/index?format=json&page=${randomNum}&size=6`
   );
+
+  useEffect(() => {
+    isLoading === false && data.programs.length === 0
+      ? setrandomNum(Math.floor(Math.random() * 200) + 1)
+      : "";
+  }, [isLoading]);
 
   if (isLoading || !data)
     return (
@@ -21,16 +29,6 @@ function Selectedprograms() {
         <Spinner animation="border" variant="light" />
       </div>
     );
-
-    if (!data.programs.length)
-    return (
-      <div className="d-flex justify-content-center mh-50 align-items-center flex-column">
-        <Spinner animation="border" variant="light" />
-        <h2 className="text-light">Ingen data hittad,ladda om sidan.</h2>
-      </div>
-    );
-
-  console.log(data);
 
   return (
     <div className="">
