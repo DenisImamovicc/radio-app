@@ -77,7 +77,7 @@ const ToggleIcon = ({ channel }: channel) => {
         onClose={() => setShowToast(false)}
         show={ShowToast}
         delay={3000}
-        className="toastFavorite"
+        className="toastFavorite toastFavorite w-100"
         bg="dark"
         autohide
       >

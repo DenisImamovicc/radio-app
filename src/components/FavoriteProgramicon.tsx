@@ -77,7 +77,7 @@ const ToggleIconProgram = ({program}:any) => {
         onClose={() => setShowToast(false)}
         show={ShowToast}
         delay={3000}
-        className="toastFavorite"
+        className="toastFavorite w-100"
         bg="dark"
         autohide
       >
