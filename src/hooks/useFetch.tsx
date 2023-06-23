@@ -19,6 +19,9 @@ const useFetch = (
     method: reqMethod,
     headers: {
       Accept: "application/json",
+      ...(url.includes("http://localhost:9000") && {
+        Authorization: `Bearer ${document.cookie.substring(4)}`,
+      }),
     },
   };
 
@@ -27,6 +30,7 @@ const useFetch = (
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      credentials: "same-origin",
     },
     body: JSON.stringify(reqBody),
   };
@@ -35,6 +39,7 @@ const useFetch = (
     setIsLoading(true);
     try {
       const response = await fetch(url, reqMethod === "GET" ? GET : POST);
+      console.log(response);
       if (!response.ok) {
         throw new Error("Request failed");
       }
@@ -53,11 +58,9 @@ const useFetch = (
       fetchData();
       setIsLoading("");
       setError(false);
-      console.log("fetch", error, isLoading);
     }
     setIsLoading("");
     setError(false);
-    console.log("No url,no fetch", error, isLoading);
   }, [url]);
 
   return { data, isLoading, error };

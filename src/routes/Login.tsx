@@ -8,7 +8,6 @@ import useFetch from "../hooks/useFetch";
 
 interface prop {
   setisLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
-  
 }
 
 function Login({setisLoggedIn}:prop) {
@@ -17,11 +16,11 @@ function Login({setisLoggedIn}:prop) {
   const [URL, setURL] = useState("");
   const [User, setUser] = useState({});
 
-  const {error,isLoading } = useFetch(URL,"POST",User);
+  const {data,error,isLoading } = useFetch(URL,"POST",User);
   const navigate = useNavigate();
 
-  const createLoginDurationCookie = () =>
-    (document.cookie = "isLoggedIn=true; Secure; max-age=3600;");
+   const createUserCookie = (cookie:any) =>
+     (document.cookie = `${cookie.Name}=${cookie.token}; ;max-age=${cookie.maxAge}`);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -43,7 +42,7 @@ function Login({setisLoggedIn}:prop) {
         setURL("");
       } else {
         navigate("/User",{ state: User });
-        createLoginDurationCookie();
+         createUserCookie(data);
         alert("Login success!");
         setisLoggedIn(true)
         setsubmitForm(false);
