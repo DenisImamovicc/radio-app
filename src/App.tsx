@@ -19,14 +19,16 @@ function App() {
   const [isLoggedIn, setisLoggedIn] = useState<boolean>(false)
 
   useEffect(() => {
-    if (document.cookie.endsWith("true")) {  
+    if (document.cookie.includes("jwt")) {  
       setisLoggedIn(true)
+    }else {
+      setisLoggedIn(false)
     }
   }, [isLoggedIn])
 
   return (
     <div className="App">
-      <Navbar isLoggedIn={isLoggedIn}/>
+      <Navbar isLoggedIn={isLoggedIn} setisLoggedIn={setisLoggedIn}/>
       <Routes>
         <Route
           path="/Channels"
