@@ -15,7 +15,7 @@ function Login({setisLoggedIn}:prop) {
   const [submitForm, setsubmitForm] = useState<boolean>(false);
   const [URL, setURL] = useState("");
   const [User, setUser] = useState({});
-
+  const [email, setemail] = useState("");
   const {data,error,isLoading } = useFetch(URL,"POST",User);
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ function Login({setisLoggedIn}:prop) {
       Email: `${e.target[0].value}`,
       Password: `${e.target[1].value}`,
     };
-
+    setemail(User.Email)
     setUser(User)
     setURL("http://localhost:9000/users/loginacount")
     setsubmitForm(true);
@@ -41,7 +41,7 @@ function Login({setisLoggedIn}:prop) {
         setsubmitForm(false);
         setURL("");
       } else {
-        navigate("/User",{ state: User });
+        navigate("/User",{ state: email });
          createUserCookie(data);
         alert("Login success!");
         setisLoggedIn(true)
