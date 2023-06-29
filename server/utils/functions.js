@@ -9,7 +9,6 @@ const JSON_FORMAT = `format=json`;
 export const hashPassword = async (Password) => await bcrypt.hash(Password, 10);
 
 export const comparePassword = async (user, DBPwd) => {
-  console.log(DBPwd);
   if (DBPwd.Password === undefined) {
     return null;
   }
@@ -53,7 +52,7 @@ export function getDataById(req, res, id, params) {
 
 export function validateData(req, res, data, dataType) {
   if (data) {
-    res.status(200).send(arrayify(data));
+    res.status(200).send(data);
   } else {
     res.status(404).send({
       error: `There is no data on ${dataType} for ${req.params.Email}`,
@@ -68,13 +67,10 @@ export function arrayify(data) {
 export async function handleLoginUser(req, res) {
   if (await matchPasswordFromDB(req.body)) {
     const token = grantAcessToken(req.body);
+    const maxAgeInMs = 30 * 60 * 1000
     res
-      .cookie("jwt", token, {
-        httpOnly: true,
-        maxAge: 30 * 60 * 1000,
-      })
       .status(200)
-      .json({ mssg: "User logged in!" });
+      .send({Name:"jwt",maxAge:maxAgeInMs,token:token});
   } else {
     res.sendStatus(401);
   }

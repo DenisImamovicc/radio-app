@@ -5,6 +5,7 @@ import {
   getFavoriteChannel,
   getFavoritePrograms,
   checkExistingEmail,
+  getAllUserData,
 } from "../model/sqlfuncs.js";
 
 import {
@@ -14,6 +15,15 @@ import {
   hashPassword,
   validateData,
 } from "../utils/functions.js";
+
+export async function getUserData(req, res) {
+  validateData(
+    req,
+    res,
+    await getAllUserData(req.params.Email),
+    "User"
+  );
+}
 
 export async function getUserChannels(req, res) {
   validateData(

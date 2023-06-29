@@ -12,7 +12,7 @@ const api = express();
 dotenv.config();
 api.use(bodyParser.json());
 api.use(cors({
-    origin: '*',
+    origin: 'https://localhost:5173',
     
 }));
 api.use(bodyParser.urlencoded({ extended: true }));

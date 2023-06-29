@@ -59,6 +59,26 @@ export async function deleteFavoriteData(req, res, userEmail, data, favtype) {
   });
 }
 
+export function getAllUserData(userEmail) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      DB.all(
+        `SELECT Name, Favoritechannels, Favoriteprograms FROM Useracounts WHERE Email = ?`,
+        [userEmail],
+        (err, rows) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(rows);
+          }
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
+
 export function getFavoritePrograms(userid) {
   return new Promise(async (resolve, reject) => {
     try {

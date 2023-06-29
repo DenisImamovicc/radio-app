@@ -4,6 +4,7 @@ import {
   deleteUserChannel,
   deleteUserProgram,
   getUserChannels,
+  getUserData,
   getUserPrograms,
   handleCreateAcount,
   handleLoginAcount,
@@ -14,6 +15,7 @@ import {
 const router = express.Router();
 
 router
+  .get("/user/:Email", authenticateToken, getUserData)
   .get("/favoritechannels/:Email", authenticateToken, getUserChannels)
   .get("/favoriteprograms/:Email", authenticateToken, getUserPrograms)
   .delete("/unfavoritechannel/:id/:Email", authenticateToken, deleteUserChannel)
