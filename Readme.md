@@ -21,8 +21,6 @@ https://sverigesradio.se/api/documentation/v2/index.html
 
 ## Project Description
 
-Provide a more detailed overview of your project. Explain what it does, its main features, and any other relevant information.
-
 Application displays the gathered data with relevant info in which a user can read ,browse and even listen to if appropriate with Responsive design ranging from mobile to desktop. Programs section has categories filter for more easily browsing through the programs list.
 
 User can favourite/unfavourite channels/programs to add/remove to their "Min sida" page for convenience. User preferences are stored on their unit for next time they use the application.
