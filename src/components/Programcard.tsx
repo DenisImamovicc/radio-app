@@ -7,10 +7,10 @@ import {
   faFacebook,
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
-import ToggleIconProgram from "./FavoriteProgramicon";
+import FavoriteIcon from "./FavoriteIcon";
 
 interface ProgramCard {
-  data: {
+  program: {
     name: string;
     programimage: string;
     responsibleeditor: string;
@@ -29,33 +29,33 @@ interface ProgramCard {
   };
 }
 
-export default function ProgramCard({ data }: ProgramCard) {
+export default function ProgramCard({ program }: ProgramCard) {
   const socialMediaIcons: any[] = [faFacebook, faTwitter, faInstagram];
 
-  if (!data) {
+  if (!program) {
     return <Loadingprogramcard />;
   }
     
   return (
     <>
-      <Card key={data.id} className="m-3" bg="dark" text="white" style={{maxWidth:"400px"}}>
-        <a href={data.programurl} target="_blank">
-          <Card.Img variant="top" src={data.programimage} height={360} />
+      <Card key={program.id} className="m-3" bg="dark" text="white" style={{maxWidth:"400px"}}>
+        <a href={program.programurl} target="_blank">
+          <Card.Img variant="top" src={program.programimage} height={360} />
         </a>
         <Card.Body>
           <Card.Title className="d-flex align-items-center justify-content-between">
-            Radiopresentatör : <br />{data.responsibleeditor}<ToggleIconProgram program={data}/>
+            Radiopresentatör : <br />{program.responsibleeditor}<FavoriteIcon content={program}  contentType={"program"}/>
           </Card.Title> 
           <hr />
           <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
           <Card.Text>
-            {data.description}
+            {program.description}
             <br />
             <br />
-            {data.broadcastinfo}
+            {program.broadcastinfo}
             <hr />
             <div className="d-flex justify-content-evenly">
-              {data.socialmediaplatforms.map(
+              {program.socialmediaplatforms.map(
                 (platform, index: number) => (
                   <a
                     href={platform.platformurl}

@@ -52,14 +52,14 @@ export default function User({ setaudioFile }: UserProps) {
 
   const getLocalStorageFavChannels = () => {
     let channelData: User[] | null = JSON.parse(
-      localStorage.getItem("FavoriteChannelsList") || "null"
+      localStorage.getItem("channelFavList") || "null"
     );
     return channelData ? channelData : [];
   };
 
   const getLocalStorageFavPrograms = () => {
     const programData: User[] | null = JSON.parse(
-      localStorage.getItem("FavoriteProgramsList") || "null"
+      localStorage.getItem("programFavList") || "null"
     );
     return programData ? programData : [];
   };

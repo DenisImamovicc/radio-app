@@ -1,6 +1,6 @@
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
-import ToggleIconProgram from "./FavoriteProgramicon.tsx";
+import FavoriteIcon from "./FavoriteIcon.tsx";
 
 interface ProgramsCard {
   program: {
@@ -32,7 +32,7 @@ export default function ProgramCards({ program }: ProgramsCard) {
         <Card.Body id="Cardbody">
           <Card.Title className="d-flex align-items-center justify-content-between">
             {program.name}
-            <ToggleIconProgram program={program} />
+            <FavoriteIcon content={program}  contentType={"program"}/>
           </Card.Title>
           <hr/>
           <Card.Text>{program.description}</Card.Text>

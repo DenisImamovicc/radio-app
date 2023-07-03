@@ -1,8 +1,8 @@
-import ToggleIcon from "../components/FavoriteChannelicon.tsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
+import FavoriteIcon from "./FavoriteIcon.tsx";
 
 interface ChannelCardProps {
   channel: {
@@ -40,7 +40,7 @@ function ChannelsCard({ channel, setaudioFile }: ChannelCardProps) {
           <div>
             <Card.Title className="d-flex align-items-center justify-content-between">
               {channel.name} - {channel.channeltype}{" "}
-              <ToggleIcon channel={channel} />
+              <FavoriteIcon content={channel} contentType={"channel"} />
             </Card.Title>
           <hr />
           <Card.Text>{channel.tagline}</Card.Text>
