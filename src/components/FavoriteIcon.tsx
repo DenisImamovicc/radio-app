@@ -12,50 +12,70 @@ interface FavoriteIconProps {
 
 function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
   const [isClicked, setIsClicked] = useState<boolean | null>(
-    JSON.parse(localStorage.getItem(`${content.name} isFav?`) || "null")
+    readFavLocalStorage(content.name)
   );
-
   const [showToast, setShowToast] = useState(false);
 
-  function removeLocalStorage(key: string, value: string) {
+  function readFavLocalStorage(value: string) {
+    const localData: any[] = JSON.parse(
+      localStorage.getItem(`${contentType}FavList`) || "null"
+    );
+
+    if (!localData) {
+      return null;
+    }
+    const foundContent = localData.filter((obj: any) => {
+      return obj.name === value;
+    });
+
+    if (foundContent[0]?.isFav) {
+      return true;
+    }
+    return null;
+  }
+
+  function removeFavFromLocalStorage(key: string, value: string) {
     const localData: any[] = JSON.parse(localStorage.getItem(key) || "null");
-    console.log(localData, value);
+
+    if (!localData) {
+      return null;
+    }
 
     const updatedData = localData.filter((obj: any) => {
       return obj.name !== value;
     });
-    console.log(updatedData);
-
     localStorage.setItem(key, JSON.stringify(updatedData));
   }
 
-  function addLocalStorage(key: string, value: any) {
+  function addFavToLocalStorage(key: string, value: any) {
     const localData: any[] = JSON.parse(localStorage.getItem(key) || "null");
     const checkData = localStorage.getItem(key);
 
     if (checkData) {
+      value.isFav = true;
       localData.push(value);
       localStorage.setItem(key, JSON.stringify(localData));
     } else {
+      value.isFav = true;
       localStorage.setItem(key, JSON.stringify([value]));
     }
   }
 
   useEffect(() => {
-    if (localStorage.getItem(`${content.name} isFav?`) === "false") {
+    if (!readFavLocalStorage(content.name)) {
       setIsClicked(false);
-      removeLocalStorage(`${contentType}FavList`, content.name);
+      removeFavFromLocalStorage(`${contentType}FavList`, content.name);
     }
   }, [isClicked]);
 
   const handleClick = () => {
     setIsClicked((prevIsClicked) => {
       const newIsClicked = !prevIsClicked;
-      localStorage.setItem(`${content.name} isFav?`, `${newIsClicked}`);
+      // localStorage.setItem(`${content.name} isFav?`, `${newIsClicked}`);
       if (newIsClicked) {
-        addLocalStorage(`${contentType}FavList`, content);
+        addFavToLocalStorage(`${contentType}FavList`, content);
       } else {
-        removeLocalStorage(`${contentType}FavList`, content.name);
+        removeFavFromLocalStorage(`${contentType}FavList`, content.name);
       }
       setShowToast(true);
       return newIsClicked;
