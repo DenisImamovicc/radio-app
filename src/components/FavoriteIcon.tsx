@@ -71,7 +71,6 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
   const handleClick = () => {
     setIsClicked((prevIsClicked) => {
       const newIsClicked = !prevIsClicked;
-      // localStorage.setItem(`${content.name} isFav?`, `${newIsClicked}`);
       if (newIsClicked) {
         addFavToLocalStorage(`${contentType}FavList`, content);
       } else {

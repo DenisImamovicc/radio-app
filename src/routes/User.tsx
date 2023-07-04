@@ -10,8 +10,17 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import useFetch from "../hooks/useFetch";
 
+ interface UserProps {
+   setaudioFile: (url: string) => void;
+ }
+
 interface User {
   Name: string;
+  Favoritechannels: string;
+  Favoriteprograms: string;
+}
+
+interface Channel {
   id: number;
   image: string;
   channeltype: string;
@@ -22,50 +31,31 @@ interface User {
   };
 }
 
-interface UserProps {
-  setaudioFile: (url: string) => void;
-}
-
-interface channel {
-  id: number;
-  image: string;
-  channeltype: string;
-  name: string;
-  tagline: string;
-  liveaudio: {
-    url: string;
-  };
-}
-
-export default function User({ setaudioFile }: UserProps) {
-  const [userName, setuserName] = useState<User[] | null>(null);
-  const [LocalStorageFavChannels, setLocalStorageFavChannels] = useState<
-    User[] | null
-  >(null);
-  const [LocalStorageFavPrograms, setLocalStorageFavPrograms] = useState<
-    User[] | null
-  >(null);
+export default function User({ setaudioFile }:UserProps) {
+  const [userName, setuserName] = useState<User | null>(null);
+  const [LocalStorageFavChannels, setLocalStorageFavChannels] = useState<any | null>(null);
+  const [LocalStorageFavPrograms, setLocalStorageFavPrograms] = useState<any | null>(null);
 
   let currentUser = useLocation().state;
   const [Url, SetUrl] = useState(``);
-  const { data, error, isLoading } = useFetch(Url, "GET");
+  const { data, isLoading } = useFetch(Url, "GET");
 
   const getLocalStorageFavChannels = () => {
-    let channelData: User[] | null = JSON.parse(
+    let channelData: any | null = JSON.parse(
       localStorage.getItem("channelFavList") || "null"
     );
     return channelData ? channelData : [];
   };
 
   const getLocalStorageFavPrograms = () => {
-    const programData: User[] | null = JSON.parse(
+    const programData: any | null = JSON.parse(
       localStorage.getItem("programFavList") || "null"
     );
     return programData ? programData : [];
   };
 
   const getLocalStorageUser = () => {
-    const User: User[] | null = JSON.parse(
+    const User: any | null = JSON.parse(
       localStorage.getItem("UserDB") || "null"
     );
     return User ? User : [];
@@ -140,7 +130,7 @@ export default function User({ setaudioFile }: UserProps) {
           <Container>
             <Row xs={1} md={2} lg={3}>
               {LocalStorageFavChannels ? (
-                LocalStorageFavChannels[0].map((channel: channel) => (
+                LocalStorageFavChannels[0].map((channel: Channel) => (
                   <Col>
                     <ChannelsCard
                       channel={channel}
@@ -160,7 +150,7 @@ export default function User({ setaudioFile }: UserProps) {
           <Container>
             <Row xs={1} md={2} lg={3}>
               {LocalStorageFavPrograms ? (
-                LocalStorageFavPrograms[0].map((program: any) => (
+                LocalStorageFavPrograms[0].map((program:any) => (
                   <Col>
                     <ProgramCards program={program} />
                   </Col>
