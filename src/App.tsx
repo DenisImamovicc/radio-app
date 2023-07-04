@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar";
 import Channels from "./routes/channels";
 import Programs from "./routes/programs";
 import Program from "./routes/program";
-import {Route, Routes,useNavigate } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import Channel from "./routes/channel";
 import User from "./routes/User";
 import Errorpage from "./routes/NotFound";
@@ -17,7 +17,7 @@ import { useEffect,useState } from "react";
 function App() {
   const [audioFile, setaudioFile] = useState("");
   const [isLoggedIn, setisLoggedIn] = useState<boolean>(false)
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   //Best attempt of logged in user gets to dashboard
   // when booting up while unlogged gets to the home screen.
