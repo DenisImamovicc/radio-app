@@ -11,20 +11,41 @@ interface FavoriteIconProps {
 }
 
 function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
+  const isLoggedIn = localStorage.getItem("UserEmail");
   const [isClicked, setIsClicked] = useState<boolean | null>(
     readFavLocalStorage(content.name)
   );
   const [showToast, setShowToast] = useState(false);
 
   function readFavLocalStorage(value: string) {
-    const localData: any[] = JSON.parse(
-      localStorage.getItem(`${contentType}FavList`) || "null"
-    );
+    let data;
+    if (isLoggedIn) {
+      const dbData: any[] = JSON.parse(
+        localStorage.getItem(`UserDB`) || "null"
+      );
+      console.log(dbData);
 
-    if (!localData) {
+      if (contentType === "program") {
+        data = JSON.parse(dbData.Favoriteprograms);
+        data = data[0]
+      } else {
+        data = JSON.parse(dbData.Favoritechannels);
+        data =data[0]
+
+      }
+    } else {
+      const localData: any[] = JSON.parse(
+        localStorage.getItem(`${contentType}FavList`) || "null"
+      );
+      data = localData;
+    }
+    console.log(data);
+
+    if (!data) {
       return null;
     }
-    const foundContent = localData.filter((obj: any) => {
+
+    const foundContent = data.filter((obj: any) => {
       return obj.name === value;
     });
 
@@ -61,19 +82,25 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
     }
   }
 
-  useEffect(() => {
-    if (!readFavLocalStorage(content.name)) {
-      setIsClicked(false);
-      removeFavFromLocalStorage(`${contentType}FavList`, content.name);
-    }
-  }, [isClicked]);
+  // useEffect(() => {
+  //   if (!readFavLocalStorage(content.name)) {
+  //     setIsClicked(false);
+  //     removeFavFromLocalStorage(`${contentType}FavList`, content.name);
+  //   }
+  // }, [isClicked]);
 
   const handleClick = () => {
     setIsClicked((prevIsClicked) => {
       const newIsClicked = !prevIsClicked;
       if (newIsClicked) {
+        if (isLoggedIn) {
+          return console.log("DB UPDATE REQ");
+        }
         addFavToLocalStorage(`${contentType}FavList`, content);
       } else {
+        if (isLoggedIn) {
+          return console.log("DB DELETE REQ");
+        }
         removeFavFromLocalStorage(`${contentType}FavList`, content.name);
       }
       setShowToast(true);

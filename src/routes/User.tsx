@@ -10,9 +10,9 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import useFetch from "../hooks/useFetch";
 
- interface UserProps {
-   setaudioFile: (url: string) => void;
- }
+interface UserProps {
+  setaudioFile: (url: string) => void;
+}
 
 interface User {
   Name: string;
@@ -22,6 +22,7 @@ interface User {
 
 interface Channel {
   id: number;
+  isFav:boolean
   image: string;
   channeltype: string;
   name: string;
@@ -31,10 +32,14 @@ interface Channel {
   };
 }
 
-export default function User({ setaudioFile }:UserProps) {
-  const [userName, setuserName] = useState<User | null>(null);
-  const [LocalStorageFavChannels, setLocalStorageFavChannels] = useState<any | null>(null);
-  const [LocalStorageFavPrograms, setLocalStorageFavPrograms] = useState<any | null>(null);
+export default function User({ setaudioFile }: UserProps) {
+  const [userName, setuserName] = useState<string | null>(null);
+  const [LocalStorageFavChannels, setLocalStorageFavChannels] = useState<
+    any | null
+  >(null);
+  const [LocalStorageFavPrograms, setLocalStorageFavPrograms] = useState<
+    any | null
+  >(null);
 
   let currentUser = useLocation().state;
   const [Url, SetUrl] = useState(``);
@@ -61,6 +66,40 @@ export default function User({ setaudioFile }:UserProps) {
     return User ? User : [];
   };
 
+  // const filterDupes = (unfilteredArr: any) => {
+  //   return unfilteredArr.filter((item: any, index: number, self: any) => {
+  //     return index === self.findIndex((obj:any) => obj.id === item.id);
+  //   });
+  // };
+
+  // const handleMergeOfDbAndLSChannel = (User: User) => {
+  //   const LocalFavChannels = getLocalStorageFavChannels();
+  //   const DbFavChannels = JSON.parse(User.Favoritechannels);
+  //   if (!DbFavChannels) {
+  //     return []
+  //   }
+  //   const mergedFavChannels = [...LocalFavChannels, ...DbFavChannels[0]];
+
+  //   setLocalStorageFavChannels(filterDupes(mergedFavChannels));
+  // };
+
+  // const handleMergeOfDbAndLSPrograms = (User: User) => {
+  //   const LocalFavPrograms = getLocalStorageFavPrograms();
+  //   const DbFavPrograms = JSON.parse(User.Favoriteprograms);
+  //   if (!DbFavPrograms) {
+  //     return []
+  //   }
+  //   const mergedFavPrograms = [...LocalFavPrograms, ...DbFavPrograms[0]];
+
+  //   setLocalStorageFavPrograms(filterDupes(mergedFavPrograms));
+  // };
+
+  const handlePossesiveApostrophe = (name: string) => {    
+    name[name.length-1] === "s" 
+    ? setuserName(name)
+    : setuserName(name+"s")
+  };
+
   //Implement data handling between localstorage and DB everytime user navigates to Min Sida
   //Whn useffect is called the logic inside will check if LS is empty.if empty send get reg for user data
   //and change appropriate state varibels with the data in mind.If not empty send update req to DB to get
@@ -71,8 +110,6 @@ export default function User({ setaudioFile }:UserProps) {
   //For favs it will only update with useffect which user wont be impacted/notice unless localstorage is disabled.
   useEffect(() => {
     if (isLoading === false) {
-      console.log(data);
-
       localStorage.setItem(
         "UserDB",
         JSON.stringify({
@@ -82,35 +119,60 @@ export default function User({ setaudioFile }:UserProps) {
         })
       );
       const User = getLocalStorageUser();
+      // handleMergeOfDbAndLSChannel(User);
+      // handleMergeOfDbAndLSPrograms(User);
       setLocalStorageFavChannels(JSON.parse(User.Favoritechannels));
       setLocalStorageFavPrograms(JSON.parse(User.Favoriteprograms));
       setuserName(User.Name);
+      handlePossesiveApostrophe(User.Name);
 
-      console.log(User);
-      //  const LocalFavChannels = getLocalStorageFavChannels()
-      //   const forgeddata= [...LocalFavChannels, ...data[0].Favoritechannels]
-      // setLocalStorageFavChannels(forgeddata);
-      // setisdone(true);
+      //Send update req to db to update user channel and program to mergeddata.
+
+
+
     } else {
-      console.log("bin chilling");
+      console.log("still Loading...");
     }
   }, [isLoading]);
+
+
+
+  const ToggleLocalStorageFavs = (toggleTo:boolean) => {
+    const LocalFavChannels = getLocalStorageFavChannels();
+    let LocalFavPrograms = getLocalStorageFavPrograms();
+
+    const disabledFavChannels = LocalFavChannels.map((channel:Channel) =>{
+      channel.isFav = toggleTo
+      return channel
+    })
+
+    const disabledFavPrograms = LocalFavPrograms.map((channel:Channel) =>{
+      channel.isFav = toggleTo
+      return channel
+    })
+    
+ localStorage.setItem("channelFavList",JSON.stringify(disabledFavChannels))
+ localStorage.setItem("programFavList",JSON.stringify(disabledFavPrograms))
+  }
 
   useEffect(() => {
     if (currentUser) {
       console.log(currentUser);
       localStorage.setItem("UserEmail", currentUser);
+      ToggleLocalStorageFavs(false)
       SetUrl(
         `http://localhost:9000/users/user/${localStorage.getItem("UserEmail")}`
       );
     } else if (localStorage.getItem("UserEmail")) {
+      ToggleLocalStorageFavs(false)
       SetUrl(
         `http://localhost:9000/users/user/${localStorage.getItem("UserEmail")}`
       );
     } else {
       const LocalFavChannels = getLocalStorageFavChannels();
       const LocalFavPrograms = getLocalStorageFavPrograms();
-
+      ToggleLocalStorageFavs(true)
+      
       setLocalStorageFavChannels([LocalFavChannels]);
       setLocalStorageFavPrograms([LocalFavPrograms]);
     }
@@ -119,7 +181,7 @@ export default function User({ setaudioFile }:UserProps) {
   return (
     <>
       <h1 className="p-2 text-light">
-        {userName ? ` ${userName}'s sida ` : "Min sida"}
+        {userName ? ` ${userName} sida ` : "Min sida"}
       </h1>
       <Tabs
         defaultActiveKey="Favorit kanaler"
@@ -150,7 +212,7 @@ export default function User({ setaudioFile }:UserProps) {
           <Container>
             <Row xs={1} md={2} lg={3}>
               {LocalStorageFavPrograms ? (
-                LocalStorageFavPrograms[0].map((program:any) => (
+                LocalStorageFavPrograms[0].map((program: any) => (
                   <Col>
                     <ProgramCards program={program} />
                   </Col>
