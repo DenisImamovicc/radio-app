@@ -16,7 +16,7 @@ export const comparePassword = async (user, DBPwd) => {
 };
 
 export const grantAcessToken = (user) =>
-  jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30min" });
+  jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "7d" });
 
 export function checkDuplicate(currentdata, reqdataID, req, res) {
   console.log(currentdata, reqdataID);
@@ -67,7 +67,7 @@ export function arrayify(data) {
 export async function handleLoginUser(req, res) {
   if (await matchPasswordFromDB(req.body)) {
     const token = grantAcessToken(req.body);
-    const maxAgeInMs = 30 * 60 * 1000
+    const maxAgeInMs = 7 * 24 * 60 * 60 * 1000
     res
       .status(200)
       .send({Name:"jwt",maxAge:maxAgeInMs,token:token});
