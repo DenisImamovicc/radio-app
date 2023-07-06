@@ -9,7 +9,7 @@ const JSON_FORMAT = `format=json`;
 export const hashPassword = async (Password) => await bcrypt.hash(Password, 10);
 
 export const comparePassword = async (user, DBPwd) => {
-  if (DBPwd.Password === undefined) {
+  if (DBPwd  === undefined) {
     return null;
   }
   return await bcrypt.compare(user.Password, DBPwd.Password);
