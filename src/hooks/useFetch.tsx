@@ -67,8 +67,8 @@ const useFetch = (
     } else if (reqMethod === "DELETE") {
       return DELETE;
     }
-    return null;
   };
+  
 
   const fetchData = async () => {
     setIsLoading(true);
