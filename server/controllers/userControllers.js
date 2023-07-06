@@ -70,7 +70,7 @@ export async function deleteUserProgram(req, res) {
 }
 
 export async function handleLoginAcount(req, res) {
-  handleLoginUser(req, res);
+    handleLoginUser(req, res)
 }
 
 export async function handleCreateAcount(req, res) {
