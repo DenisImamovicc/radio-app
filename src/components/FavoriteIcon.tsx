@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import Toast from "react-bootstrap/Toast";
 import { Link } from "react-router-dom";
+import useFetch from "../hooks/useFetch";
 
 interface FavoriteIconProps {
   content: any;
@@ -16,42 +17,47 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
     readFavLocalStorage(content.name)
   );
   const [showToast, setShowToast] = useState(false);
+  const [Url, setUrl] = useState("");
+  const [reqMethod, setreqMethod] = useState("");
+  const [reqData, setreqData] = useState("");
 
+
+  const {} = useFetch(Url, reqMethod,reqData);
+//fix shitty func to not crash if user has no favchannel/programs from db
   function readFavLocalStorage(value: string) {
-    let data;
-    if (isLoggedIn) {
-      const dbData: any[] = JSON.parse(
-        localStorage.getItem(`UserDB`) || "null"
-      );
-      console.log(dbData);
+     let data;    
+     if (isLoggedIn) {
+       const dbData = JSON.parse(
+         localStorage.getItem(`UserDB`) || "null"
+       );
+        
+      //  if (!dbData.Favoriteprograms || !dbData.Favoritechannels) {
+      //    return null
+      //  }
+       if (contentType === "program") {
+         data = JSON.parse(dbData.Favoriteprograms);
+         data = data;
+       } else {
+         data = JSON.parse(dbData.Favoritechannels);
+         data = data;
+       }
+     } else {
+       const localData: any[] = JSON.parse(
+         localStorage.getItem(`${contentType}FavList`) || "null"
+         );
+         data = localData;
+       }
+       if (!data) {
+         return null;
+       }      
 
-      if (contentType === "program") {
-        data = JSON.parse(dbData.Favoriteprograms);
-        data = data[0]
-      } else {
-        data = JSON.parse(dbData.Favoritechannels);
-        data =data[0]
+     const foundContent = data.filter((obj: any) => {
+       return obj.name === value;
+     });
 
-      }
-    } else {
-      const localData: any[] = JSON.parse(
-        localStorage.getItem(`${contentType}FavList`) || "null"
-      );
-      data = localData;
-    }
-    console.log(data);
-
-    if (!data) {
-      return null;
-    }
-
-    const foundContent = data.filter((obj: any) => {
-      return obj.name === value;
-    });
-
-    if (foundContent[0]?.isFav) {
-      return true;
-    }
+     if (foundContent[0]?.isFav) {
+       return true;
+     }
     return null;
   }
 
@@ -83,23 +89,55 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
   }
 
   // useEffect(() => {
-  //   if (!readFavLocalStorage(content.name)) {
-  //     setIsClicked(false);
-  //     removeFavFromLocalStorage(`${contentType}FavList`, content.name);
+    
+  //   if (isLoading === false && Url.includes("users")) {
+  //     console.log("wnt th");
+      
+  //     const DbData=data
+  //     localStorage.setItem(
+  //       "UserDB",
+  //       JSON.stringify({
+  //         Name: DbData.Name,
+  //         Favoritechannels: DbData.Favoritechannels === "[]" ? null : DbData.Favoritechannels,
+  //         Favoriteprograms: DbData.Favoriteprograms === "[]" ? null : DbData.Favoriteprograms,
+  //       })
+  //     );
+  //   } else {
+  //     console.log("still Loading...");
   //   }
-  // }, [isClicked]);
+  // }, [isLoading]);
 
   const handleClick = () => {
     setIsClicked((prevIsClicked) => {
       const newIsClicked = !prevIsClicked;
       if (newIsClicked) {
+        //reverse the logic order for toast to make sense
         if (isLoggedIn) {
-          return console.log("DB UPDATE REQ");
+          setreqMethod("PUT")
+          content.isFav=true
+          setreqData(content)          
+          setUrl(`http://localhost:9000/users/favorite${contentType}/${content.id}/${isLoggedIn}`)
+
+          //  const dbData: any[] = JSON.parse(
+          //    localStorage.getItem(`UserDB`) || "null"
+          //  );
+
+          //    console.log(dbData.Favoriteprograms);
+            
+          //   localStorage.setItem(
+          //         "UserDB",
+          //         JSON.stringify({
+          //           Favoriteprograms: dbData.Favoritechannels.unshift(content) ? dbData.Favoritechannels.push(content):null
+          //         }))
+
+          setShowToast(false);
         }
         addFavToLocalStorage(`${contentType}FavList`, content);
       } else {
         if (isLoggedIn) {
-          return console.log("DB DELETE REQ");
+          setreqMethod("DELETE")
+          setUrl(`http://localhost:9000/users/unfavorite${contentType}/${content.id}/${isLoggedIn}`)
+          setShowToast(true);
         }
         removeFavFromLocalStorage(`${contentType}FavList`, content.name);
       }
@@ -108,6 +146,7 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
     });
   };
 
+  //refactor toast into own omponent and add parameter for deciding text depending on if user is looged in or not.
   return (
     <>
       <FontAwesomeIcon
