@@ -22,7 +22,7 @@ interface User {
 
 interface Channel {
   id: number;
-  isFav:boolean
+  isFav: boolean;
   image: string;
   channeltype: string;
   name: string;
@@ -49,14 +49,14 @@ export default function User({ setaudioFile }: UserProps) {
     let channelData: any | null = JSON.parse(
       localStorage.getItem("channelFavList") || "null"
     );
-    return channelData ? channelData : [];
+    return channelData ? channelData : null;
   };
 
   const getLocalStorageFavPrograms = () => {
     const programData: any | null = JSON.parse(
       localStorage.getItem("programFavList") || "null"
     );
-    return programData ? programData : [];
+    return programData ? programData : null;
   };
 
   const getLocalStorageUser = () => {
@@ -94,28 +94,21 @@ export default function User({ setaudioFile }: UserProps) {
   //   setLocalStorageFavPrograms(filterDupes(mergedFavPrograms));
   // };
 
-  const handlePossesiveApostrophe = (name: string) => {    
-    name[name.length-1] === "s" 
-    ? setuserName(name)
-    : setuserName(name+"s")
+  const handlePossesiveApostrophe = (name: string) => {
+    name[name.length - 1] === "s" ? setuserName(name) : setuserName(name + "s");
   };
 
-  //Implement data handling between localstorage and DB everytime user navigates to Min Sida
-  //Whn useffect is called the logic inside will check if LS is empty.if empty send get reg for user data
-  //and change appropriate state varibels with the data in mind.If not empty send update req to DB to get
-  //User DB,then add ls to it.Remove dupes before updating Db user with the modified data.
-  //if LS and DB is empty then do nothing.
-  //Outside of Useffect,when use is unfaving content it will make a db delete req
-  //with id to user data removing content on the backend to.
-  //For favs it will only update with useffect which user wont be impacted/notice unless localstorage is disabled.
   useEffect(() => {
     if (isLoading === false) {
+      const DbData = data[0];
       localStorage.setItem(
         "UserDB",
         JSON.stringify({
-          Name: data[0].Name,
-          Favoritechannels: data[0].Favoritechannels,
-          Favoriteprograms: data[0].Favoriteprograms,
+          Name: DbData.Name,
+          Favoritechannels:
+            DbData.Favoritechannels === "[]" ? null : DbData.Favoritechannels,
+          Favoriteprograms:
+            DbData.Favoriteprograms === "[]" ? null : DbData.Favoriteprograms,
         })
       );
       const User = getLocalStorageUser();
@@ -127,54 +120,58 @@ export default function User({ setaudioFile }: UserProps) {
       handlePossesiveApostrophe(User.Name);
 
       //Send update req to db to update user channel and program to mergeddata.
-
-
-
     } else {
       console.log("still Loading...");
     }
   }, [isLoading]);
 
-
-
-  const ToggleLocalStorageFavs = (toggleTo:boolean) => {
+  const ToggleLocalStorageFavs = (toggleTo: boolean) => {
     const LocalFavChannels = getLocalStorageFavChannels();
-    let LocalFavPrograms = getLocalStorageFavPrograms();
+    const LocalFavPrograms = getLocalStorageFavPrograms();
 
-    const disabledFavChannels = LocalFavChannels.map((channel:Channel) =>{
-      channel.isFav = toggleTo
-      return channel
-    })
-
-    const disabledFavPrograms = LocalFavPrograms.map((channel:Channel) =>{
-      channel.isFav = toggleTo
-      return channel
-    })
-    
- localStorage.setItem("channelFavList",JSON.stringify(disabledFavChannels))
- localStorage.setItem("programFavList",JSON.stringify(disabledFavPrograms))
-  }
+    if (!LocalFavChannels && !LocalFavPrograms) {
+      return null;
+    } else if (LocalFavChannels) {
+      const disabledFavChannels = LocalFavChannels.map((channel: Channel) => {
+        channel.isFav = toggleTo;
+        return channel;
+      });
+      localStorage.setItem(
+        "channelFavList",
+        JSON.stringify(disabledFavChannels)
+      );
+    } else if (LocalFavPrograms) {
+      const disabledFavPrograms = LocalFavPrograms.map((channel: Channel) => {
+        channel.isFav = toggleTo;
+        return channel;
+      });
+      localStorage.setItem(
+        "programFavList",
+        JSON.stringify(disabledFavPrograms)
+      );
+    }
+  };
 
   useEffect(() => {
     if (currentUser) {
       console.log(currentUser);
       localStorage.setItem("UserEmail", currentUser);
-      ToggleLocalStorageFavs(false)
+       ToggleLocalStorageFavs(false)
       SetUrl(
         `http://localhost:9000/users/user/${localStorage.getItem("UserEmail")}`
       );
     } else if (localStorage.getItem("UserEmail")) {
-      ToggleLocalStorageFavs(false)
+       ToggleLocalStorageFavs(false)
       SetUrl(
         `http://localhost:9000/users/user/${localStorage.getItem("UserEmail")}`
       );
     } else {
       const LocalFavChannels = getLocalStorageFavChannels();
       const LocalFavPrograms = getLocalStorageFavPrograms();
-      ToggleLocalStorageFavs(true)
-      
-      setLocalStorageFavChannels([LocalFavChannels]);
-      setLocalStorageFavPrograms([LocalFavPrograms]);
+      ToggleLocalStorageFavs(true);
+
+      setLocalStorageFavChannels(LocalFavChannels);
+      setLocalStorageFavPrograms(LocalFavPrograms);
     }
   }, []);
 
@@ -192,7 +189,7 @@ export default function User({ setaudioFile }: UserProps) {
           <Container>
             <Row xs={1} md={2} lg={3}>
               {LocalStorageFavChannels ? (
-                LocalStorageFavChannels[0].map((channel: Channel) => (
+                LocalStorageFavChannels.map((channel: Channel) => (
                   <Col>
                     <ChannelsCard
                       channel={channel}
@@ -212,7 +209,7 @@ export default function User({ setaudioFile }: UserProps) {
           <Container>
             <Row xs={1} md={2} lg={3}>
               {LocalStorageFavPrograms ? (
-                LocalStorageFavPrograms[0].map((program: any) => (
+                LocalStorageFavPrograms.map((program: any) => (
                   <Col>
                     <ProgramCards program={program} />
                   </Col>
