@@ -13,6 +13,8 @@ const navbar = ({isLoggedIn,setisLoggedIn}:prop) => {
 
   const handleLogout = () => {
     document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+    localStorage.removeItem("UserDB")
+    localStorage.removeItem("UserEmail")
     setisLoggedIn(false)
   }
 
