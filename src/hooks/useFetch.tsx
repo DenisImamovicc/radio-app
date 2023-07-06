@@ -35,11 +35,45 @@ const useFetch = (
     body: JSON.stringify(reqBody),
   };
 
+  const PUT = {
+    method: reqMethod,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      ...(url.includes("http://localhost:9000") && {
+        Authorization: `Bearer ${document.cookie.substring(4)}`,
+      }),
+    },
+    body: JSON.stringify(reqBody),
+  };
+
+  const DELETE = {
+    method: reqMethod,
+    headers: {
+      Accept: "application/json",
+      ...(url.includes("http://localhost:9000") && {
+        Authorization: `Bearer ${document.cookie.substring(4)}`,
+      }),
+    },
+  };
+
+  const chooseReqMethod = (reqMethod: string) => {
+    if (reqMethod === "GET") {
+      return GET;
+    } else if (reqMethod === "POST") {
+      return POST;
+    } else if (reqMethod === "PUT") {
+      return PUT;
+    } else if (reqMethod === "DELETE") {
+      return DELETE;
+    }
+    return null;
+  };
+
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(url, reqMethod === "GET" ? GET : POST);
-      console.log(response);
+      const response = await fetch(url, chooseReqMethod(reqMethod));
       if (!response.ok) {
         throw new Error("Request failed");
       }
