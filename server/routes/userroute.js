@@ -20,8 +20,8 @@ router
   .get("/favoriteprograms/:Email", authenticateToken, getUserPrograms)
   .delete("/unfavoritechannel/:id/:Email", authenticateToken, deleteUserChannel)
   .delete("/unfavoriteprogram/:id/:Email", authenticateToken, deleteUserProgram)
-  .put("/favoritechannel", authenticateToken, updateUserChannels)
-  .put("/favoriteprogram", authenticateToken, updateUserPrograms)
+  .put("/favoritechannel/:id/:Email", authenticateToken, updateUserChannels)
+  .put("/favoriteprogram/:id/:Email", authenticateToken, updateUserPrograms)
   .post("/loginacount", handleLoginAcount)
   .post("/newacount", handleCreateAcount)
 

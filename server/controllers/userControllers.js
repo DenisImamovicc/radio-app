@@ -51,7 +51,7 @@ export async function deleteUserChannel(req, res) {
     req,
     res,
     req.params.Email,
-    JSON.stringify([modifiedData]),
+    JSON.stringify(modifiedData),
     "favoritechannel"
   );
 }
@@ -64,7 +64,7 @@ export async function deleteUserProgram(req, res) {
     req,
     res,
     req.params.Email,
-    JSON.stringify([modifiedData]),
+    JSON.stringify(modifiedData),
     "favoriteprograms"
   );
 }
@@ -81,23 +81,22 @@ export async function handleCreateAcount(req, res) {
 }
 
 export async function updateUserChannels(req, res) {
-  const oldData = await getFavoriteChannel(req.body.Email);
-
+  const oldData = await getFavoriteChannel(req.params.Email);
   if (!oldData) {
     await addFavoriteData(
       req,
       res,
-      req.body.Email,
-      JSON.stringify([req.body.channel]),
+      req.params.Email,
+      JSON.stringify([req.body]),
       "favoritechannel"
     );
-  } else if (checkDuplicate(arrayify(oldData), req.body.channel.id, req, res)) {
+  } else if (checkDuplicate(arrayify(oldData), req.body.id, req, res)) {
     const data = arrayify(oldData);
-    data.unshift(req.body.channel);
+    data.unshift(req.body);
     await addFavoriteData(
       req,
       res,
-      req.body.Email,
+      req.params.Email,
       JSON.stringify(data),
       "favoritechannel"
     );
@@ -105,23 +104,22 @@ export async function updateUserChannels(req, res) {
 }
 
 export async function updateUserPrograms(req, res) {
-  const oldData = await getFavoritePrograms(req.body.Email);
-
+  const oldData = await getFavoritePrograms(req.params.Email);
   if (!oldData) {
     await addFavoriteData(
       req,
       res,
-      req.body.Email,
-      JSON.stringify([req.body.program]),
+      req.params.Email,
+      JSON.stringify([req.body]),
       "favoriteprogram"
     );
-  } else if (checkDuplicate(arrayify(oldData), req.body.program.id, req, res)) {
+  } else if (checkDuplicate(arrayify(oldData), req.body.id, req, res)) {
     const data = arrayify(oldData);
-    data.unshift(req.body.program);
+    data.unshift(req.body);
     await addFavoriteData(
       req,
       res,
-      req.body.Email,
+      req.params.Email,
       JSON.stringify(data),
       "favoriteprogram"
     );
