@@ -16,14 +16,15 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [audioFile, setaudioFile] = useState("");
-  const [isLoggedIn, setisLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setisLoggedIn] = useState<boolean>(true);
   const navigate = useNavigate();
 
   const handleUserXTimeVisit = () => {
     const isFirstTimeVisit: boolean | null = sessionStorage.getItem("isFirstTimeVisit") !== null
     ? JSON.parse(sessionStorage.getItem("isFirstTimeVisit")!)
     : null;
-
+    console.log(document.cookie.includes("jwt"));
+    
     if (document.cookie.includes("jwt") && isFirstTimeVisit) {
       return "User visited page more than once";
     } else if (document.cookie.includes("jwt")) {
@@ -39,7 +40,7 @@ function App() {
 
   useEffect(() => {
     handleUserXTimeVisit();
-  }, [isLoggedIn]);
+  }, []);
 
   return (
     <div className="App">
