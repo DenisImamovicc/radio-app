@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
+import { Link } from "react-router-dom";
 
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
@@ -7,13 +8,19 @@ import ListGroup from "react-bootstrap/ListGroup";
 function ProgramSearchBar() {
   const [programSearchList, setprogramSearchList] = useState("");
   const [currSearchRek, setcurrSearchRek] = useState([]);
-  const { data, isLoading} = useFetch(
-    `https://api.sr.se/api/v2/programs?format=json&size=10`
+  
+  const { data, isLoading } = useFetch(
+    `https://api.sr.se/api/v2/programs?format=json&size=815`
   );
 
   useEffect(() => {
-    if (isLoading === false) {
-      console.log(data);
+    if (isLoading === false && localStorage.getItem("Programsearchlist")) {
+      setprogramSearchList(
+        JSON.parse(localStorage.getItem("Programsearchlist"))
+      );
+      console.log("fetch loclastorage data");
+    } else if (isLoading === false) {
+      console.log(data, "fetch data");
       localStorage.setItem("Programsearchlist", JSON.stringify(data.programs));
       setprogramSearchList(data.programs);
     }
@@ -39,14 +46,23 @@ function ProgramSearchBar() {
           type="text"
           placeholder="Sök program"
           onInput={handleUserInput}
-        ></input>
+        >
+          
+        </input>
         <Card>
           <ListGroup variant="flush" id="Searchsuggestionslist">
             {currSearchRek &&
-              currSearchRek.map((obj) => (
-                <ListGroup.Item className="d-flex align-content-around">
-                <img src={obj.programimage} id="Searchsuggestionimage" className=""/>
-                  {obj.name}</ListGroup.Item>
+              currSearchRek.map((program) => (
+                <ListGroup.Item className="d-flex" onClick={() => setcurrSearchRek([])}>
+                  <Link to={`/Programs/Program/${program.id}`} state={program}>
+                    <img
+                      src={program.programimage}
+                      id="Searchsuggestionimage"
+                      className=""
+                    />
+                    {program.name}
+                  </Link>
+                </ListGroup.Item>
               ))}
           </ListGroup>
         </Card>
