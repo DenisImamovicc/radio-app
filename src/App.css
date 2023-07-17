@@ -38,6 +38,11 @@ audio {
     border-style: solid;
 }
 
+#Searchsuggestionslist{
+    position: absolute;
+    z-index: 1;
+}
+
 a {
     text-decoration: none !important;
 }
