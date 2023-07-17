@@ -7,7 +7,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 function ProgramSearchBar() {
   const [programSearchList, setprogramSearchList] = useState("");
   const [currSearchRek, setcurrSearchRek] = useState([]);
-  const { data, isLoading, err } = useFetch(
+  const { data, isLoading} = useFetch(
     `https://api.sr.se/api/v2/programs?format=json&size=10`
   );
 
@@ -19,26 +19,17 @@ function ProgramSearchBar() {
     }
   }, [isLoading]);
 
-  //   const handleProgramSearchlist = () => {
-  //     if (localStorage.programsearchlistexists) {
-  //       // then search from that
-  //     } else {
-  //       // fetch all programs from api and store it
-  //     }
-  //   };
-
-  const handleUserInput = (e: any) => {
-    console.log(e.nativeEvent.data, e.target.value);
+  const handleUserInput = (e) => {
     let currSearch = e.target.value;
-    //Make it so that if searchbar is empty it will not show any suggestions
-    //   if (!currSearch) {
 
-    //   }
+    if (currSearch === "") {
+      return setcurrSearchRek([]);
+    }
 
     const regex = new RegExp(`^${currSearch}`, "i");
     const result = programSearchList.filter((obj) => regex.test(obj.name));
-    console.log(result);
-    setcurrSearchRek(result);
+
+    return setcurrSearchRek(result);
   };
 
   return (
@@ -53,7 +44,9 @@ function ProgramSearchBar() {
           <ListGroup variant="flush" id="Searchsuggestionslist">
             {currSearchRek &&
               currSearchRek.map((obj) => (
-                <ListGroup.Item>{obj.name}</ListGroup.Item>
+                <ListGroup.Item className="d-flex align-content-around">
+                <img src={obj.programimage} id="Searchsuggestionimage" className=""/>
+                  {obj.name}</ListGroup.Item>
               ))}
           </ListGroup>
         </Card>

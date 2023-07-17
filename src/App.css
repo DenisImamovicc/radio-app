@@ -43,6 +43,10 @@ audio {
     z-index: 1;
 }
 
+#Searchsuggestionimage{
+    width: 3rem;
+}
+
 a {
     text-decoration: none !important;
 }
