@@ -13,7 +13,7 @@ Radio station containing channels, programs, podcasts and episodes gathered from
 - Frameworks:React.js,Typescript.js,Express.js,Bootstrap
 - Front-End:Javascript,Html,Css
 - Back-End:Node.js,SQLite
-- Mehodologies:CRUD,Full-stack,REST-API,MVC
+- Mehodologies:CRUD,Full-stack,REST-API,MVC,SPA
 - Others:GIT
 
 Sveriges Radio Publika Api:
