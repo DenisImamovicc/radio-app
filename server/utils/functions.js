@@ -72,6 +72,6 @@ export async function handleLoginUser(req, res) {
       .status(200)
       .send({Name:"jwt",maxAge:maxAgeInMs,token:token});
   } else {
-    res.sendStatus(401);
+    res.sendStatus(400);
   }
 }
