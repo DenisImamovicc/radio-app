@@ -1,24 +1,29 @@
 import express from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import SR_API_route from "./routes/SR_API_route.js"
-import userRoute from "./routes/userroute.js"
-import cors from "cors"
+import SR_API_route from "./routes/SR_API_route.js";
+import userRoute from "./routes/userroute.js";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 
 const port = 9000;
 const api = express();
+const allowedOrigins = [
+  "https://localhost:5173",
+  "https://sradio.onrender.com",
+];
 
 dotenv.config();
 api.use(bodyParser.json());
-api.use(cors({
-    origin: 'https://localhost:5173',
-    
-}));
+api.use(
+  cors({
+    origin: allowedOrigins,
+  })
+);
 api.use(bodyParser.urlencoded({ extended: true }));
 api.use(cookieParser());
 
-api.use("/users",userRoute)
-api.use("/SR_api",SR_API_route)
+api.use("/users", userRoute);
+api.use("/SR_api", SR_API_route);
 
 api.listen(port, () => console.log(port, `Live at http://localhost:${port}`));
