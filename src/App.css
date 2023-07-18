@@ -38,9 +38,30 @@ audio {
     border-style: solid;
 }
 
+.searchinput{
+    color: white;
+    background-color: black;
+    border: white solid 2px;
+    width: 100%;
+    padding-left: 0.5rem;
+}
+
 #Searchsuggestionslist{
     position: absolute;
     z-index: 1;
+    border: white solid 2px;
+    width: 100%;
+}
+
+#Searchsuggestion{
+    background-color: rgb(0, 0, 0);
+    color: black;
+}
+
+#Searchsuggestion:hover{
+    background-color: black;
+    border: blue solid 2px;
+
 }
 
 #Searchsuggestionimage{

@@ -26,8 +26,8 @@ const navbar = ({ isLoggedIn, setisLoggedIn }: prop) => {
           </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+        <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between flex-row-reverse">
+          <Nav className="">
             <Link to="/Channels">
               <Nav.Link href="/#" id="link">
                 Kanal
