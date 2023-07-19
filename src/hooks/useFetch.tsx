@@ -19,7 +19,7 @@ const useFetch = (
     method: reqMethod,
     headers: {
       Accept: "application/json",
-      ...(url.includes("https://sradio-api.onrender.com") && {
+      ...(url.includes("http://localhost:9000") && {
         Authorization: `Bearer ${document.cookie.substring(4)}`,
       }),
     },
@@ -40,7 +40,7 @@ const useFetch = (
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      ...(url.includes("https://sradio-api.onrender.com") && {
+      ...(url.includes("http://localhost:9000") && {
         Authorization: `Bearer ${document.cookie.substring(4)}`,
       }),
     },
@@ -51,7 +51,7 @@ const useFetch = (
     method: reqMethod,
     headers: {
       Accept: "application/json",
-      ...(url.includes("https://sradio-api.onrender.com") && {
+      ...(url.includes("http://localhost:9000") && {
         Authorization: `Bearer ${document.cookie.substring(4)}`,
       }),
     },

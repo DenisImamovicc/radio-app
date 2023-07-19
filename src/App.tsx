@@ -23,6 +23,7 @@ function App() {
     const isFirstTimeVisit: boolean | null = sessionStorage.getItem("isFirstTimeVisit") !== null
     ? JSON.parse(sessionStorage.getItem("isFirstTimeVisit")!)
     : null;
+
     if (document.cookie.includes("jwt") && isFirstTimeVisit) {
       return "User visited page more than once";
     } else if (document.cookie.includes("jwt")) {
@@ -38,9 +39,7 @@ function App() {
 
   useEffect(() => {
     handleUserXTimeVisit();
-
   }, [isLoggedIn]);
-
 
   return (
     <div className="App">
