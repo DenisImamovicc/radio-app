@@ -37,7 +37,7 @@ function NewAcount() {
       Password: `${e.target[2].value}`,
     };
     setUser(User);
-    setURL("https://sradio-api.onrender.com/users/newacount");
+    setURL("http://localhost:9000/users/newacount");
     setsubmitForm(true);
   };
 
