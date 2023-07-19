@@ -116,7 +116,7 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
           setreqMethod("PUT")
           content.isFav=true
           setreqData(content)          
-          setUrl(`https://sradio-api.onrender.com/users/favorite${contentType}/${content.id}/${isLoggedIn}`)
+          setUrl(`http://localhost:9000/users/favorite${contentType}/${content.id}/${isLoggedIn}`)
 
           //  const dbData: any[] = JSON.parse(
           //    localStorage.getItem(`UserDB`) || "null"
@@ -136,7 +136,7 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
       } else {
         if (isLoggedIn) {
           setreqMethod("DELETE")
-          setUrl(`https://sradio-api.onrender.com/users/unfavorite${contentType}/${content.id}/${isLoggedIn}`)
+          setUrl(`http://localhost:9000/users/unfavorite${contentType}/${content.id}/${isLoggedIn}`)
           setShowToast(true);
         }
         removeFavFromLocalStorage(`${contentType}FavList`, content.name);
