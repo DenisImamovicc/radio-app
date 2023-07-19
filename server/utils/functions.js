@@ -5,15 +5,14 @@ import { matchPasswordFromDB } from "../model/sqlfuncs.js";
 export const hashPassword = async (Password) => await bcrypt.hash(Password, 10);
 
 export const comparePassword = async (user, DBPwd) => {
-  console.log(DBPwd);
-  if (DBPwd === undefined) {
+  if (DBPwd  === undefined) {
     return null;
   }
   return await bcrypt.compare(user.Password, DBPwd.Password);
 };
 
 export const grantAcessToken = (user) =>
-  jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30min" });
+  jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "7d" });
 
 export function checkDuplicate(currentdata, reqdataID, req, res) {
   console.log(currentdata, reqdataID);
@@ -43,8 +42,10 @@ export function arrayify(data) {
 export async function handleLoginUser(req, res) {
   if (await matchPasswordFromDB(req.body)) {
     const token = grantAcessToken(req.body);
-    const maxAgeInMs = 30 * 60 * 1000;
-    res.status(200).send({ Name: "jwt", maxAge: maxAgeInMs, token: token });
+    const maxAgeInMs = 7 * 24 * 60 * 60 * 1000
+    res
+      .status(200)
+      .send({Name:"jwt",maxAge:maxAgeInMs,token:token});
   } else {
     res.sendStatus(400);
   }
