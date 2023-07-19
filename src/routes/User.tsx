@@ -158,12 +158,12 @@ export default function User({ setaudioFile }: UserProps) {
       localStorage.setItem("UserEmail", currentUser);
        ToggleLocalStorageFavs(false)
       SetUrl(
-        `http://localhost:9000/users/user/${localStorage.getItem("UserEmail")}`
+        `https://sradio-api.onrender.com/users/user/${localStorage.getItem("UserEmail")}`
       );
     } else if (localStorage.getItem("UserEmail")) {
        ToggleLocalStorageFavs(false)
       SetUrl(
-        `http://localhost:9000/users/user/${localStorage.getItem("UserEmail")}`
+        `https://sradio-api.onrender.com/users/user/${localStorage.getItem("UserEmail")}`
       );
     } else {
       const LocalFavChannels = getLocalStorageFavChannels();
