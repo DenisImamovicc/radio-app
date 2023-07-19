@@ -1,6 +1,10 @@
+import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { matchPasswordFromDB } from "../model/sqlfuncs.js";
+
+const SVERIGES_RADIO_API = `http://api.sr.se/api/v2`;
+const JSON_FORMAT = `format=json`;
 
 export const hashPassword = async (Password) => await bcrypt.hash(Password, 10);
 
@@ -23,6 +27,27 @@ export function checkDuplicate(currentdata, reqdataID, req, res) {
   }
   console.log("NO DUPES :)");
   return true;
+}
+
+export function getAllList(req, res) {
+  const TYPE = req.originalUrl.replace("/SR_api", "");
+  fetch(SVERIGES_RADIO_API + TYPE + "?" + JSON_FORMAT)
+    .then((res) => res.json())
+    .then((Data) => res.status(200).send(Data))
+    .catch((err) => {
+      console.error("sent from catch", err.message);
+      throw new Error(res.status(500).send(err));
+    });
+}
+
+export function getDataById(req, res, id, params) {
+  fetch(SVERIGES_RADIO_API + params + `=${id}` + "&" + JSON_FORMAT)
+    .then((res) => res.json())
+    .then((Data) => res.status(200).send(Data))
+    .catch((err) => {
+      console.error("sent from catch", err.message);
+      throw new Error(res.status(500).send(err));
+    });
 }
 
 export function validateData(req, res, data, dataType) {
