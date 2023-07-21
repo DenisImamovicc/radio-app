@@ -90,16 +90,6 @@ function ContentList({ data, setaudioFile, contentType }: data) {
 
   return (
     <>
-      {/* <Container className="mt-5">
-      <Row xs={1} md={2} lg={3}>
-        {data.channels &&
-          data.channels.map((channel: channel) => (
-            <Col>
-              <ChannelsCard channel={channel} setaudioFile={setaudioFile} />
-            </Col>
-          ))}
-      </Row>
-      </Container> */}
       <Container className="mt-5">
         <ListGroup as="ol" numbered className="mb-3" id="Contentlist">
           <Row xs={1} md={2} lg={3}>
