@@ -66,34 +66,6 @@ export default function User({ setaudioFile }: UserProps) {
     return User ? User : [];
   };
 
-  // const filterDupes = (unfilteredArr: any) => {
-  //   return unfilteredArr.filter((item: any, index: number, self: any) => {
-  //     return index === self.findIndex((obj:any) => obj.id === item.id);
-  //   });
-  // };
-
-  // const handleMergeOfDbAndLSChannel = (User: User) => {
-  //   const LocalFavChannels = getLocalStorageFavChannels();
-  //   const DbFavChannels = JSON.parse(User.Favoritechannels);
-  //   if (!DbFavChannels) {
-  //     return []
-  //   }
-  //   const mergedFavChannels = [...LocalFavChannels, ...DbFavChannels[0]];
-
-  //   setLocalStorageFavChannels(filterDupes(mergedFavChannels));
-  // };
-
-  // const handleMergeOfDbAndLSPrograms = (User: User) => {
-  //   const LocalFavPrograms = getLocalStorageFavPrograms();
-  //   const DbFavPrograms = JSON.parse(User.Favoriteprograms);
-  //   if (!DbFavPrograms) {
-  //     return []
-  //   }
-  //   const mergedFavPrograms = [...LocalFavPrograms, ...DbFavPrograms[0]];
-
-  //   setLocalStorageFavPrograms(filterDupes(mergedFavPrograms));
-  // };
-
   const handlePossesiveApostrophe = (name: string) => {
     name[name.length - 1] === "s" ? setuserName(name) : setuserName(name + "s");
   };
@@ -112,14 +84,11 @@ export default function User({ setaudioFile }: UserProps) {
         })
       );
       const User = getLocalStorageUser();
-      // handleMergeOfDbAndLSChannel(User);
-      // handleMergeOfDbAndLSPrograms(User);
       setLocalStorageFavChannels(JSON.parse(User.Favoritechannels));
       setLocalStorageFavPrograms(JSON.parse(User.Favoriteprograms));
       setuserName(User.Name);
       handlePossesiveApostrophe(User.Name);
 
-      //Send update req to db to update user channel and program to mergeddata.
     } else {
       console.log("still Loading...");
     }
