@@ -6,6 +6,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faPlay } from "@fortawesome/free-solid-svg-icons";
 import PaginationComponent from "./PaginationComponent";
 
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+
 interface data {
   data: {
     name: string;
@@ -86,46 +90,60 @@ function ContentList({ data, setaudioFile, contentType }: data) {
 
   return (
     <>
-      <ListGroup as="ol" numbered className="mb-3" id="Contentlist">
-        {contentData && contentData[contentType]
-          ? contentData[contentType].map((content: any) => (
-              <ListGroup.Item
-                as="li"
-                className="d-flex justify-content-between align-items-start mx-3  text-light bg-dark"
-                key={content.id}
-              >
-                <div className="ms-2 me-auto ">
-                  <div className="fw-bold">
-                    {content.title}
-                    {contentType === "episodes" ? (
-                      <a
-                        href={handleDownloadUrl(content)}
-                        className="text-light ms-1"
-                        id="downloadComponent"
-                      >
-                        <FontAwesomeIcon icon={faDownload} />
-                      </a>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  {content.description ? <p>{content.description}</p> : ""}
-                  <p>
-                    <FontAwesomeIcon
-                      onClick={() => playAudio(handleContentTypePath(content))}
-                      className="me-1"
-                      icon={faPlay}
-                    />
-                    {Math.round(
-                      (handleContentDurationPath(content) / 60) * 10
-                    ) / 10}
-                    min
-                  </p>
-                </div>
-              </ListGroup.Item>
-            ))
-          : ""}
-      </ListGroup>
+      <Container className="mt-5">
+        <ListGroup as="ol" numbered className="mb-3" id="Contentlist">
+          <Row xs={1} md={2} lg={3}>
+            {contentData && contentData[contentType]
+              ? contentData[contentType].map((content: any) => (
+                  <Col>
+                    <ListGroup.Item
+                      as="li"
+                      className="d-flex justify-content-between align-items-start mx-3  text-light bg-dark"
+                      id="contentItem"
+                      key={content.id}
+                    >
+                      <div className="ms-2 me-auto" id="contentMain">
+                        <div className="fw-bold ">
+                          {content.title}
+                          {contentType === "episodes" ? (
+                            <a
+                              href={handleDownloadUrl(content)}
+                              className="text-light ms-1"
+                              id="downloadComponent"
+                            >
+                              <FontAwesomeIcon icon={faDownload} />
+                            </a>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                        {content.description ? (
+                          <p>{content.description}</p>
+                        ) : (
+                          ""
+                        )}
+                        <p>
+                          <FontAwesomeIcon
+                            onClick={() =>
+                              playAudio(handleContentTypePath(content))
+                            }
+                            className="me-1"
+                            icon={faPlay}
+                          />
+                          {Math.round(
+                            (handleContentDurationPath(content) / 60) * 10
+                          ) / 10}
+                          min
+                        </p>
+                      </div>
+                    </ListGroup.Item>
+                  </Col>
+                ))
+              : ""}
+          </Row>
+        </ListGroup>
+      </Container>
+      
       <PaginationComponent
         data={contentData.pagination}
         handleFetchNextPage={handleFetchNextPage}
