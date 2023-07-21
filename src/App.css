@@ -77,6 +77,12 @@ a {
     color: white !important;
 }
 
+#contentItem{
+    margin: 1rem;
+}
+
+
+
 .toastFavorite{
     position: absolute;
     top: 0;
@@ -117,6 +123,10 @@ a {
 
 @media (min-width: 765px) {
     #Cardbody{
+        height: 300px;
+    }
+
+    #contentItem{
         height: 300px;
     }
 
