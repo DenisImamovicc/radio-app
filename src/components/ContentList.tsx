@@ -143,6 +143,7 @@ function ContentList({ data, setaudioFile, contentType }: data) {
           </Row>
         </ListGroup>
       </Container>
+      
       <PaginationComponent
         data={contentData.pagination}
         handleFetchNextPage={handleFetchNextPage}
