@@ -70,7 +70,7 @@ function ContentList({ data, setaudioFile, contentType }: data) {
     return 0;
   };
 
-  const handleDownloadUrl = (data: any) => data.downloadpodfile?.urls || "#";
+  const handleDownloadUrl = (data: any) => data.downloadpodfile?.url || "#";
 
   if (!contentData) {
     return <Spinner animation="border" variant="light" />;
