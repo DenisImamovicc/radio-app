@@ -1,26 +1,41 @@
-import { useState, useEffect } from "react";
 import Alert from "react-bootstrap/Alert";
-import Button from "react-bootstrap/Button";
+import { useEffect } from "react";
 
-const alertMessage =  () => {
-  const [show, setShow] = useState(true);
-
-  useEffect(() => {
-    if (show === true) {
-      setTimeout(() => {
-        setShow(false);
-      }, 3000);
-    }
-  }, [show]);
-
-  
-    return (
-      <Alert variant="danger" onClose={() => setShow(false)} dismissible>
-        <Alert.Heading>Email and/or Password is incorrect!</Alert.Heading>
-        <Button onClick={() => setShow(true)}>Show Alert</Button>;
-      </Alert>
-    );
-   
+interface AlertMssg {
+  alert: {
+    mssg: string;
+    type: string;
+    duration:number
+  };
+  setalert: React.Dispatch<React.SetStateAction<AlertMssg["alert"]>>;
 }
+
+const alertMessage = ({ alert, setalert }: AlertMssg) => {
+  useEffect(() => {
+    alert.mssg.length
+      ? setTimeout(() => {
+          setalert({ mssg: "", type: "",duration:3000});
+        }, alert.duration)
+      : "";
+  }, [alert.mssg]);
+
+  return (
+    <>
+      {alert ? (
+        <Alert
+          className="m-1"
+          variant={alert.type}
+          key={alert.type}
+          onClose={() => setalert({ mssg: "", type: "",duration:3000})}
+          dismissible
+        >
+          {alert.mssg}
+        </Alert>
+      ) : (
+        ""
+      )}
+    </>
+  );
+};
 
 export default alertMessage;
