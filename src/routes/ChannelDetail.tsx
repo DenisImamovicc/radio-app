@@ -1,7 +1,7 @@
 import { useLocation, useParams } from "react-router-dom";
-import Channeloptions from "./Channeloptions.tsx";
-import useFetch from "../hooks/useFetch";
-import Loadingprogramcard from "../components/Loadingprogramcard";
+import Channeloptions from "../components/ChannelContents.tsx";
+import useFetch from "../hooks/useFetch.tsx";
+import Loadingprogramcard from "../components/Loadingprogramcard.tsx";
 import { Placeholder } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";

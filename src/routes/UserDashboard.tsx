@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import ProgramCards from "../components/Programscard";
-import ChannelsCard from "../components/ChannelsCard";
+import ProgramCards from "../components/ProgramListCard";
+import ChannelsCard from "../components/ChannelsList";
 import { useLocation } from "react-router-dom";
 
 import Container from "react-bootstrap/Container";
@@ -34,18 +34,14 @@ interface Channel {
 
 export default function User({ setaudioFile }: UserProps) {
   const [userName, setuserName] = useState<string | null>(null);
-  const [LocalStorageFavChannels, setLocalStorageFavChannels] = useState<
-    any | null
-  >(null);
-  const [LocalStorageFavPrograms, setLocalStorageFavPrograms] = useState<
-    any | null
-  >(null);
+  const [favouriteChannels, setfavouriteChannels] = useState<any | null>(null);
+  const [favoritePrograms, setfavoritePrograms] = useState<any | null>(null);
   const [Url, SetUrl] = useState(``);
   const API_URL: any = import.meta.env.VITE_API_URL;
-  let currentUser = useLocation().state;
+  let currUserEmail = useLocation().state;
   const { data, isLoading } = useFetch(Url, "GET");
 
-  const getLocalStorageFavChannels = () => {
+  const getfavouriteChannels = () => {
     let channelData: any | null = JSON.parse(
       localStorage.getItem("channelFavList") || "null"
     );
@@ -58,7 +54,7 @@ export default function User({ setaudioFile }: UserProps) {
     return channelData;
   };
 
-  const getLocalStorageFavPrograms = () => {
+  const getfavoritePrograms = () => {
     let programData: any | null = JSON.parse(
       localStorage.getItem("programFavList") || "null"
     );
@@ -81,32 +77,23 @@ export default function User({ setaudioFile }: UserProps) {
   const handlePossesiveApostrophe = (name: string) =>
     name[name.length - 1] === "s" ? setuserName(name) : setuserName(name + "s");
 
-  useEffect(() => {
-    if (isLoading === false) {
-      const DbData = data[0];
-      localStorage.setItem(
-        "UserDB",
-        JSON.stringify({
-          Name: DbData.Name,
-          Favoritechannels:
-            DbData.Favoritechannels === "[]" ? null : DbData.Favoritechannels,
-          Favoriteprograms:
-            DbData.Favoriteprograms === "[]" ? null : DbData.Favoriteprograms,
-        })
-      );
-      const User = getLocalStorageUser();
-      setLocalStorageFavChannels(JSON.parse(User.Favoritechannels));
-      setLocalStorageFavPrograms(JSON.parse(User.Favoriteprograms));
-      setuserName(User.Name);
-      handlePossesiveApostrophe(User.Name);
-    } else {
-      console.log("still Loading...");
-    }
-  }, [isLoading]);
+  const setupUserDB = () => {
+    const DbData = data[0];
+    localStorage.setItem(
+      "UserDB",
+      JSON.stringify({
+        Name: DbData.Name,
+        Favoritechannels:
+          DbData.Favoritechannels === "[]" ? null : DbData.Favoritechannels,
+        Favoriteprograms:
+          DbData.Favoriteprograms === "[]" ? null : DbData.Favoriteprograms,
+      })
+    );
+  };
 
   const ToggleLocalStorageFavs = (toggleTo: boolean) => {
-    const LocalFavChannels = getLocalStorageFavChannels();
-    const LocalFavPrograms = getLocalStorageFavPrograms();
+    const LocalFavChannels = getfavouriteChannels();
+    const LocalFavPrograms = getfavoritePrograms();
 
     if (!LocalFavChannels && !LocalFavPrograms) {
       return null;
@@ -131,22 +118,35 @@ export default function User({ setaudioFile }: UserProps) {
     }
   };
 
+  const modifyUserDB = () => {
+    const User = getLocalStorageUser();
+    setfavouriteChannels(JSON.parse(User.Favoritechannels));
+    setfavoritePrograms(JSON.parse(User.Favoriteprograms));
+    setuserName(User.Name);
+    handlePossesiveApostrophe(User.Name);
+  };
+
   useEffect(() => {
-    if (currentUser) {
-      console.log(currentUser);
-      localStorage.setItem("UserEmail", currentUser);
+    if (isLoading === false) {
+      setupUserDB();
+      modifyUserDB();
+    } else {
+      console.log("still Loading...");
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (currUserEmail) {
+      localStorage.setItem("UserEmail", currUserEmail);
       ToggleLocalStorageFavs(false);
       SetUrl(API_URL + `users/user/${localStorage.getItem("UserEmail")}`);
     } else if (localStorage.getItem("UserEmail")) {
       ToggleLocalStorageFavs(false);
       SetUrl(API_URL + `users/user/${localStorage.getItem("UserEmail")}`);
     } else {
-      const LocalFavChannels = getLocalStorageFavChannels();
-      const LocalFavPrograms = getLocalStorageFavPrograms();
       ToggleLocalStorageFavs(true);
-
-      setLocalStorageFavChannels(LocalFavChannels);
-      setLocalStorageFavPrograms(LocalFavPrograms);
+      setfavouriteChannels(getfavouriteChannels());
+      setfavoritePrograms(getfavoritePrograms());
     }
   }, []);
 
@@ -163,8 +163,8 @@ export default function User({ setaudioFile }: UserProps) {
         <Tab eventKey="Favorit kanaler" title="Favorit kanaler" className="">
           <Container>
             <Row xs={1} md={2} lg={3}>
-              {LocalStorageFavChannels ? (
-                LocalStorageFavChannels.map((channel: Channel) => (
+              {favouriteChannels ? (
+                favouriteChannels.map((channel: Channel) => (
                   <Col>
                     <ChannelsCard
                       channel={channel}
@@ -183,8 +183,8 @@ export default function User({ setaudioFile }: UserProps) {
         <Tab eventKey="Favorit program" title="Favorit program">
           <Container>
             <Row xs={1} md={2} lg={3}>
-              {LocalStorageFavPrograms ? (
-                LocalStorageFavPrograms.map((program: any) => (
+              {favoritePrograms ? (
+                favoritePrograms.map((program: any) => (
                   <Col>
                     <ProgramCards program={program} />
                   </Col>

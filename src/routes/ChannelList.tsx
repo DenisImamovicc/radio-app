@@ -1,8 +1,8 @@
 import PaginationComponent from "../components/PaginationComponent.tsx";
-import useFetch from "../hooks/useFetch";
+import useFetch from "../hooks/useFetch.tsx";
 import { useState } from "react";
 import Loadingprogramcard from "../components/Loadingprogramcard.tsx";
-import ChannelsCard from "../components/ChannelsCard.tsx";
+import ChannelsCard from "../components/ChannelsList.tsx";
 
 import Container from 'react-bootstrap/Container';
 import Col from "react-bootstrap/Col";

@@ -1,17 +1,17 @@
 import "./App.css";
 import AudioPlayer from "./components/AudioPlayer";
 import Navbar from "./components/Navbar";
-import Channels from "./routes/channels";
-import Programs from "./routes/programs";
-import Program from "./routes/program";
+import Channels from "./routes/ChannelList";
+import Programs from "./routes/ProgramList";
+import Program from "./routes/ProgramDetail";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import Channel from "./routes/channel";
-import User from "./routes/User";
-import Errorpage from "./routes/NotFound";
-import RecommendedChannels from "./components/RecommendedChannels";
-import Selectedprograms from "./components/Selectedprograms";
-import Login from "./routes/Login";
-import NewAcount from "./routes/NewAcount";
+import Channel from "./routes/ChannelDetail";
+import User from "./routes/UserDashboard";
+import Errorpage from "./routes/NotFoundPage";
+import RecommendedChannels from "./components/HomePageChannels";
+import Selectedprograms from "./components/HomePagePrograms";
+import Login from "./routes/LoginAcount";
+import NewAcount from "./routes/CreateAcount";
 import { useEffect, useState } from "react";
 
 function App() {

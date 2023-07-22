@@ -3,6 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 import ProgramSearchBar from "./ProgramSearchBar";
+import { useState } from "react";
 
 interface prop {
   isLoggedIn: boolean;
@@ -10,6 +11,7 @@ interface prop {
 }
 
 const navbar = ({ isLoggedIn, setisLoggedIn }: prop) => {
+  const [userDB] = useState(JSON.parse(localStorage.getItem("UserDB")));
   const handleLogout = () => {
     document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     localStorage.removeItem("UserDB");
@@ -26,7 +28,10 @@ const navbar = ({ isLoggedIn, setisLoggedIn }: prop) => {
           </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between flex-row-reverse">
+        <Navbar.Collapse
+          id="basic-navbar-nav"
+          className="justify-content-between flex-row-reverse"
+        >
           <Nav className="">
             <Link to="/Channels">
               <Nav.Link href="/#" id="link">
@@ -42,7 +47,7 @@ const navbar = ({ isLoggedIn, setisLoggedIn }: prop) => {
               <>
                 <Link to="/User">
                   <Nav.Link href="/#" id="link">
-                    Min sida
+                    {userDB?.Name ? userDB.Name + " sida" : "Min sida"}
                   </Nav.Link>
                 </Link>
                 <Link to="/">

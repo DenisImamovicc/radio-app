@@ -1,6 +1,6 @@
 import useFetch from "../hooks/useFetch";
 import { useEffect, useState } from "react";
-import ProgramCards from "./Programscard";
+import ProgramCards from "./ProgramListCard";
 import { Link } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import Container from "react-bootstrap/Container";

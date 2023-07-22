@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
@@ -20,45 +20,43 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
   const [Url, setUrl] = useState("");
   const [reqMethod, setreqMethod] = useState("");
   const [reqData, setreqData] = useState("");
-  const API_URL:any = import.meta.env.VITE_API_URL
+  const [userDB] = useState(JSON.parse(localStorage.getItem("UserDB")));
+  const API_URL: any = import.meta.env.VITE_API_URL;
 
-
-  const {} = useFetch(Url, reqMethod,reqData);
-//fix shitty func to not crash if user has no favchannel/programs from db
+  const {} = useFetch(Url, reqMethod, reqData);
+  //fix shitty func to not crash if user has no favchannel/programs from db
   function readFavLocalStorage(value: string) {
-     let data;    
-     if (isLoggedIn) {
-       const dbData = JSON.parse(
-         localStorage.getItem(`UserDB`) || "null"
-       );
-        
+    let data;
+    if (isLoggedIn) {
+      const dbData = JSON.parse(localStorage.getItem(`UserDB`) || "null");
+
       //  if (!dbData.Favoriteprograms || !dbData.Favoritechannels) {
       //    return null
       //  }
-       if (contentType === "program") {
-         data = JSON.parse(dbData.Favoriteprograms);
-         data = data;
-       } else {
-         data = JSON.parse(dbData.Favoritechannels);
-         data = data;
-       }
-     } else {
-       const localData: any[] = JSON.parse(
-         localStorage.getItem(`${contentType}FavList`) || "null"
-         );
-         data = localData;
-       }
-       if (!data) {
-         return null;
-       }      
+      if (contentType === "program") {
+        data = JSON.parse(dbData.Favoriteprograms);
+        data = data;
+      } else {
+        data = JSON.parse(dbData.Favoritechannels);
+        data = data;
+      }
+    } else {
+      const localData: any[] = JSON.parse(
+        localStorage.getItem(`${contentType}FavList`) || "null"
+      );
+      data = localData;
+    }
+    if (!data) {
+      return null;
+    }
 
-     const foundContent = data.filter((obj: any) => {
-       return obj.name === value;
-     });
+    const foundContent = data.filter((obj: any) => {
+      return obj.name === value;
+    });
 
-     if (foundContent[0]?.isFav) {
-       return true;
-     }
+    if (foundContent[0]?.isFav) {
+      return true;
+    }
     return null;
   }
 
@@ -94,17 +92,22 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
       const newIsClicked = !prevIsClicked;
       if (newIsClicked) {
         if (isLoggedIn) {
-          setreqMethod("PUT")
-          content.isFav=true
-          setreqData(content)          
-          setUrl(API_URL + `users/favorite${contentType}/${content.id}/${isLoggedIn}`)
+          setreqMethod("PUT");
+          content.isFav = true;
+          setreqData(content);
+          setUrl(
+            API_URL + `users/favorite${contentType}/${content.id}/${isLoggedIn}`
+          );
           setShowToast(false);
         }
         addFavToLocalStorage(`${contentType}FavList`, content);
       } else {
         if (isLoggedIn) {
-          setreqMethod("DELETE")
-          setUrl(API_URL + `users/unfavorite${contentType}/${content.id}/${isLoggedIn}`)
+          setreqMethod("DELETE");
+          setUrl(
+            API_URL +
+              `users/unfavorite${contentType}/${content.id}/${isLoggedIn}`
+          );
           setShowToast(true);
         }
         removeFavFromLocalStorage(`${contentType}FavList`, content.name);
@@ -136,7 +139,7 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
             {isClicked ? "favoritmarkerats till" : "avfavoritmarkerats från"}{" "}
             <Link to={`/User`} className="text-decoration-underline">
               {" "}
-              Min sida!{" "}
+              {userDB?.Name ? userDB.Name + " sida!" : "Min sida!"}
             </Link>
           </strong>
         </Toast.Header>

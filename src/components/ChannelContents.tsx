@@ -1,11 +1,11 @@
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import useFetch from "../hooks/useFetch";
-import Broadcastcard from "../components/Broadcastcard.tsx";
-import ProgramCard from "../components/Programscard.tsx";
-import PaginationComponent from "../components/PaginationComponent.tsx";
+import useFetch from "../hooks/useFetch.tsx";
+import Broadcastcard from "./Broadcastcard.tsx";
+import ProgramCard from "./ProgramListCard.tsx";
+import PaginationComponent from "./PaginationComponent.tsx";
 import { useState } from "react";
-import Loadingprogramcard from "../components/Loadingprogramcard.tsx";
+import Loadingprogramcard from "./Loadingprogramcard.tsx";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";

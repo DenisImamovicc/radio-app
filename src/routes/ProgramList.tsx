@@ -1,8 +1,8 @@
-import useFetch from "../hooks/useFetch";
-import ProgramTypeDropdown from "../components/ProgramTypeDropdown";
+import useFetch from "../hooks/useFetch.tsx";
+import ProgramTypeDropdown from "../components/ProgramTypeDropdown.tsx";
 import { useState } from "react";
 import PaginationComponent from "../components/PaginationComponent.tsx";
-import ProgramCards from "../components/Programscard.tsx";
+import ProgramCards from "../components/ProgramListCard.tsx";
 import Loadingprogramcard from "../components/Loadingprogramcard.tsx";
 
 import Container from "react-bootstrap/Container";

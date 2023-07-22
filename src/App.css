@@ -3,10 +3,6 @@ body{
     min-height: 100vh;
 }
 
-/* .App{
-    min-height: 100vh;
-} */
-
 img{
     background: url(assets/image-holder-icon-614x460.png) no-repeat scroll 0 0;
 }
@@ -80,8 +76,6 @@ a {
 #contentItem{
     margin: 1rem;
 }
-
-
 
 .toastFavorite{
     position: absolute;

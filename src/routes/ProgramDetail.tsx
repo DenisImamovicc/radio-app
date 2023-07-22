@@ -1,5 +1,5 @@
 import { useLocation, useParams } from "react-router-dom";
-import ProgramCard from "../components/Programcard";
+import ProgramCard from "../components/ProgramDetailCard";
 import useFetch from "../hooks/useFetch";
 import Loadingprogramcard from "../components/Loadingprogramcard";
 import { Placeholder } from "react-bootstrap";
