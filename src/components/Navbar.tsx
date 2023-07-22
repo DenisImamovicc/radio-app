@@ -11,7 +11,7 @@ interface prop {
 }
 
 const navbar = ({ isLoggedIn, setisLoggedIn }: prop) => {
-  const [userDB] = useState(JSON.parse(localStorage.getItem("UserDB")));
+  const [userDB] = useState<any | null>(JSON.parse(localStorage.getItem("UserDB")|| "null"));
   const handleLogout = () => {
     document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     localStorage.removeItem("UserDB");

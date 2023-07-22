@@ -20,7 +20,7 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
   const [Url, setUrl] = useState("");
   const [reqMethod, setreqMethod] = useState("");
   const [reqData, setreqData] = useState("");
-  const [userDB] = useState(JSON.parse(localStorage.getItem("UserDB")));
+  const [userDB] = useState<any | null>(JSON.parse(localStorage.getItem("UserDB")|| "null"));
   const API_URL: any = import.meta.env.VITE_API_URL;
 
   const {} = useFetch(Url, reqMethod, reqData);
