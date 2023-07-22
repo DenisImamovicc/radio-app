@@ -41,7 +41,7 @@ export default function User({ setaudioFile }: UserProps) {
     any | null
   >(null);
   const [Url, SetUrl] = useState(``);
-  const API_URL:any = import.meta.env.VITE_API_URL
+  const API_URL: any = import.meta.env.VITE_API_URL;
   let currentUser = useLocation().state;
   const { data, isLoading } = useFetch(Url, "GET");
 
@@ -49,14 +49,26 @@ export default function User({ setaudioFile }: UserProps) {
     let channelData: any | null = JSON.parse(
       localStorage.getItem("channelFavList") || "null"
     );
-    return channelData ? channelData : null;
+
+    if (!channelData || !channelData.length) {
+      channelData = null;
+      return channelData;
+    }
+
+    return channelData;
   };
 
   const getLocalStorageFavPrograms = () => {
-    const programData: any | null = JSON.parse(
+    let programData: any | null = JSON.parse(
       localStorage.getItem("programFavList") || "null"
     );
-    return programData ? programData : null;
+
+    if (!programData || !programData.length) {
+      programData = null;
+      return programData;
+    }
+
+    return programData;
   };
 
   const getLocalStorageUser = () => {
@@ -66,9 +78,8 @@ export default function User({ setaudioFile }: UserProps) {
     return User ? User : [];
   };
 
-  const handlePossesiveApostrophe = (name: string) => {
+  const handlePossesiveApostrophe = (name: string) =>
     name[name.length - 1] === "s" ? setuserName(name) : setuserName(name + "s");
-  };
 
   useEffect(() => {
     if (isLoading === false) {
@@ -124,15 +135,11 @@ export default function User({ setaudioFile }: UserProps) {
     if (currentUser) {
       console.log(currentUser);
       localStorage.setItem("UserEmail", currentUser);
-       ToggleLocalStorageFavs(false)
-      SetUrl(
-        API_URL + `users/user/${localStorage.getItem("UserEmail")}`
-      );
+      ToggleLocalStorageFavs(false);
+      SetUrl(API_URL + `users/user/${localStorage.getItem("UserEmail")}`);
     } else if (localStorage.getItem("UserEmail")) {
-       ToggleLocalStorageFavs(false)
-      SetUrl(
-        API_URL + `users/user/${localStorage.getItem("UserEmail")}`
-      );
+      ToggleLocalStorageFavs(false);
+      SetUrl(API_URL + `users/user/${localStorage.getItem("UserEmail")}`);
     } else {
       const LocalFavChannels = getLocalStorageFavChannels();
       const LocalFavPrograms = getLocalStorageFavPrograms();

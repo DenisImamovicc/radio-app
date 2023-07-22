@@ -17,9 +17,11 @@ function Selectedprograms() {
     `https://api.sr.se/api/v2/programs/index?format=json&page=${randomNum}&size=6`
   );
 
+  const rng = () => setrandomNum(Math.floor(Math.random() * 200) + 1)
+
   useEffect(() => {
     isLoading === false && data.programs.length === 0
-      ? setrandomNum(Math.floor(Math.random() * 200) + 1)
+      ? rng()
       : "";
   }, [isLoading]);
 
