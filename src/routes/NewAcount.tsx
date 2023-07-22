@@ -11,7 +11,7 @@ function NewAcount() {
   const [submitForm, setsubmitForm] = useState<boolean>(false);
   const [URL, setURL] = useState("");
   const [User, setUser] = useState({});
-  const [alert, setalert] = useState({mssg:"",type:"",duration:3000});
+  const [alert, setalert] = useState({ mssg: "", type: "", duration: 3000 });
 
   const { error, isLoading } = useFetch(URL, "POST", User);
   const navigate = useNavigate();
@@ -19,13 +19,19 @@ function NewAcount() {
   useEffect(() => {
     if (isLoading === false && submitForm) {
       if (error) {
-        setalert({mssg:"Skapelse av ny konto har misslyckats!",type:"danger",duration:3000});
+        setalert({
+          mssg: "Skapelse av ny konto har misslyckats!",
+          type: "danger",
+          duration: 3000,
+        });
         setsubmitForm(false);
         setURL("");
       } else {
-        setalert(
-          {mssg:"Skapelse av ny konto har lyckats,dirigerar till inloggningsidan!",type:"success",duration:3000}
-        );
+        setalert({
+          mssg: "Skapelse av ny konto har lyckats,dirigerar till inloggningsidan!",
+          type: "success",
+          duration: 3000,
+        });
         setTimeout(handleSucessfulCreateAcount, 3000);
       }
     }
@@ -39,8 +45,7 @@ function NewAcount() {
       Password: `${e.target[2].value}`,
     };
     setUser(User);
-    setURL("http://localhost:9000/users/newacount");
-    // setURL("https://sradio-api.onrender.com/users/newacount");
+    setURL("https://sradio-api.onrender.com/users/newacount");
     setsubmitForm(true);
   };
 
@@ -54,7 +59,7 @@ function NewAcount() {
 
   return (
     <>
-      <AlertMessage alert={alert} setalert={setalert}/>
+      <AlertMessage alert={alert} setalert={setalert} />
       <div
         className="d-flex justify-content-center align-items-center flex-column"
         id="LoginContainer"
