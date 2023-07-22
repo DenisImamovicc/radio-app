@@ -12,6 +12,7 @@ function NewAcount() {
   const [URL, setURL] = useState("");
   const [User, setUser] = useState({});
   const [alert, setalert] = useState({ mssg: "", type: "", duration: 3000 });
+  const API_URL:any = import.meta.env.VITE_API_URL
 
   const { error, isLoading } = useFetch(URL, "POST", User);
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ function NewAcount() {
       Password: `${e.target[2].value}`,
     };
     setUser(User);
-    setURL("https://sradio-api.onrender.com/users/newacount");
+    setURL(API_URL + "users/newacount");
     setsubmitForm(true);
   };
 

@@ -7,7 +7,10 @@ import cookieParser from "cookie-parser";
 
 const port = 9000;
 const api = express();
-const allowedOrigins = ["https://sradio.onrender.com"];
+const allowedOrigins = [
+  // "https://localhost:5173",
+  "https://sradio.onrender.com",
+];
 
 dotenv.config();
 api.use(bodyParser.json());

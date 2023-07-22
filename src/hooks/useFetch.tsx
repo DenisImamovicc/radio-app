@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 interface FetchData {
   data: any;
   isLoading: boolean | string;
@@ -14,12 +13,13 @@ const useFetch = (
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean | string>("");
   const [error, setError] = useState<boolean>(false);
+  const API_URL:any = import.meta.env.VITE_API_URL
 
   const GET = {
     method: reqMethod,
     headers: {
       Accept: "application/json",
-      ...(url.includes("https://sradio-api.onrender.com") && {
+      ...(url.includes(API_URL) && {
         Authorization: `Bearer ${document.cookie.substring(4)}`,
       }),
     },
@@ -40,7 +40,7 @@ const useFetch = (
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      ...(url.includes("https://sradio-api.onrender.com") && {
+      ...(url.includes(API_URL) && {
         Authorization: `Bearer ${document.cookie.substring(4)}`,
       }),
     },
@@ -51,7 +51,7 @@ const useFetch = (
     method: reqMethod,
     headers: {
       Accept: "application/json",
-      ...(url.includes("https://sradio-api.onrender.com") && {
+      ...(url.includes(API_URL) && {
         Authorization: `Bearer ${document.cookie.substring(4)}`,
       }),
     },

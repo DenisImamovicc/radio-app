@@ -21,6 +21,8 @@ function Login({ setisLoggedIn }: prop) {
 
   const { data, error, isLoading } = useFetch(URL, "POST", User);
   const navigate = useNavigate();
+  const API_URL:any = import.meta.env.VITE_API_URL
+
 
   const createUserCookie = (cookie: any) =>
     (document.cookie = `${cookie.Name}=${cookie.token}; ;max-age=${cookie.maxAge}`);
@@ -33,7 +35,7 @@ function Login({ setisLoggedIn }: prop) {
     };
     setemail(User.Email)
     setUser(User)
-    setURL("https://sradio-api.onrender.com/users/loginacount")
+    setURL(API_URL+"users/loginacount")
     setsubmitForm(true);
   };
 

@@ -20,6 +20,7 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
   const [Url, setUrl] = useState("");
   const [reqMethod, setreqMethod] = useState("");
   const [reqData, setreqData] = useState("");
+  const API_URL:any = import.meta.env.VITE_API_URL
 
 
   const {} = useFetch(Url, reqMethod,reqData);
@@ -88,55 +89,22 @@ function FavoriteIcon({ content, contentType }: FavoriteIconProps) {
     }
   }
 
-  // useEffect(() => {
-    
-  //   if (isLoading === false && Url.includes("users")) {
-  //     console.log("wnt th");
-      
-  //     const DbData=data
-  //     localStorage.setItem(
-  //       "UserDB",
-  //       JSON.stringify({
-  //         Name: DbData.Name,
-  //         Favoritechannels: DbData.Favoritechannels === "[]" ? null : DbData.Favoritechannels,
-  //         Favoriteprograms: DbData.Favoriteprograms === "[]" ? null : DbData.Favoriteprograms,
-  //       })
-  //     );
-  //   } else {
-  //     console.log("still Loading...");
-  //   }
-  // }, [isLoading]);
-
   const handleClick = () => {
     setIsClicked((prevIsClicked) => {
       const newIsClicked = !prevIsClicked;
       if (newIsClicked) {
-        //reverse the logic order for toast to make sense
         if (isLoggedIn) {
           setreqMethod("PUT")
           content.isFav=true
           setreqData(content)          
-          setUrl(`https://sradio-api.onrender.com/users/favorite${contentType}/${content.id}/${isLoggedIn}`)
-
-          //  const dbData: any[] = JSON.parse(
-          //    localStorage.getItem(`UserDB`) || "null"
-          //  );
-
-          //    console.log(dbData.Favoriteprograms);
-            
-          //   localStorage.setItem(
-          //         "UserDB",
-          //         JSON.stringify({
-          //           Favoriteprograms: dbData.Favoritechannels.unshift(content) ? dbData.Favoritechannels.push(content):null
-          //         }))
-
+          setUrl(API_URL + `users/favorite${contentType}/${content.id}/${isLoggedIn}`)
           setShowToast(false);
         }
         addFavToLocalStorage(`${contentType}FavList`, content);
       } else {
         if (isLoggedIn) {
           setreqMethod("DELETE")
-          setUrl(`https://sradio-api.onrender.com/users/unfavorite${contentType}/${content.id}/${isLoggedIn}`)
+          setUrl(API_URL + `users/unfavorite${contentType}/${content.id}/${isLoggedIn}`)
           setShowToast(true);
         }
         removeFavFromLocalStorage(`${contentType}FavList`, content.name);
