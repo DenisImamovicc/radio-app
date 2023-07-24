@@ -1,6 +1,13 @@
 body{
     background-color: black!important;
-    min-height: 100vh;
+    padding-bottom: 3rem;
+    
+}
+
+::-webkit-scrollbar {
+    display: none;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
 }
 
 img{
@@ -8,15 +15,22 @@ img{
 }
 
 .audioplayer{
-    position: sticky;
+    position: fixed;
     bottom: 0;
+    left: 0;
     width: 100vw;
     z-index: 10;
     background-color: black;
 }
 
+.closebutton{
+    position: absolute;
+    bottom: 3.5rem;
+    right: 0;
+}
+
 audio {
-    border-radius: 50%;
+    border-radius: 40%;
 }
 
 #link{

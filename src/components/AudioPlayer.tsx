@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button } from "react-bootstrap";
 
 interface AudioPlayer {
@@ -6,26 +7,41 @@ interface AudioPlayer {
 }
 
 const AudioPlayer = ({ setaudioFile, audioFile }: AudioPlayer) => {
+  useEffect(() => {
+    updateAudio();
+  }, [audioFile]);
+
+  const updateAudio = () => {
+    document.getElementById("my-audio")?.setAttribute("src", audioFile);
+  };
+
   return (
     <>
       <div className="audioplayer ">
-        {audioFile ? 
-        <Button
-          onClick={() => setaudioFile("")}
-          className="w-100 p-2 "
-          variant="dark"
-        >
-          Ta bort nuvarande för att kunna spela nästa
-        </Button>
-        :
-        ""
-      }
         {audioFile ? (
-          <audio controls autoPlay className="w-100">
+          <Button
+            onClick={() => setaudioFile("")}
+            className="closebutton"
+            variant="danger"
+          >
+            X
+          </Button>
+        ) : (
+          ""
+        )}
+        {audioFile ? (
+          <audio controls autoPlay className="w-100" id="my-audio">
             <source src={audioFile} type="audio/mpeg"></source>
           </audio>
         ) : (
-          ""
+          <audio
+            controls
+            autoPlay
+            className="w-100 visually-hidden"
+            id="my-audio"
+          >
+            <source src={audioFile} type="audio/mpeg"></source>
+          </audio>
         )}
       </div>
     </>
