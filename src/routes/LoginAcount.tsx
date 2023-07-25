@@ -17,12 +17,12 @@ function Login({ setisLoggedIn }: prop) {
   const [URL, setURL] = useState("");
   const [User, setUser] = useState({});
   const [email, setemail] = useState("");
-  const [alert, setalert] = useState({mssg:"",type:"",duration:3000});
+  const [alert, setalert] = useState({ mssg: "", type: "", duration: 3000 });
+  const [buttonIsLoading, setbuttonIsLoading] = useState(false);
 
   const { data, error, isLoading } = useFetch(URL, "POST", User);
   const navigate = useNavigate();
-  const API_URL:any = import.meta.env.VITE_API_URL
-
+  const API_URL: any = import.meta.env.VITE_API_URL;
 
   const createUserCookie = (cookie: any) =>
     (document.cookie = `${cookie.Name}=${cookie.token}; ;max-age=${cookie.maxAge}`);
@@ -33,9 +33,10 @@ function Login({ setisLoggedIn }: prop) {
       Email: `${e.target[0].value}`,
       Password: `${e.target[1].value}`,
     };
-    setemail(User.Email)
-    setUser(User)
-    setURL(API_URL+"users/loginacount")
+    setbuttonIsLoading(true);
+    setemail(User.Email);
+    setUser(User);
+    setURL(API_URL + "users/loginacount");
     setsubmitForm(true);
   };
 
@@ -50,11 +51,21 @@ function Login({ setisLoggedIn }: prop) {
   useEffect(() => {
     if (isLoading === false && submitForm) {
       if (error) {
-        setalert({mssg:"Inloggning misslyckades!",type:"danger",duration:3000});
+        setbuttonIsLoading(false);
+        setalert({
+          mssg: "Inloggning misslyckades!",
+          type: "danger",
+          duration: 3000,
+        });
         setsubmitForm(false);
         setURL("");
       } else {
-        setalert({mssg:"Framgångsrik inloggning,vänta några sekunder!",type:"success",duration:3000});
+        setbuttonIsLoading(false);
+        setalert({
+          mssg: "Framgångsrik inloggning,vänta några sekunder!",
+          type: "success",
+          duration: 3000,
+        });
         setTimeout(handleSucessfulLogin, 3000);
       }
     }
@@ -64,7 +75,7 @@ function Login({ setisLoggedIn }: prop) {
 
   return (
     <>
-      <AlertMessage alert={alert} setalert={setalert}/>
+      <AlertMessage alert={alert} setalert={setalert} />
       <div
         className="d-flex justify-content-center align-items-center flex-column"
         id="LoginContainer"
@@ -103,8 +114,13 @@ function Login({ setisLoggedIn }: prop) {
               />
             </Form.Group>
             <div>
-              <Button variant="primary" type="submit" className="mt-2">
-                Submit
+              <Button
+                variant="primary"
+                type="submit"
+                className="mt-2"
+                disabled={buttonIsLoading}
+              >
+                {buttonIsLoading ? "Loggar in..." : "Logga in"}
               </Button>
             </div>
             <div className="text-end text-light  mt-1">

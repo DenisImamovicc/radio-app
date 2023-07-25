@@ -12,7 +12,9 @@ function NewAcount() {
   const [URL, setURL] = useState("");
   const [User, setUser] = useState({});
   const [alert, setalert] = useState({ mssg: "", type: "", duration: 3000 });
-  const API_URL:any = import.meta.env.VITE_API_URL
+  const [buttonIsLoading, setbuttonIsLoading] = useState(false);
+
+  const API_URL: any = import.meta.env.VITE_API_URL;
 
   const { error, isLoading } = useFetch(URL, "POST", User);
   const navigate = useNavigate();
@@ -20,14 +22,17 @@ function NewAcount() {
   useEffect(() => {
     if (isLoading === false && submitForm) {
       if (error) {
+        setbuttonIsLoading(false);
         setalert({
           mssg: "Skapelse av ny konto har misslyckats!",
           type: "danger",
           duration: 3000,
         });
+
         setsubmitForm(false);
         setURL("");
       } else {
+        setbuttonIsLoading(false);
         setalert({
           mssg: "Skapelse av ny konto har lyckats,dirigerar till inloggningsidan!",
           type: "success",
@@ -45,6 +50,7 @@ function NewAcount() {
       Email: `${e.target[1].value}`,
       Password: `${e.target[2].value}`,
     };
+    setbuttonIsLoading(true);
     setUser(User);
     setURL(API_URL + "users/newacount");
     setsubmitForm(true);
@@ -106,8 +112,13 @@ function NewAcount() {
               />
             </Form.Group>
             <div>
-              <Button variant="primary" type="submit" className="mt-1">
-                Submit
+              <Button
+                variant="primary"
+                type="submit"
+                className="mt-1"
+                disabled={buttonIsLoading}
+              >
+                {buttonIsLoading ? "Skapar ny konto..." : "Skapa ny konto"}
               </Button>
             </div>
           </Form>
