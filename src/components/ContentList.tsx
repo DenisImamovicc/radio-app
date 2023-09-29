@@ -28,8 +28,15 @@ interface data {
       id: number;
     };
   };
-  setaudioFile: (url: string) => void;
+  setaudioFile: (url: AudioPlayer) => void;
   contentType: string;
+}
+
+interface AudioPlayer {
+  audioFile: {
+    songFile:string,
+    contentID:string
+  }
 }
 
 function ContentList({ data, setaudioFile, contentType }: data) {
@@ -42,7 +49,7 @@ function ContentList({ data, setaudioFile, contentType }: data) {
     setUrl(nextpageData);
   };
 
-  const playAudio = (url: string) => setaudioFile(url);
+  const playAudio = (url: AudioPlayer) => setaudioFile(url);
 
   const handleContentTypePath = (content: any) => {
     if (contentType === "broadcasts") {
@@ -124,8 +131,14 @@ function ContentList({ data, setaudioFile, contentType }: data) {
                         )}
                         <p>
                           <FontAwesomeIcon
+                            // onClick={() =>
+                            //   playAudio(handleContentTypePath(content))
+                            // }
                             onClick={() =>
-                              playAudio(handleContentTypePath(content))
+                              playAudio({
+                                songFile: handleContentTypePath(content),
+                                contentID: "",
+                              })
                             }
                             className="me-1"
                             icon={faPlay}

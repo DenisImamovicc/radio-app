@@ -12,13 +12,21 @@ interface channel {
   };
 }
 
+interface AudioPlayer {
+  audioFile: {
+    songFile:string,
+    contentID:string
+  }
+}
+
+
 function RecommendedChannels({ setaudioFile }: any) {
   const { data } = useFetch(
     `https://api.sr.se/api/v2/channels/?format=json&page=1&size=3`
   );
-//   console.log(data);
+  //   console.log(data);
 
-  const playAudio = (url: string) => setaudioFile(url);
+  const playAudio = (url: AudioPlayer) => setaudioFile(url);
 
   if (!data) return <h1>Loading...</h1>;
 
@@ -34,7 +42,12 @@ function RecommendedChannels({ setaudioFile }: any) {
                   className="bg-dark text-white m-2"
                   id="channelStartingpagecard"
                   key={channel.id}
-                  onClick={() => playAudio(channel.liveaudio.url)}
+                  onClick={() =>
+                    playAudio({
+                      songFile: channel.liveaudio.url,
+                      contentID: channel.id,
+                    })
+                  }
                 >
                   <Link to={`/Channels/Channel/${channel.id}`} state={channel}>
                     <Card.Img src={channel.image} alt={channel.name} />
@@ -44,7 +57,7 @@ function RecommendedChannels({ setaudioFile }: any) {
               );
             })}
         </div>
-        <hr className="text-light"/>
+        <hr className="text-light" />
       </div>
     </>
   );

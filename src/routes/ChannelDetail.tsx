@@ -7,7 +7,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 
 interface channel {
-  setaudioFile: (url: string) => void;
+  setaudioFile: (url: AudioPlayer) => void;
+}
+
+interface AudioPlayer {
+  audioFile: {
+    songFile:string,
+    contentID:string
+  }
 }
 
 const Channel = ({ setaudioFile }: channel) => {
@@ -17,7 +24,7 @@ const Channel = ({ setaudioFile }: channel) => {
     `https://api.sr.se/api/v2/channels/${id}?format=json`
   );
 
-  const playAudio = (url: string) => setaudioFile(url);
+  const playAudio = (url: AudioPlayer) => setaudioFile(url);
 
   scroll({
     top: 0,
@@ -67,7 +74,12 @@ const Channel = ({ setaudioFile }: channel) => {
             <span>
               <FontAwesomeIcon
                 icon={faPlay}
-                onClick={() => playAudio(channelData.liveaudio.url)}
+                onClick={() =>
+                playAudio({
+                  songFile: channelData.liveaudio.url,
+                  contentID: channelData.id,
+                })
+              }
                 className="text-light me-1"
               />
               LIVE

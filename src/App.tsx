@@ -15,9 +15,14 @@ import NewAcount from "./routes/CreateAcount";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [audioFile, setaudioFile] = useState("");
+  const [audioFile, setaudioFile] = useState({songFile:"",contentID:""});
   const [isLoggedIn, setisLoggedIn] = useState<boolean>(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    handleUserXTimeVisit();
+
+  }, [isLoggedIn]);
 
   const handleUserXTimeVisit = () => {
     const isFirstTimeVisit: boolean | null = sessionStorage.getItem("isFirstTimeVisit") !== null
@@ -35,12 +40,6 @@ function App() {
       setisLoggedIn(false);
     }
   };
-
-  useEffect(() => {
-    handleUserXTimeVisit();
-
-  }, [isLoggedIn]);
-
 
   return (
     <div className="App">

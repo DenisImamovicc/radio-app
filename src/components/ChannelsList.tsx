@@ -15,11 +15,19 @@ interface ChannelCardProps {
       url: string;
     };
   };
-  setaudioFile: (url: string) => void;
+  setaudioFile: (url: AudioPlayer) => void;
+}
+
+
+interface AudioPlayer {
+  audioFile: {
+    songFile:string,
+    contentID:string
+  }
 }
 
 function ChannelsCard({ channel, setaudioFile }: ChannelCardProps) {
-  const playAudio = (url: string) => setaudioFile(url);
+  const playAudio = (url: AudioPlayer) => setaudioFile(url);
 
   return (
     <>
@@ -49,7 +57,12 @@ function ChannelsCard({ channel, setaudioFile }: ChannelCardProps) {
           <hr />
             <FontAwesomeIcon
               icon={faPlay}
-              onClick={() => playAudio(channel.liveaudio.url)}
+              onClick={() =>
+                playAudio({
+                  songFile: channel.liveaudio.url,
+                  contentID: channel.id,
+                })
+              }
             />
             <span> LIVE</span> 
           </div>
