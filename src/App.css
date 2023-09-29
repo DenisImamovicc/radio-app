@@ -25,7 +25,7 @@ img{
 
 .closebutton{
     position: absolute;
-    bottom: 3.5rem;
+    bottom: 3.7rem;
     right: 0;
 }
 
@@ -140,5 +140,13 @@ a {
 
     #Loadingcard{
         display: none;
+    }
+  }
+
+
+@media (min-width: 1024px) {
+    .audioplayer{
+        width: 33vw;
+        left: 66%;
     }
   }
