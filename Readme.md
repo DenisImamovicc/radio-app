@@ -1,6 +1,8 @@
 # SRadio 
 Live version:[https://sradio.onrender.com](https://sradio.onrender.com)
 
+![Preview_img](https://github.com/DenisImamovicc/radio-app/assets/60396488/290bc252-e613-4130-8f5e-cbf2a2bd3bf8)
+
 Radio station containing channels, programs, podcasts and episodes gathered from Sveriges Radio Public API.
 
 ## Table of Contents
